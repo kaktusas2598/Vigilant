@@ -12,6 +12,8 @@
  * Model Loading
  * Rigid Body Dynamics support
  * Component bases model?
+ * GLSL program loading
+ * Texture loading
 
 
 ### Used Libraries
