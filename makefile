@@ -1,8 +1,11 @@
 OBJS= src/*.cpp
+#OBJS2= src/imgui/imgui*cpp
+
 CC= g++
 CF=-Wall -g -std=c++11 -std=c++14 -fexceptions
-#LDF= -lglew32s -lopengl32 -lglu -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system
-LDF= -framework OpenGL -lglew -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system
+
+LDF= -framework OpenGL -lglew -lSDL2
+
 INCLUDE_PATHS = -I/usr/local/include -I/opt/X11/include
 LIBRARY_PATHS = -L/usr/local/lib -I/opt/X11/lib
 OBJ_NAME= main
