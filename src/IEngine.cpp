@@ -1,0 +1,250 @@
+#include "IEngine.hpp"
+#include "FrameLimiter.hpp"
+#include "ErrorHandler.hpp"
+#include "StateMachine.hpp"
+#include "IGameState.hpp"
+//#include "TextureManager.h"
+#include <string>
+
+namespace Vigilant {
+
+	IEngine::IEngine()
+	{
+		//Initialize State Machine
+		m_stateMachine = std::make_unique<StateMachine>(this);
+	}
+
+	IEngine::~IEngine()
+	{
+	}
+
+
+	void IEngine::init(std::string title, int screenHeight, int screenWidth, unsigned int currentFlags){
+
+		// Initialize SDL
+		if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
+		{
+			exitWithError("Could Not Initialize SDL");
+		}
+
+		// set up a double buffered window (minimizes flickering)
+		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
+		SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);//?
+
+		m_window.create(title, screenHeight, screenWidth, currentFlags);
+
+		//initialize the current game
+		onInit();
+
+		//initialize game screens and add them to the screenList
+		addStates();
+
+		//set the MainGame's current game screen
+		m_currentState = m_stateMachine->getCurrentState();
+
+		//initialize game screen elements
+		m_currentState->onEntry();
+
+		//set the initial game screen to ScreenState::RUNNING
+		m_currentState->setRunning();
+
+		m_isRunning = true;//start main loop
+	}
+
+	void IEngine::run() {
+
+		const float DESIRED_FPS = 60.0f;
+		//maximum steps, used to avoid the 'spiral of death'
+		const int MAX_PHYSICS_STEPS = 6;
+		//set max delta time to avoid speedup
+		const float MAX_DELTA_TIME = 1.0f;
+		//milliseconds per second
+		const float MS_PER_SECOND = 1000;
+		//the fps we want in ms / frame
+		const float DESIRED_FRAMETIME = MS_PER_SECOND / DESIRED_FPS;
+
+		//set max fps to 60
+		FrameLimiter frameLimiter;
+		frameLimiter.setMaxFPS(DESIRED_FPS);
+
+		//starting time
+		float prevTicks = SDL_GetTicks();
+
+		while (m_isRunning)
+		{
+			frameLimiter.begin();
+
+			//time at the start of the frame
+			Uint32 newTicks = SDL_GetTicks();
+			//total time the frame took
+			Uint32 frameTime = SDL_GetTicks() - prevTicks;
+			//update previous frame time
+			prevTicks = newTicks;
+
+			//how much extra time we have in the frame
+			float totalDeltaTime = frameTime / DESIRED_FRAMETIME;
+
+			//update input manager
+			inputManager.update();
+
+			//SEMI FIXED TIME STEP ??
+			int updateCount = 0;
+			while (totalDeltaTime > 0.0f && updateCount < MAX_PHYSICS_STEPS && m_isRunning)
+			{
+				//limit deltatime to 1.0 so no speedup (1.0 being one frame and .2 being a fifth of a frame)
+				float deltaTime = std::min(totalDeltaTime, MAX_DELTA_TIME);
+
+				deltaTime = deltaTime / DESIRED_FPS;
+
+				//std::cout <<"deltaTime: " << deltaTime << std::endl;
+				update(deltaTime);
+
+				render(deltaTime);
+				//std::cout << deltaTime << std::endl;
+				//std::cout <<  " T: " << totalDeltaTime << std::endl;
+				totalDeltaTime -= deltaTime;
+
+				//if we have reached the maximum physics steps, just continue on with the frame
+				updateCount++;
+			}
+
+			m_fps = frameLimiter.end();
+
+			//swap window buffer for less flickering
+			m_window.swapBuffer();
+		}
+	}
+
+	void IEngine::render(float deltaTime){
+
+		if (m_currentState && m_currentState->getScreenState() == ScreenState::RUNNING)
+		{
+			m_currentState->draw(deltaTime);
+		}
+		/*
+		//clear the renderer to draw color
+		SDL_RenderClear(m_pRenderer);
+
+		//SDL_RenderCopyEx(m_pRenderer, m_pTexture, &m_sourceRectangle, &m_destinationRectangle,
+		//0, 0, SDL_FLIP_HORIZONTAL);
+
+		//TextureManager::Instance()->draw("animate", 0, 0, 128, 82, m_pRenderer);
+
+		//TextureManager::Instance()->drawFrame("animate", 100, 100, 128, 82, 1, m_currentFrame,  m_pRenderer);
+
+		//TextureManager::Instance()->drawFrame("animate", 200, 200, 128, 82, 1, m_currentFrame,  m_pRenderer);
+
+		//draw to the screen
+		SDL_RenderPresent(m_pRenderer);
+		*/
+	}
+	void IEngine::update(float deltaTime){
+		//m_currentFrame = int((SDL_GetTicks() / 100) % 6);
+
+		if (m_currentState)
+		{
+			switch (m_currentState->getScreenState())
+			{
+				//update the current running screen
+				case ScreenState::RUNNING:
+					m_currentState->update(deltaTime);
+					break;
+
+					//change to next screen
+				case ScreenState::CHANGE_NEXT:
+					//clean up running screen
+					m_currentState->onExit();
+					m_currentState = m_stateMachine->moveNext();
+					if (m_currentState)
+					{
+						//initialize zanew running screen
+						m_currentState->setRunning();
+						m_currentState->onEntry();
+					}
+					break;
+
+					//change to previous screen
+				case ScreenState::CHANGE_PREVIOUS:
+					//clean up running screen
+					m_currentState->onExit();
+					m_currentState = m_stateMachine->movePrev();
+					if (m_currentState)
+					{
+						//initialize new running screen
+						m_currentState->setRunning();
+						m_currentState->onEntry();
+					}
+					break;
+
+					//exit game
+				case ScreenState::EXIT_APPLICATION:
+					exit();
+					break;
+
+					// if NONE, do nothing
+				default:
+					break;
+
+			}
+		}
+		else { exit(); }
+	}
+	void IEngine::handleEvents(SDL_Event& event)
+	{
+		//set the event type
+		///inputManager.setEventType(event.type);
+		switch (event.type) {
+			case SDL_QUIT:
+				exit();
+				break;
+			case SDL_MOUSEMOTION:
+				inputManager.setMouseCoords((float)event.motion.x, (float)event.motion.y);
+				break;
+			case SDL_KEYDOWN:
+				inputManager.pressKey(event.key.keysym.sym);
+				break;
+			case SDL_KEYUP:
+				inputManager.releaseKey(event.key.keysym.sym);
+				break;
+			case SDL_MOUSEBUTTONDOWN:
+				inputManager.pressKey(event.button.button);
+				break;
+			case SDL_MOUSEBUTTONUP:
+				inputManager.releaseKey(event.button.button);
+				break;
+			case SDL_TEXTINPUT:
+				inputManager.addInputCharacters(event.text.text);
+				break;
+			case SDL_MOUSEWHEEL:
+				if (event.wheel.y > 0)
+					inputManager.setMouseWheel(1);
+				if (event.wheel.y < 0)
+					inputManager.setMouseWheel(-1);
+				break;
+			case (SDLK_ESCAPE):
+				{
+					//empty
+				}
+			default:
+				break;
+		}
+	}
+
+	void IEngine::exit(){
+		std::cout << "Cleaning game..\n";
+		//SDL_DestroyWindow(m_pWindow);
+		//SDL_DestroyRenderer(m_pRenderer);
+		//SDL_Quit();
+
+		m_currentState->onExit();
+
+		if (m_stateMachine)
+		{
+			m_stateMachine->destroy();
+			m_stateMachine.reset();
+		}
+
+		m_isRunning = false;
+	}
+}
