@@ -45,16 +45,15 @@ namespace Vigilant
 
 			/// Updates the mouse wheel
 			void setMouseWheel(int m);
-			int mousewheel = 0; ///< Mouse wheel's valu
+			int mousewheel = 0; ///< Mouse wheel's value
 
 			/// Add characters into inChars
 			void addInputCharacter(char c);
 			/// Add characters into inChars from a string
 			void addInputCharacters(const char* chars);
 
-			//getters
-			glm::vec2 getMouseCoords() const { return m_mouseCoords; }
-			Uint32 getEventType() { return m_eventType; }
+			glm::vec2 getMouseCoords() const { return m_mouseCoords; } ///<Mouse coords's geeter
+			Uint32 getEventType() { return m_eventType; } //<SDL Event type's getter
 			const char* getInChars() { return m_inChars; }
 
 		private:
