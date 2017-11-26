@@ -6,16 +6,25 @@ namespace Vigilant
 {
 	class IEngine;
 
+	/**
+	 * Enumeration of avialable states per IGameState
+	 */
 	enum class ScreenState
 	{
 		NONE,
-		RUNNING,
-		EXIT_APPLICATION,
+		RUNNING, //< state is running
+		EXIT_APPLICATION, //< exit application
 		CHANGE_NEXT, ///< change to next screen
 		CHANGE_PREVIOUS ///< change to previous screen
 	};
 
 
+	/** \brief IGameState
+	*         Abstract State Class. Blueprint for all application states
+	*
+	*  Abstract State Class. Playable or Menu states must extend this class!
+	*  @sa StateMachine
+	*/
 	class IGameState
 	{
 
@@ -29,16 +38,27 @@ namespace Vigilant
 				//empty
 			}
 
-			/// Return the index of the next or prev screen when changing screens
-			virtual int getNextStateIndex() const = 0;
-			virtual int getPrevStateIndex() const = 0;
+			virtual int getNextStateIndex() const = 0; ///< Return the index of the next screen when changing screens
+			virtual int getPrevStateIndex() const = 0; ///< Return the index of the previous screen when changing screens
 
-			/// Called at beginning and end of application
-			virtual void build() = 0; ///< will be custom for each inherited class
+			/**
+			 * Called at beginning of application.
+			 * Will be custom for each inherited class.
+			 */
+			virtual void build() = 0;
+			/**
+			 * Called at end of application.
+			 * Will be custom for each inherited class.
+			 */
 			virtual void destroy() = 0;
 
-			/// Called when screen enters and exits focus
+			/**
+			 * Called when screen enters focus.
+			 */
 			virtual void onEntry() = 0;
+			/**
+			 * Called when screen exits focus.
+			 */
 			virtual void onExit() = 0;
 
 			/// Called in game loop
@@ -53,14 +73,13 @@ namespace Vigilant
 				m_currentScreenState = ScreenState::RUNNING;
 			}
 
-			//getters
-			int getScreenIndex() { return m_screenIndex; }
-			ScreenState getScreenState() { return m_currentScreenState; }
+			int getScreenIndex() { return m_screenIndex; } ///< Current screen index getter
+			ScreenState getScreenState() { return m_currentScreenState; } ///< current ScreenState enum getter
 
 		protected:
 
 			ScreenState m_currentScreenState = ScreenState::NONE;
-			IEngine* m_game = nullptr;
+			IEngine* m_game = nullptr; ///< Pointer to Engine
 			int m_screenIndex = -1;
 	};
 }
