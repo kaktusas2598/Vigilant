@@ -15,7 +15,7 @@ namespace Vigilant
 	 *
 	 *  Manages unordered map currently and previously pressed keys and also holds mouse coordinates.
 	 *  Can be used to set pressed keys and mouse coords, and also to query for presse keys or coordinates.
-	 *  @sa IEngine::handleEvents()
+	 *  @sa IEngine::handleEvents
 	 */
 	class InputManager
 	{
@@ -53,7 +53,7 @@ namespace Vigilant
 			void addInputCharacters(const char* chars);
 
 			glm::vec2 getMouseCoords() const { return m_mouseCoords; } ///<Mouse coords's geeter
-			Uint32 getEventType() { return m_eventType; } //<SDL Event type's getter
+			Uint32 getEventType() { return m_eventType; } //< SDL_Event type's getter
 			const char* getInChars() { return m_inChars; }
 
 		private:
