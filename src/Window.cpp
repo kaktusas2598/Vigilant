@@ -61,16 +61,6 @@ namespace Vigilant {
         //what kind of blending we want
         //in this case, we want alpha 0 to be transparent
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-		//SDL_Surface * pTempSurface = SDL_LoadBMP("assets/animate.bmp");
-		//SDL_Surface * pTempSurface = IMG_Load("assets/animate-alpha.png");
-
-		//m_pTexture = SDL_CreateTextureFromSurface(m_pRenderer, pTempSurface);
-
-		//SDL_FreeSurface(pTempSurface);
-
-		//SDL_QueryTexture(m_pTexture, NULL, NULL, &m_sourceRectangle.w, &m_sourceRectangle.h);
-		//TextureManager::Instance()->load("assets/animate-alpha.png", "animate", m_pRenderer);
 	}
 
 	void Window::swapBuffer()

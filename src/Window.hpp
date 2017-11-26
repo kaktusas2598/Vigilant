@@ -5,27 +5,49 @@
 #include <SDL2/SDL.h>
 #include <OpenGL/gl3.h>
 
+/// Main Namespace
 namespace Vigilant {
+	/**
+	 * Creates window with use of these flags. 0x0 to use none.
+	 */
+	enum WindowFlags
+	{
+		INVISIBLE = 0x1, //<
+		FULLSCREEN = 0x2, //< Fullscreen window
+		BORDERLESS = 0x4 //< Borderless
+	};
 
-	enum WindowFlags {INVISIBLE = 0x1, FULLSCREEN = 0x2, BORDERLESS = 0x4};
-
+	/*! \brief Window
+	 *         Main Window Class.
+	 *
+	 *  Setups OpenGL flags and crates SDL Window, GL context.
+	 *  Also creates and binds VAO's.
+	 */
 	class Window {
 		public:
 			Window(){}
 			~Window(){}
 
+			/**
+			 * First setups GL flags, then creates SDL_Window and GL context. Finally initializes and binds VAOs.
+			 * @param title Title to be displayed on window title bar
+			 * @param screenHeight Screen height in pixels
+			 * @param screenWidth Screen width in pixels
+			 * @sa IEngine::init()
+			 */
 			void create(std::string title, int screenHeight, int screenWidth, unsigned int currentFlags);
-
+			/**
+			 * Swap OpenGL framebuffers/Update Display
+			 */
 			void swapBuffer();
 
-			int getScreenWidth() { return m_screenWidth; }
-			int getScreenHeight() { return m_screenHeight; }
-			SDL_Window* getSDLWindow() { return m_pWindow; }
+			int getScreenWidth() { return m_screenWidth; } ///< Screen width getter
+			int getScreenHeight() { return m_screenHeight; } ///< Screen height getter
+			SDL_Window* getSDLWindow() { return m_pWindow; } ///< SDL-Window pointer getter
 
 		private:
 
-			SDL_Window * m_pWindow;
-
-			int m_screenWidth, m_screenHeight;
+			SDL_Window * m_pWindow; ///< Pointer to SDL_Window
+			int m_screenWidth, m_screenHeight; ///< Screen width and height
 	};
 }
