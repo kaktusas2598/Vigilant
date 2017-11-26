@@ -62,13 +62,6 @@ namespace Vigilant {
         //in this case, we want alpha 0 to be transparent
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		/*m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, 0);
-
-		if(m_pRenderer == nullptr){
-		  exitWithError("SDL Renderer could not be created");
-		}
-		SDL_SetRenderDrawColor(m_pRenderer, 0, 255, 0, 255);*/
-
 		//SDL_Surface * pTempSurface = SDL_LoadBMP("assets/animate.bmp");
 		//SDL_Surface * pTempSurface = IMG_Load("assets/animate-alpha.png");
 
