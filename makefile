@@ -1,8 +1,13 @@
+#SOURCES
 OBJS= src/*.cpp src/img/imgui*cpp
 
-CC= g++
+#COMPILER
+CC= clang++ #Or g++
+#COMPILER FLAGS
 CF=-Wall -g -std=c++11 -std=c++14 -fexceptions
 
+#LINKER FLAGS
+#For Mac OS X: brew install sdl2; brew install sdl2_image; brew install glew; brew install sdl2_ttf
 LDF= -framework OpenGL -lglew -lSDL2 -lBox2D -framework SDL2_ttf
 
 INCLUDE_PATHS = -I/usr/local/include -I/opt/X11/include
