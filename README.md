@@ -1,13 +1,14 @@
 # Vigilant Engine
 
-2D Game/Physics engine I am working on.
+2D (Eventually 3D) Game/Physics engine I am working on.
 
 #### Supported features:
 
- * Finite State Machine
+ * Finite State Machine to Load Game States (I would ditch this for Data Driven Design)
  * Keyboard and Mouse input handling with SDL2
- * GLSL program loading
- * Immediate mode GUI using Dear IMGUI
+ * Window and GL context handling with SDL2
+ * GLSL program loading 
+ * Immediate mode GUI using Dear IMGUI (Altrough I am still looking at other options like Nuklear)
 
 #### Planned feature list:
 
@@ -16,6 +17,8 @@
  * Component bases model?
  * Texture loading
  * TTF Font loading
+ * Data Driven Design
+ * Lua Support
 
 
 ### Used Libraries
