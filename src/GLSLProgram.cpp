@@ -73,15 +73,7 @@ namespace Vigilant {
 		// link program
 		glLinkProgram(m_programID);
 
-		GLint isLinked = 0;
-		glGetProgramiv(m_programID, GL_LINK_STATUS, (int *) &isLinked);
-		if (isLinked == GL_FALSE)
-		{
-			GLint maxLength = 0;
-			glGetProgramiv(m_programID, GL_INFO_LOG_LENGTH, &maxLength);
-
-			std::vector<char> errorLog(maxLength);
-			glGetProgramInfoLog(m_programID, maxLength, &maxLength, &errorLog[0]);
+		if (!checkStatus(m_programID, glGetProgramiv, glGetProgramInfoLog, GL_LINK_STATUS)) {
 
 			glDetachShader(m_programID, m_vertexShaderID);
 			glDetachShader(m_programID, m_fragmentShaderID);
@@ -89,7 +81,6 @@ namespace Vigilant {
 			glDeleteShader(m_vertexShaderID);
 			glDeleteShader(m_fragmentShaderID);
 
-			std::printf("%s\n", &(errorLog[0]));
 			exitWithError("Shaders failed to link!");
 		}
 	}
@@ -134,31 +125,42 @@ namespace Vigilant {
 
 	void GLSLProgram::compileShader(const char* source, const std::string& name, GLuint id)
 	{
-
 		glShaderSource(id, 1, &source, nullptr);
 
 		glCompileShader(id);
 
+		if (!checkStatus(id, glGetShaderiv, glGetShaderInfoLog, GL_COMPILE_STATUS)) {
+			// exit with faiure
+			glDeleteShader(id);
+			exitWithError("Shader " + name + " failed to compile");
+		}
+	}
+
+	bool GLSLProgram::checkStatus(
+			GLuint objectID,
+			PFNGLGETSHADERIVPROC objectPropertyGetter,
+			PFNGLGETSHADERINFOLOGPROC getInfoLogFunc,
+			GLenum statusType)
+	{
 		GLint success = 0;
-		glGetShaderiv(id, GL_COMPILE_STATUS, &success);
+		objectPropertyGetter(objectID, statusType, &success);
 
 		if (success == GL_FALSE)
 		{
 			GLint maxLength = 0;
-			glGetShaderiv(id, GL_INFO_LOG_LENGTH, &maxLength);
+			objectPropertyGetter(objectID, GL_INFO_LOG_LENGTH, &maxLength);
 
 			// the maxLength includes the NULL character
 			std::vector<char> errorLog(maxLength);
-			glGetShaderInfoLog(id, maxLength, &maxLength, &errorLog[0]);
-
-			// provide the infolog in whatever manor you deem best
-			// exit with faiure
-			glDeleteShader(id);
+			getInfoLogFunc(objectID, maxLength, &maxLength, &errorLog[0]);
 
 			std::printf("%s\n", &(errorLog[0]));
-			exitWithError("Shader " + name + " failed to compile");
+
+			return false;
 		}
+		return true;
 	}
+
 
 	void GLSLProgram::dispose()
 	{

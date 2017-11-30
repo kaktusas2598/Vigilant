@@ -32,6 +32,13 @@ namespace Vigilant {
 
 			void compileShader(const char* source, const std::string& name, GLuint id);
 
+			//Function pointer magic for refactoring compile and link errors checking
+			bool checkStatus(
+					GLuint objectID,
+					PFNGLGETSHADERIVPROC objectPropertyGetter,
+					PFNGLGETSHADERINFOLOGPROC getInfoLogFunc,
+					Glenum statusType);
+
 			int m_numAttributes = 0;
 
 			GLuint m_programID = 0;
