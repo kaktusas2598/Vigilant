@@ -37,7 +37,7 @@ namespace Vigilant {
 					GLuint objectID,
 					PFNGLGETSHADERIVPROC objectPropertyGetter,
 					PFNGLGETSHADERINFOLOGPROC getInfoLogFunc,
-					Glenum statusType);
+					GLenum statusType);
 
 			int m_numAttributes = 0;
 
