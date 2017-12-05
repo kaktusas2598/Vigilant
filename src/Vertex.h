@@ -1,6 +1,8 @@
 #pragma once
 
 #include <OpenGL/gl3.h>
+#include <glm/glm.hpp>
+//TODO: change to use GLM
 
 namespace Vigilant {
 

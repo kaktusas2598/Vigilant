@@ -97,7 +97,6 @@ namespace Vigilant {
 
 				deltaTime = deltaTime / DESIRED_FPS;
 
-				//std::cout <<"deltaTime: " << deltaTime << std::endl;
 				update(deltaTime);
 
 				render(deltaTime);
@@ -116,31 +115,24 @@ namespace Vigilant {
 		}
 	}
 
+	/**
+	* Renders current state
+	* @param deltaTime
+	*/
 	void IEngine::render(float deltaTime){
 
 		if (m_currentState && m_currentState->getScreenState() == ScreenState::RUNNING)
 		{
 			m_currentState->draw(deltaTime);
 		}
-		/*
-		//clear the renderer to draw color
-		SDL_RenderClear(m_pRenderer);
-
-		//SDL_RenderCopyEx(m_pRenderer, m_pTexture, &m_sourceRectangle, &m_destinationRectangle,
-		//0, 0, SDL_FLIP_HORIZONTAL);
-
-		//TextureManager::Instance()->draw("animate", 0, 0, 128, 82, m_pRenderer);
-
-		//TextureManager::Instance()->drawFrame("animate", 100, 100, 128, 82, 1, m_currentFrame,  m_pRenderer);
-
-		//TextureManager::Instance()->drawFrame("animate", 200, 200, 128, 82, 1, m_currentFrame,  m_pRenderer);
-
-		//draw to the screen
-		SDL_RenderPresent(m_pRenderer);
-		*/
 	}
+
+	/**
+	* Update current state or change state if needed
+	* @param deltaTime
+	* @sa StateMachine
+	*/
 	void IEngine::update(float deltaTime){
-		//m_currentFrame = int((SDL_GetTicks() / 100) % 6);
 
 		if (m_currentState)
 		{
@@ -150,7 +142,6 @@ namespace Vigilant {
 				case ScreenState::RUNNING:
 					m_currentState->update(deltaTime);
 					break;
-
 					//change to next screen
 				case ScreenState::CHANGE_NEXT:
 					//clean up running screen
@@ -163,7 +154,6 @@ namespace Vigilant {
 						m_currentState->onEntry();
 					}
 					break;
-
 					//change to previous screen
 				case ScreenState::CHANGE_PREVIOUS:
 					//clean up running screen
@@ -176,7 +166,6 @@ namespace Vigilant {
 						m_currentState->onEntry();
 					}
 					break;
-
 					//exit game
 				case ScreenState::EXIT_APPLICATION:
 					exit();
@@ -190,10 +179,16 @@ namespace Vigilant {
 		}
 		else { exit(); }
 	}
+
+	/**
+	* Takes SDL_Event reference from current running state and according to event types to InputManager.
+	* @param event SDL_Event& structure
+	* @sa IGameState::update, InputManager
+	*/
 	void IEngine::handleEvents(SDL_Event& event)
 	{
 		//set the event type
-		///inputManager.setEventType(event.type);
+		inputManager.setEventType(event.type);
 		switch (event.type) {
 			case SDL_QUIT:
 				exit();
@@ -232,9 +227,9 @@ namespace Vigilant {
 	}
 
 	void IEngine::exit(){
+
 		std::cout << "Cleaning game..\n";
 		//SDL_DestroyWindow(m_pWindow);
-		//SDL_DestroyRenderer(m_pRenderer);
 		//SDL_Quit();
 
 		m_currentState->onExit();

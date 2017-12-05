@@ -45,6 +45,8 @@ namespace Vigilant
 
 	void StateMachine::addState(IGameState* newScreen)
 	{
+		//TODO: This is shit, I think this was causing segfault, I need to replace order of consts in States.hpp
+		//It seems like this is just assigning them in order - poor design
 		newScreen->m_screenIndex = (int)m_states.size();
 
 		//add new screen to vector of screens

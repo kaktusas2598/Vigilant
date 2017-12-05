@@ -37,7 +37,6 @@ namespace Vigilant {
 			virtual void addStates() = 0;
 			virtual void onExit() = 0;
 
-			// Handles all sdl events
 			void handleEvents(SDL_Event& event);
 
 			bool running(){ return m_isRunning; }
