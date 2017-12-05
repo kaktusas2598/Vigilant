@@ -12,13 +12,13 @@
 
 #### Planned feature list:
 
- * Model Loading
+ * Model Loading (simple .obj loader or assimp?)
  * Rigid Body Dynamics support (My Own, not Box2D)
- * Component bases model?
- * Texture loading
+ * Entity-Component Model
+ * Texture loading with stb_image.h instead of picoPNG..
  * TTF Font loading
- * Data Driven Design
- * Lua Support
+ * Data Driven Design 
+ * Lua Support (For scripting states and entities?)
 
 
 ### Used Libraries
