@@ -7,18 +7,18 @@
  * Finite State Machine to Load Game States (I would ditch this for Data Driven Design)
  * Keyboard and Mouse input handling with SDL2
  * Window and GL context handling with SDL2
- * GLSL program loading 
+ * GLSL program loading
  * Immediate mode GUI using Dear IMGUI (Altrough I am still looking at other options like Nuklear)
 
 #### Planned feature list:
 
- * Model Loading
+ * Model Loading (simple .obj loader or assimp?)
  * Rigid Body Dynamics support (My Own, not Box2D)
- * Component bases model?
- * Texture loading
+ * Entity-Component Model
+ * Texture loading with stb_image.h instead of picoPNG..
  * TTF Font loading
  * Data Driven Design
- * Lua Support
+ * Lua Support (For scripting states and entities?)
 
 
 ### Used Libraries
