@@ -41,6 +41,7 @@ namespace Vigilant {
 				break;
 			default:
 				std::cout << "nrChannels is: " << nrChannels << std::endl;
+				glChannels = GL_RGB;
 				break;
 		}
 		glTexImage2D(GL_TEXTURE_2D, 0, glChannels, width, height, 0, glChannels, GL_UNSIGNED_BYTE, data);
