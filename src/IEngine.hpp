@@ -4,6 +4,7 @@
 #include "InputManager.hpp"
 
 #include <stdio.h>
+#include <memory>
 
 namespace Vigilant {
 
