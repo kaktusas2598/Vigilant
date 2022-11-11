@@ -3,6 +3,7 @@
 #include "IOManager.hpp"
 #include <fstream>
 #include <vector>
+#include <memory>
 
 namespace Vigilant {
 
