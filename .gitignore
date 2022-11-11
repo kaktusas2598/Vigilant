@@ -1,3 +1,8 @@
 *.dSYM/
 html
 latex
+src/include
+src/lib
+glm
+*.dll
+*.exe
