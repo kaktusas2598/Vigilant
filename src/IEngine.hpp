@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <memory>
 
+
 namespace Vigilant {
 
 	class StateMachine;
@@ -43,8 +44,12 @@ namespace Vigilant {
 			bool running(){ return m_isRunning; }
 
 			const float getFps() const { return m_fps; }
+			
+			StateMachine *getStateMachine() { return m_stateMachine.get(); }
 
 			InputManager inputManager; ///< main application's input manager
+
+			void setSDLRendering(bool useSDLRendering) { SDLRenderingEnabled = useSDLRendering; }
 
 		protected:
 
@@ -61,5 +66,6 @@ namespace Vigilant {
 
 			int m_currentFrame;
 
+			bool SDLRenderingEnabled = false;
 	};
 }

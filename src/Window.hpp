@@ -35,7 +35,7 @@ namespace Vigilant {
 	 */
 	class Window {
 		public:
-			Window(){}
+			Window(bool glContextEnabled = true) { GLContextEnabled = glContextEnabled; }
 			~Window(){}
 
 			/**
@@ -53,11 +53,16 @@ namespace Vigilant {
 
 			int getScreenWidth() { return m_screenWidth; } ///< Screen width getter
 			int getScreenHeight() { return m_screenHeight; } ///< Screen height getter
-			SDL_Window* getSDLWindow() { return m_pWindow; } ///< SDL-Window pointer getter
+			SDL_Window* getSDLWindow() { return m_pWindow; } ///< SDL_Window pointer getter
+			SDL_Renderer* getSDLRenderer() { return renderer; } ///<Optional SDL_Renderer getter
 
 		private:
 
 			SDL_Window * m_pWindow; ///< Pointer to SDL_Window
 			int m_screenWidth, m_screenHeight; ///< Screen width and height
+
+			// Optional SDL Rendering
+			bool GLContextEnabled = true;
+			SDL_Renderer *renderer;
 	};
 }

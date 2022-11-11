@@ -29,7 +29,6 @@ namespace Vigilant {
 
 		// set up a double buffered window (minimizes flickering)
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-
 		SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);//?
 
 		m_window.create(title, screenHeight, screenWidth, currentFlags);
@@ -92,11 +91,17 @@ namespace Vigilant {
 			int updateCount = 0;
 			while (totalDeltaTime > 0.0f && updateCount < MAX_PHYSICS_STEPS && m_isRunning)
 			{
+				// TODO: I added this adhoc
+				SDL_Event event;
+				while (SDL_PollEvent(&event)) {
+					handleEvents(event);
+				}
+
 				//limit deltatime to 1.0 so no speedup (1.0 being one frame and .2 being a fifth of a frame)
 				float deltaTime = std::min(totalDeltaTime, MAX_DELTA_TIME);
 
 				deltaTime = deltaTime / DESIRED_FPS;
-
+				
 				update(deltaTime);
 
 				render(deltaTime);
@@ -120,6 +125,25 @@ namespace Vigilant {
 	* @param deltaTime
 	*/
 	void IEngine::render(float deltaTime){
+
+		if (SDLRenderingEnabled) {
+			SDL_RenderClear(m_window.getSDLRenderer()); // clear the renderer to the draw color
+			SDL_RenderPresent(m_window.getSDLRenderer()); // draw to the screen
+		} else {
+			//TODO: below is temporary code to test OpenGL drawing
+			glClearDepth(1.0);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+			//Following is deprecated GL stuff
+			glEnableClientState(GL_COLOR_ARRAY); //enable colouring
+			glBegin(GL_TRIANGLES);
+			glColor3f(0,0,0); //set colour for GL immediate mode(deprecated)
+			glVertex2f(0, 0); //draw each vertice
+			glVertex2f(0, 200);
+			glVertex2f(500, 500);
+			glEnd();
+			///////////////////////
+		}
 
 		if (m_currentState && m_currentState->getScreenState() == ScreenState::RUNNING)
 		{
@@ -229,8 +253,13 @@ namespace Vigilant {
 	void IEngine::exit(){
 
 		std::cout << "Cleaning game..\n";
-		//SDL_DestroyWindow(m_pWindow);
-		//SDL_Quit();
+		if (SDLRenderingEnabled) {
+			SDL_DestroyWindow(m_window.getSDLWindow());
+			SDL_DestroyRenderer(m_window.getSDLRenderer());
+			SDL_Quit();
+		} else {
+
+		}
 
 		m_currentState->onExit();
 
