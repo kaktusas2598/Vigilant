@@ -4,6 +4,7 @@
 
 #### Supported features:
 
+ * OpenGL and optional SDL (only 2D) rendering
  * Finite State Machine to Load Game States (I would ditch this for Data Driven Design)
  * Keyboard and Mouse input handling with SDL2
  * Window and GL context handling with SDL2
