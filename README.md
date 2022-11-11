@@ -25,6 +25,7 @@
 
  * [OpenGL](https://www.opengl.org) - for 2D rendering and eventually 3D;
  * [SDL2](https://www.libsdl.org/) - for window creation and input handling;
+ * [GLEW] - extension library for loading OpenGL functions
  * [IMGUI](https://github.com/ocornut/imgui) - Bloat-free Immediate Mode Graphical User interface for C++ with minimal dependencies;
  * [GLM](https://glm.g-truc.net/0.9.8/index.html) - C++ Mathematics library for graphics applications.
  + stb_image Public Domain Image Loading Library for C++

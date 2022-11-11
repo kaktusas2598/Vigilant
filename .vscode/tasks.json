@@ -1,0 +1,40 @@
+{
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "Vigilant",
+            "command": "C:\\msys64\\mingw64\\bin\\g++.exe",
+            "args": [
+                "*.cpp",
+                "src/*.cpp",
+                "-o",
+                "main",
+                "-IC:\\msys64\\mingw64\\include",
+                "-Isrc/include",
+                "-Lsrc/lib",
+                "-LC:\\msys64\\mingw64\\lib",
+                "-v",
+                "-Wall",
+                "-g",
+                "-std=c++11",
+                "-std=c++14",
+                "-fexceptions",
+                "-lmingw32",
+                "-lSDL2main",
+                "-lSDL2",
+                "-mwindows",
+                "-lglew32",
+                "-lopengl32",
+                "-lm"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": "build"
+        }
+    ],
+    "version": "2.0.0"
+}
