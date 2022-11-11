@@ -73,7 +73,11 @@ namespace Vigilant
 	IGameState* StateMachine::getCurrentState()
 	{
 		//error check
-		if(m_currentStateIndex == STATE_NONE) return nullptr;
+		//why did I do this? if no state provided, engine will segfault
+		if(m_currentStateIndex == STATE_NONE) {
+			return nullptr;
+		}
+	
 
 		return m_states[m_currentStateIndex];
 	}
