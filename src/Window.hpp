@@ -35,7 +35,7 @@ namespace Vigilant {
 	 */
 	class Window {
 		public:
-			Window(bool glContextEnabled = true) { GLContextEnabled = glContextEnabled; }
+			Window() {}
 			~Window(){}
 
 			/**
@@ -55,6 +55,7 @@ namespace Vigilant {
 			int getScreenHeight() { return m_screenHeight; } ///< Screen height getter
 			SDL_Window* getSDLWindow() { return m_pWindow; } ///< SDL_Window pointer getter
 			SDL_Renderer* getSDLRenderer() { return renderer; } ///<Optional SDL_Renderer getter
+			void setSDLRendering(bool sdlRenderingEnabled) { GLContextEnabled =  !sdlRenderingEnabled; }
 
 		private:
 

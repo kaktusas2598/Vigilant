@@ -26,8 +26,7 @@ class MenuState: public Vigilant::IGameState {
 				m_game->getStateMachine()->setState(1);
 			}
 		}
-		void draw(float deltaTime) {}
-	private:
+		void draw(float deltaTime) { }			
 };
 
 class PlayState: public Vigilant::IGameState {
@@ -71,6 +70,8 @@ int main(int argc, char *argv[]) {
 	
 	printf("Initialising Engine...");		
 	MyGame *engine = new MyGame();
+	// Must be called before init! This is horrible design, remove later TODO
+	engine->setSDLRendering(true);
 	engine->init("Vigilant Engine Test", 640, 480, 0);
 	engine->run();
 	return 0;

@@ -6,6 +6,9 @@
 #include <stdio.h>
 #include <memory>
 
+// TODO: TEMP, DELETE
+# include <SDL2/SDL_image.h>
+
 
 namespace Vigilant {
 

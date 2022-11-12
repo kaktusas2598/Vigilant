@@ -25,7 +25,8 @@
                 "-mwindows",
                 "-lglew32",
                 "-lopengl32",
-                "-lm"
+                "-lm",
+                "-lSDL2_image"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"

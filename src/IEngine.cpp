@@ -3,7 +3,7 @@
 #include "ErrorHandler.hpp"
 #include "StateMachine.hpp"
 #include "IGameState.hpp"
-//#include "TextureManager.h"
+#include "TextureManager.hpp"
 #include <string>
 
 namespace Vigilant {
@@ -27,9 +27,17 @@ namespace Vigilant {
 			exitWithError("Could Not Initialize SDL");
 		}
 
+		// TODO: DELETE
+		// SDL_Texture* m_pTexture;
+		// SDL_Rect m_sourceRectangle;
+		// SDL_Rect m_destinationRectangle;
+
 		// set up a double buffered window (minimizes flickering)
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 		SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);//?
+
+		//TODO: this is temp
+		m_window.setSDLRendering(SDLRenderingEnabled);
 
 		m_window.create(title, screenHeight, screenWidth, currentFlags);
 
@@ -44,6 +52,12 @@ namespace Vigilant {
 
 		//initialize game screen elements
 		m_currentState->onEntry();
+
+		//TODO: delete
+		if(!TheTextureManager::Instance()->load("assets/player.png", "animate", m_window.getSDLRenderer()))
+		{
+			exitWithError("Could not load image");
+		}
 
 		//set the initial game screen to ScreenState::RUNNING
 		m_currentState->setRunning();
@@ -128,6 +142,9 @@ namespace Vigilant {
 
 		if (SDLRenderingEnabled) {
 			SDL_RenderClear(m_window.getSDLRenderer()); // clear the renderer to the draw color
+
+			TheTextureManager::Instance()->draw("animate", 0,0, 128, 82,  m_window.getSDLRenderer());
+
 			SDL_RenderPresent(m_window.getSDLRenderer()); // draw to the screen
 		} else {
 			//TODO: below is temporary code to test OpenGL drawing
