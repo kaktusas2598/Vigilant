@@ -33,6 +33,7 @@
  * [IMGUI](https://github.com/ocornut/imgui) - Bloat-free Immediate Mode Graphical User interface for C++ with minimal dependencies;
  * [GLM](https://glm.g-truc.net/0.9.8/index.html) - C++ Mathematics library for graphics applications.
  * [TinyXML](https://www.grinninglizard.com/tinyxml/) - For XML file parsing
+ * [inih](https://github.com/jtilly/inih) - header only C++ version of inih - ini file loader and parser
  + stb_image Public Domain Image Loading Library for C++
  * SpriteFont class from Seeds of Andromeda, will implement my own, as I can't get it working at the moment.
 
