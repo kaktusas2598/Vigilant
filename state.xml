@@ -19,7 +19,7 @@
 		</TEXTURES>
 		<OBJECTS>
 			<object type="Player" x="100" y="100" width="50" height="50" textureID="player" numFrames="12"/>
-            <object type="Player" x="200" y="100" width="50" height="50" textureID="player" numFrames="12"/>
+            <object type="Enemy" x="500" y="100" width="50" height="50" textureID="player" numFrames="12"/>
         </OBJECTS>
     </PLAY>
     <!-- The Game Over State -->

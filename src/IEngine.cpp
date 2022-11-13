@@ -9,6 +9,7 @@
 
 #include "MenuButton.hpp"
 #include "Player.hpp"
+#include "Enemy.hpp"
 #include <string>
 
 namespace Vigilant {
@@ -58,6 +59,7 @@ namespace Vigilant {
 
 		TheEntityFactory::Instance()->registerType("MenuButton", new MenuButtonCreator());
 		TheEntityFactory::Instance()->registerType("Player", new PlayerCreator());
+		TheEntityFactory::Instance()->registerType("Enemy", new EnemyCreator());
 		// TheGameObjectFactory::Instance()->registerType("AnimatedGraphic", new AnimatedGraphicCreator());
 		//initialize the current game
 		// onInit();

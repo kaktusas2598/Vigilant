@@ -26,7 +26,7 @@ namespace Vigilant {
     void Player::handleInput() {
         Vector2D target = TheInputManager::Instance()->getMouseCoords();
         m_velocity = target - m_position;
-        m_velocity /= 50;
+        m_velocity /= 100;
     }
 
     void Player::clean() {}
