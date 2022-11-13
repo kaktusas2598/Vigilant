@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __IENGINE__
+#define __IENGINE__
 
 #include "Window.hpp"
 #include "InputManager.hpp"
@@ -10,7 +11,6 @@
 
 // TODO: TEMP, DELETE
 # include <SDL2/SDL_image.h>
-
 
 namespace Vigilant {
 
@@ -82,3 +82,5 @@ namespace Vigilant {
 
 	typedef IEngine TheEngine;
 }
+
+#endif // __IENGINE__

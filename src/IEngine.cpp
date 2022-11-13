@@ -44,11 +44,6 @@ namespace Vigilant {
 			exitWithError("Could Not Initialize SDL");
 		}
 
-		// TODO: DELETE
-		// SDL_Texture* m_pTexture;
-		// SDL_Rect m_sourceRectangle;
-		// SDL_Rect m_destinationRectangle;
-
 		// set up a double buffered window (minimizes flickering)
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 		SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);//?
@@ -75,15 +70,6 @@ namespace Vigilant {
 
 		//initialize game screen elements
 		m_currentState->onEntry();
-
-		//TODO: delete
-		if (SDLRenderingEnabled) {
-			if (!TheTextureManager::Instance()->load("assets/player.png", "animate"))
-			{
-				exitWithError("Could not load image");
-			}
-		}
-
 		//set the initial game screen to ScreenState::RUNNING
 		m_currentState->setRunning();
 
@@ -166,10 +152,7 @@ namespace Vigilant {
 
 		if (SDLRenderingEnabled) {
 			SDL_RenderClear(m_window.getSDLRenderer()); // clear the renderer to the draw color
-
 			m_stateMachine->getCurrentState()->draw(deltaTime);
-			TheTextureManager::Instance()->draw("animate", 0,0, 128, 82);
-
 			SDL_RenderPresent(m_window.getSDLRenderer()); // draw to the screen
 		} else {
 			//TODO: below is temporary code to test OpenGL drawing
@@ -211,8 +194,7 @@ namespace Vigilant {
 					//clean up running screen
 					m_currentState->onExit();
 					m_currentState = m_stateMachine->moveNext();
-					if (m_currentState)
-					{
+					if (m_currentState) {
 						//initialize zanew running screen
 						m_currentState->setRunning();
 						m_currentState->onEntry();
@@ -223,8 +205,7 @@ namespace Vigilant {
 					//clean up running screen
 					m_currentState->onExit();
 					m_currentState = m_stateMachine->movePrev();
-					if (m_currentState)
-					{
+					if (m_currentState) {
 						//initialize new running screen
 						m_currentState->setRunning();
 						m_currentState->onEntry();
