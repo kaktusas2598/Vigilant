@@ -13,6 +13,7 @@ namespace Vigilant {
 
 			void draw(float deltaTime);
 			void update(float deltaTime);
+			void handleInput();
 			void clean();
 			void load(const LoaderParams *params);
 	};

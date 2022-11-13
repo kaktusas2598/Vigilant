@@ -7,8 +7,9 @@
             <texture filename="assets/quit.png" ID="exitbutton"/>
         </TEXTURES>
         <OBJECTS>
-            <object type="MenuButton" x="100" y="100" width="400" height="100" textureID="playbutton"  numFrames="0" callbackID="1"/>
-            <object type="MenuButton" x="100" y="300" width="400" height="100" textureID="exitbutton"  numFrames="0" callbackID="2"/>
+            <!-- Buttons measure for 1024 x 768 resolution-->
+            <object type="MenuButton" x="362" y="234" width="300" height="100" textureID="playbutton"  numFrames="0" callbackID="1"/>
+            <object type="MenuButton" x="362" y="468" width="300" height="100" textureID="exitbutton"  numFrames="0" callbackID="2"/>
         </OBJECTS>
     </MENU>
     <!--The Play State-->
@@ -17,8 +18,8 @@
 			<texture filename="assets/player.png" ID="player"/>
 		</TEXTURES>
 		<OBJECTS>
-			<object type="Player" x="100" y="100" width="50" height="50" textureID="player" numFrames="4"/>
-            <object type="Player" x="200" y="100" width="50" height="50" textureID="player" numFrames="4"/>
+			<object type="Player" x="100" y="100" width="50" height="50" textureID="player" numFrames="12"/>
+            <object type="Player" x="200" y="100" width="50" height="50" textureID="player" numFrames="12"/>
         </OBJECTS>
     </PLAY>
     <!-- The Game Over State -->

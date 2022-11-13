@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __StateMachine__
+#define __StateMachine__
 
 #define STATE_NONE -1
 
@@ -13,7 +14,8 @@ namespace Vigilant
 	/*! \brief StateMachine
 	*         Finite State Machine Manager class.
 	*
-	*  Finite State Machine. Manages std::vector of IGameState instances
+	* Finite State Machine. Manages std::vector of IGameState instances
+	* Limitations: changes between states sequentually 
 	*  @sa IGameState, IEngine
 	*/
 	class StateMachine
@@ -38,3 +40,6 @@ namespace Vigilant
 			int m_currentStateIndex = -1; ///< Indicates index of current state in states collection, -1 indicates none
 	};
 }
+
+
+#endif // __StateMachine__

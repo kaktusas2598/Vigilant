@@ -1,14 +1,19 @@
 #pragma once
 
 #include <SDL2/SDL.h>
-#include <glm/glm.hpp>
 #include <stdio.h>
 #include <unordered_map>
-
+#include <vector>
 #include <iostream>
+#include "Vector2D.hpp"
 
 namespace Vigilant
 {
+	enum mouseButtons {
+		LEFT = 0,
+		MIDDLE = 1,
+		RIGHT = 2
+	};
 
 	/*! \brief InputManager
 	 *         Keyboard and Mouse input manager.
@@ -16,13 +21,17 @@ namespace Vigilant
 	 *  Manages unordered map currently and previously pressed keys and also holds mouse coordinates.
 	 *  Can be used to set pressed keys and mouse coords, and also to query for presse keys or coordinates.
 	 *  @sa IEngine::handleEvents
+	 * 
 	 */
-	class InputManager
-	{
+	class InputManager {
 		public:
-			InputManager();
-			~InputManager();
-
+			static InputManager* Instance() {
+				if (s_pInstance == 0) {
+					s_pInstance = new InputManager();
+				}
+				return s_pInstance;
+			}
+		
 			/// Copies current key map to previous one, gets called in Main Engine loop
 			void update();
 
@@ -52,11 +61,18 @@ namespace Vigilant
 			/// Add characters into inChars from a string
 			void addInputCharacters(const char* chars);
 
-			glm::vec2 getMouseCoords() const { return m_mouseCoords; } ///<Mouse coords's geeter
+			Vector2D getMouseCoords() const { return m_mouseCoords; } ///<Mouse coords's geeter
+			bool getMouseButtonState(int buttonNumber) {return m_mouseButtonStates[buttonNumber]; }
+
 			Uint32 getEventType() { return m_eventType; } //< SDL_Event type's getter
 			const char* getInChars() { return m_inChars; }
 
 		private:
+			InputManager();
+			~InputManager() {};
+
+			//singleton instance
+			static InputManager* s_pInstance;
 
 			/// Identical to isKeyDown but searches the previous key map
 			bool wasKeyDown(unsigned int keyID);
@@ -64,10 +80,13 @@ namespace Vigilant
 			std::unordered_map<unsigned int, bool> m_keyMap; ///< Holds map of SDL key values versus pressed/released bool values
 			std::unordered_map<unsigned int, bool> m_prevKeyMap; ///< Holds map of previously pressed keys
 
-			glm::vec2 m_mouseCoords; ///< GLM vector2 holding mouse coordinates
+			std::vector<bool> m_mouseButtonStates;
+			Vector2D m_mouseCoords; ///< vector2 holding mouse coordinates
 
 			Uint32 m_eventType; ///< event type: keypress, mousemotion, etc...
 
 			char m_inChars[1];
 	};
+
+	typedef InputManager TheInputManager;
 }

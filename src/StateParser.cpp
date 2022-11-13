@@ -55,7 +55,7 @@ namespace Vigilant {
             std::string textureID;
 
             e->Attribute("x", &x);
-            e->Attribute("y", &x);
+            e->Attribute("y", &y);
             e->Attribute("width", &width);
             e->Attribute("height", &height);
             e->Attribute("numFrames", &numFrames);

@@ -3,15 +3,12 @@
 #include "imgui/imgui.h"
 #include <iostream>
 
-namespace Vigilant
-{
+namespace Vigilant {
+
+	InputManager* InputManager::s_pInstance = 0;
+
 	InputManager::InputManager() :
 		m_mouseCoords(0.0f,0.0f)
-	{
-		//empty
-	}
-
-	InputManager::~InputManager()
 	{
 		//empty
 	}
@@ -40,8 +37,8 @@ namespace Vigilant
 
 	void InputManager::setMouseCoords(float x, float y)
 	{
-		m_mouseCoords.x = x;
-		m_mouseCoords.y = y;
+		m_mouseCoords.setX(x);
+		m_mouseCoords.setY(y);
 	}
 
 	bool InputManager::isKeyDown(unsigned int keyID)
@@ -80,8 +77,7 @@ namespace Vigilant
 		else { return false; }
 	}
 
-	void InputManager::setMouseWheel(int m)
-	{
+	void InputManager::setMouseWheel(int m) {
 		if (m == 1)
 		{
 			mousewheel = 1;
@@ -96,8 +92,7 @@ namespace Vigilant
 		}
 	}
 
-	int ImTextCharFromUtf8(unsigned int* out_char, const char* in_text, const char* in_text_end)
-	{
+	int ImTextCharFromUtf8(unsigned int* out_char, const char* in_text, const char* in_text_end) {
 		unsigned int c = (unsigned int)-1;
 		const unsigned char* str = (const unsigned char*)in_text;
 		if (!(*str & 0x80))
@@ -154,8 +149,7 @@ namespace Vigilant
 		return 0;
 	}
 
-	int ImTextStrFromUtf8(ImWchar* buf, int buf_size, const char* in_text, const char* in_text_end, const char** in_text_remaining)
-	{
+	int ImTextStrFromUtf8(ImWchar* buf, int buf_size, const char* in_text, const char* in_text_end, const char** in_text_remaining) {
 		ImWchar* buf_out = buf;
 		ImWchar* buf_end = buf + buf_size;
 		while (buf_out < buf_end-1 && (!in_text_end || in_text < in_text_end) && *in_text)
@@ -173,8 +167,7 @@ namespace Vigilant
 		return (int)(buf_out - buf);
 	}
 
-	void InputManager::addInputCharacter(char c)
-	{
+	void InputManager::addInputCharacter(char c) {
 		//get string length
 		int x = 0;
 		while(m_inChars[x++]);
@@ -188,8 +181,7 @@ namespace Vigilant
 		}
 	}
 
-	void InputManager::addInputCharacters(const char* chars)
-	{
+	void InputManager::addInputCharacters(const char* chars) {
 		for (int i = 0; i < sizeof(chars)/sizeof(const char*); i++)
 		{
 			m_inChars[i] = chars[i];

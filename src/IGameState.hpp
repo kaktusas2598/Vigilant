@@ -1,13 +1,15 @@
 #pragma once
 
 #include <stdio.h>
+#include <string>
+#include <vector>
 
 namespace Vigilant
 {
 	class IEngine;
 
 	/**
-	 * Enumeration of avialable states per IGameState
+	 * Enumeration of available states per IGameState
 	 */
 	enum class ScreenState
 	{
@@ -31,12 +33,8 @@ namespace Vigilant
 		public:
 			friend class StateMachine;
 
-			IGameState(){
-				//empty
-			}
-			virtual ~IGameState(){
-				//empty
-			}
+			IGameState(){ }
+			virtual ~IGameState(){ }
 
 			virtual int getNextStateIndex() const = 0; ///< Return the index of the next screen when changing screens
 			virtual int getPrevStateIndex() const = 0; ///< Return the index of the previous screen when changing screens
@@ -67,19 +65,19 @@ namespace Vigilant
 
 			/// Sets m_game to be the parent game
 			void setParentGame(IEngine* game) { m_game = game; }
-			/// Sets current game state to running
-			void setRunning()
-			{
+			void setRunning() {
 				m_currentScreenState = ScreenState::RUNNING;
 			}
 
 			int getScreenIndex() { return m_screenIndex; } ///< Current screen index getter
 			ScreenState getScreenState() { return m_currentScreenState; } ///< current ScreenState enum getter
+			virtual void setScreenState(ScreenState screenState) { m_currentScreenState = screenState; }
 
 		protected:
 
 			ScreenState m_currentScreenState = ScreenState::NONE;
 			IEngine* m_game = nullptr; ///< Pointer to Engine
 			int m_screenIndex = -1;
+			std::vector<std::string> textureIDs;
 	};
 }

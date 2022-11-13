@@ -2,8 +2,7 @@
 #include "IGameState.hpp"
 #include "IEngine.hpp"
 
-namespace Vigilant
-{
+namespace Vigilant {
 
 	StateMachine::StateMachine(IEngine* game) :
 		m_game(game)
