@@ -11,7 +11,8 @@ namespace Vigilant
 	/** \brief IEntity
 	*         Abstract Entity Class.
 	*
-	*  Abstract State Class. Renderable entities must extend from this class, this is temporary solution!
+	*  Abstract State Class. Renderable entities must extend from this class
+	*  TODO: Future plans: Implement Entity Component System to decouple things like Renderer, Audio and so on
 	*/
 	class IEntity {
 
