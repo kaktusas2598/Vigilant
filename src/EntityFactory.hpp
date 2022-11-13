@@ -3,9 +3,9 @@
 
 #include <string>
 #include <map>
-#include <iostream>
 
 #include "IEntity.hpp"
+#include "ErrorHandler.hpp"
 
 /**
  * Distibuted factory pattern to make game entity creation more streamlined
@@ -46,7 +46,7 @@ namespace Vigilant {
                 std::map<std::string, BaseCreator*>::iterator it = creators.find(typeID);
 
                 if (it == creators.end()) {
-                    std::cout << "Could not find entity type: " << typeID << std::endl;
+                    exitWithError("Could not find entity type:");
                     return NULL;
                 }
 

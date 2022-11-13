@@ -1,16 +1,23 @@
 #include "IEngine.hpp"
 #include "FrameLimiter.hpp"
 #include "ErrorHandler.hpp"
-#include "StateMachine.hpp"
+// #include "StateMachine.hpp"
 #include "IGameState.hpp"
+#include "MainMenuState.hpp"
+#include "PlayState.hpp"
 #include "TextureManager.hpp"
+
+#include "MenuButton.hpp"
+#include "Player.hpp"
 #include <string>
 
 namespace Vigilant {
 
+	IEngine* IEngine::s_pInstance = 0;
+
 	IEngine::IEngine()
 	{
-		//Initialize State Machine
+		// Initialize State Machine
 		m_stateMachine = std::make_unique<StateMachine>(this);
 	}
 
@@ -18,8 +25,18 @@ namespace Vigilant {
 	{
 	}
 
+	void IEngine::addStates() {
+		MainMenuState *menuState = new MainMenuState();
+		PlayState *playState = new PlayState();
+		//Currently states is std:vector and each time they are just pushed to it in order
+		m_stateMachine->addState(menuState);
+		m_stateMachine->addState(playState);
+		m_stateMachine->setState(0);
+		return;
+	}
 
-	void IEngine::init(std::string title, int screenHeight, int screenWidth, unsigned int currentFlags){
+
+	void IEngine::init(std::string title, int screenHeight, int screenWidth, unsigned int currentFlags, bool sdlEnabled){
 
 		// Initialize SDL
 		if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
@@ -36,13 +53,19 @@ namespace Vigilant {
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 		SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);//?
 
-		//TODO: this is temp
+		SDLRenderingEnabled = sdlEnabled;
 		m_window.setSDLRendering(SDLRenderingEnabled);
-
 		m_window.create(title, screenHeight, screenWidth, currentFlags);
+		
+		if (SDLRenderingEnabled) {
+			TheTextureManager::Instance()->setRenderer(m_window.getSDLRenderer());
+		}
 
+		TheEntityFactory::Instance()->registerType("MenuButton", new MenuButtonCreator());
+		TheEntityFactory::Instance()->registerType("Player", new PlayerCreator());
+		// TheGameObjectFactory::Instance()->registerType("AnimatedGraphic", new AnimatedGraphicCreator());
 		//initialize the current game
-		onInit();
+		// onInit();
 
 		//initialize game screens and add them to the screenList
 		addStates();
@@ -54,9 +77,11 @@ namespace Vigilant {
 		m_currentState->onEntry();
 
 		//TODO: delete
-		if(!TheTextureManager::Instance()->load("assets/player.png", "animate", m_window.getSDLRenderer()))
-		{
-			exitWithError("Could not load image");
+		if (SDLRenderingEnabled) {
+			if (!TheTextureManager::Instance()->load("assets/player.png", "animate"))
+			{
+				exitWithError("Could not load image");
+			}
 		}
 
 		//set the initial game screen to ScreenState::RUNNING
@@ -84,8 +109,7 @@ namespace Vigilant {
 		//starting time
 		float prevTicks = SDL_GetTicks();
 
-		while (m_isRunning)
-		{
+		while (m_isRunning) {
 			frameLimiter.begin();
 
 			//time at the start of the frame
@@ -99,7 +123,7 @@ namespace Vigilant {
 			float totalDeltaTime = frameTime / DESIRED_FRAMETIME;
 
 			//update input manager
-			inputManager.update();
+			TheInputManager::Instance()->update();
 
 			//SEMI FIXED TIME STEP ??
 			int updateCount = 0;
@@ -143,7 +167,8 @@ namespace Vigilant {
 		if (SDLRenderingEnabled) {
 			SDL_RenderClear(m_window.getSDLRenderer()); // clear the renderer to the draw color
 
-			TheTextureManager::Instance()->draw("animate", 0,0, 128, 82,  m_window.getSDLRenderer());
+			m_stateMachine->getCurrentState()->draw(deltaTime);
+			TheTextureManager::Instance()->draw("animate", 0,0, 128, 82);
 
 			SDL_RenderPresent(m_window.getSDLRenderer()); // draw to the screen
 		} else {
@@ -175,10 +200,8 @@ namespace Vigilant {
 	*/
 	void IEngine::update(float deltaTime){
 
-		if (m_currentState)
-		{
-			switch (m_currentState->getScreenState())
-			{
+		if (m_currentState) {
+			switch (m_currentState->getScreenState()) {
 				//update the current running screen
 				case ScreenState::RUNNING:
 					m_currentState->update(deltaTime);
@@ -229,34 +252,34 @@ namespace Vigilant {
 	void IEngine::handleEvents(SDL_Event& event)
 	{
 		//set the event type
-		inputManager.setEventType(event.type);
+		TheInputManager::Instance()->setEventType(event.type);
 		switch (event.type) {
 			case SDL_QUIT:
 				exit();
 				break;
 			case SDL_MOUSEMOTION:
-				inputManager.setMouseCoords((float)event.motion.x, (float)event.motion.y);
+				TheInputManager::Instance()->setMouseCoords((float)event.motion.x, (float)event.motion.y);
 				break;
 			case SDL_KEYDOWN:
-				inputManager.pressKey(event.key.keysym.sym);
+				TheInputManager::Instance()->pressKey(event.key.keysym.sym);
 				break;
 			case SDL_KEYUP:
-				inputManager.releaseKey(event.key.keysym.sym);
+				TheInputManager::Instance()->releaseKey(event.key.keysym.sym);
 				break;
 			case SDL_MOUSEBUTTONDOWN:
-				inputManager.pressKey(event.button.button);
+				TheInputManager::Instance()->pressKey(event.button.button);
 				break;
 			case SDL_MOUSEBUTTONUP:
-				inputManager.releaseKey(event.button.button);
+				TheInputManager::Instance()->releaseKey(event.button.button);
 				break;
 			case SDL_TEXTINPUT:
-				inputManager.addInputCharacters(event.text.text);
+				TheInputManager::Instance()->addInputCharacters(event.text.text);
 				break;
 			case SDL_MOUSEWHEEL:
 				if (event.wheel.y > 0)
-					inputManager.setMouseWheel(1);
+					TheInputManager::Instance()->setMouseWheel(1);
 				if (event.wheel.y < 0)
-					inputManager.setMouseWheel(-1);
+					TheInputManager::Instance()->setMouseWheel(-1);
 				break;
 			case (SDLK_ESCAPE):
 				{

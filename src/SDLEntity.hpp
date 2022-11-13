@@ -1,3 +1,6 @@
+#ifndef __SDLEntity__
+#define __SDLEntity__
+
 #include "IEntity.hpp"
 #include "Vector2D.hpp"
 
@@ -29,3 +32,5 @@ namespace Vigilant {
             std::string m_textureID;
     };
 }
+
+#endif //  __SDLEntity__

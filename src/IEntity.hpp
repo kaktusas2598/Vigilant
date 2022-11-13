@@ -1,13 +1,10 @@
-#pragma once
+#ifndef __IENTITY__
+#define __IENTITY__
 
 #include <stdio.h>
 #include "LoaderParams.hpp"
 
-namespace Vigilant
-{
-	// class IEngine;
-
-
+namespace Vigilant {
 	/** \brief IEntity
 	*         Abstract Entity Class.
 	*
@@ -22,13 +19,11 @@ namespace Vigilant
             virtual void clean() = 0;
 
 			virtual void load(const LoaderParams *params) = 0;
-			/// Sets m_game to be the parent game
-			// void setParentGame(IEngine* game) { m_game = game; }
 
 		protected:
             IEntity(){}
 			virtual ~IEntity(){}
-
-			// IEngine* m_game = nullptr; ///< Pointer to Engine
 	};
 }
+
+#endif // __IENTITY__
