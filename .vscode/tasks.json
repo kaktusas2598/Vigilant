@@ -14,7 +14,7 @@
                 "-Lsrc/lib",
                 "-LC:\\msys64\\mingw64\\lib",
                 "-v",
-                "-Wall",
+                //"-Wall",
                 "-g",
                 "-std=c++11",
                 "-std=c++14",
