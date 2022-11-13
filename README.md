@@ -5,15 +5,15 @@
 #### Supported features:
 
  * OpenGL and optional SDL (only 2D) rendering
- * Finite State Machine to Load Game States (I would ditch this for Data Driven Design)
+ * Finite State Machine to Load Game States from XML file
  * Keyboard and Mouse input handling with SDL2
  * Window and GL context handling with SDL2
- * GLSL program loading
+ * GLSL shader program loading
  * Texture loading (With stb_image.h)
 
 #### Planned feature list:
 
- * Data Driven Design
+ * Tileable map loading and possibly level editor
  * 3D Rendering with OpenGL
  * Audio support
  * Model Loading (simple .obj loader or assimp?)
