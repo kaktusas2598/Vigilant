@@ -1,9 +1,10 @@
 #include <stdio.h>
-#include <SDL2/SDL.h>
+#include <iostream>
 //TODO: learn how to include headers properly - cause of so many issues and errors
 #include "src/IEngine.hpp"
 #include "src/IGameState.hpp"
 #include "src/StateMachine.hpp"
+#include "INIReader.h"
 
 const int WIDTH = 800, HEIGHT = 600;
 
@@ -68,10 +69,16 @@ class MyGame : public Vigilant::IEngine {
 
 int main(int argc, char *argv[]) {
 	
+	// Load engine config
+	INIReader reader("config.ini");
+	if (reader.ParseError() != 0) {
+		std::cout << "Could not load configuration file!" << std::endl;
+	}
+
 	printf("Initialising Engine...");		
 	MyGame *engine = new MyGame();
 	// Must be called before init! This is horrible design, remove later TODO
-	engine->setSDLRendering(true);
+	engine->setSDLRendering(reader.GetBoolean("rendering", "SDLRenderingEnabled", true));
 	engine->init("Vigilant Engine Test", 640, 480, 0);
 	engine->run();
 	return 0;
