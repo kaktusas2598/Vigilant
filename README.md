@@ -4,12 +4,13 @@
 
 #### Supported features:
 
- * OpenGL and optional SDL (only 2D) rendering
- * Finite State Machine to Load Game States from XML file
+ * SDL2 2D rendering (OpenGL support will be coming later)
+ * Finite State Machine and state loading from XML file
  * Keyboard and Mouse input handling with SDL2
  * Window and GL context handling with SDL2
  * GLSL shader program loading
- * Texture loading (With stb_image.h)
+ * Texture loading (With stb_image.h and SDL2_image)
+ * Menu buttons with callbacks
 
 #### Planned feature list:
 
@@ -17,11 +18,11 @@
  * 3D Rendering with OpenGL
  * Audio support
  * Model Loading (simple .obj loader or assimp?)
- * Rigid Body Dynamics support (My Own, not Box2D)
+ * Rigid Body Dynamics support
  * Entity-Component Model
  * TTF Font loading
  * Data Driven Design
- * Lua Support (For scripting states and entities?)
+ * Lua Support (For scripting states and entities)
  * Immediate mode GUI using Dear IMGUI (Altrough I am still looking at other options like Nuklear)
 
 
@@ -39,4 +40,7 @@
 
  #### Build Notes
 
+ Use the attached makefile to compile and build, but before that make sure your compiler knows where to find libraries and includes
+
+ Outdated Notes:
  To compile Box2D on MacOS Sierra, I copied header files to my /usr/local/include and moved compile static library (.a file) to /usr/local/lib/
