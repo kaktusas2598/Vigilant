@@ -14,8 +14,8 @@ int main(int argc, char *argv[]) {
 	// Initialise and start the engine
 	Vigilant::TheEngine::Instance()->init(
 		"Vigilant Engine Test",
-		reader.GetInteger("rendering", "ScreenWidth", 800),
 		reader.GetInteger("rendering", "ScreenHeight", 600),
+		reader.GetInteger("rendering", "ScreenWidth", 800),
 		0,
 		reader.GetBoolean("rendering", "SDLRenderingEnabled", true)
 	);

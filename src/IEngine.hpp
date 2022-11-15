@@ -34,13 +34,13 @@ namespace Vigilant {
 			/**
 			 * init systems, create window and GL context
 			 * @param title Title to be displayed on window title bar
-			 * @param screenHeight Screen height in pixels
-			 * @param screenWidth Screen width in pixels
+			 * @param height Screen height in pixels
+			 * @param width Screen width in pixels
 			 * @param currentFlags window flags
 			 * @param sdlEnabled Optional SDL rendering
 			 * @sa WindowFlags
 			 */
-			void init(std::string title, int screenHeight, int screenWidth, unsigned int currentFlags, bool sdlRendering = false);
+			void init(std::string title, int height, int width, unsigned int currentFlags, bool sdlRendering = false);
 			void run(); ///< runs main application's loop
 			void exit(); //< clean resources and exit application
 
@@ -58,6 +58,9 @@ namespace Vigilant {
 			StateMachine* getStateMachine() { return m_stateMachine.get(); }
 			SDL_Renderer* getSDLRenderer() { return m_window.getSDLRenderer(); } ///<Optional SDL_Renderer getter
 
+			int getScreenWidth() const { return screenWidth; }
+			int getScreenHeight() const { return screenHeight; }
+
 		private:
 			IEngine();
 			~IEngine();
@@ -69,6 +72,7 @@ namespace Vigilant {
 
 			bool m_isRunning = false; ///< appliction running flag
 			Window m_window; ///< main window instance
+			int screenWidth, screenHeight;
 
 			float m_fps = 0; ///< main application's fps
 

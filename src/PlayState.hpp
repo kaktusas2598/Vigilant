@@ -5,6 +5,7 @@
 
 #include "IGameState.hpp"
 #include "SDLEntity.hpp"
+#include "Level.hpp"
 // class IEntity;
 // class SDLEntity;
 
@@ -25,6 +26,7 @@ namespace Vigilant {
         std::string getStateID() const { return playID; }
         
     private:
+        Level* level;
 
         static const std::string playID;
         std::vector<IEntity*> gameEntities;

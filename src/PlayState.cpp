@@ -3,6 +3,7 @@
 #include "InputManager.hpp"
 #include "IEngine.hpp"
 #include "StateParser.hpp"
+#include "LevelParser.hpp"
 #include "StateMachine.hpp"
 
 namespace Vigilant {
@@ -10,7 +11,9 @@ namespace Vigilant {
     const std::string PlayState::playID = "PLAY";
 
     void PlayState::update(float deltaTime) {
-        if (TheInputManager::Instance()->isKeyPressed(SDL_SCANCODE_ESCAPE)) {
+        level->update();
+
+        if (TheInputManager::Instance()->isKeyDown(SDL_SCANCODE_ESCAPE)) {
             TheEngine::Instance()->getStateMachine()->getCurrentState()->setScreenState(ScreenState::CHANGE_NEXT);
         }
         
@@ -25,12 +28,17 @@ namespace Vigilant {
     }
 
     void PlayState::draw(float deltaTime) {
+        level->render();
+
         for (int i = 0; i < gameEntities.size(); i++) {
             gameEntities[i]->draw(deltaTime);
         }
     }
 
     void PlayState::onEntry() {
+        LevelParser levelParser;
+        level = levelParser.parseLevel("map.tmx");
+
         StateParser stateParser;
         stateParser.parseState("state.xml", playID, &gameEntities, &textureIDs);
         // return true;

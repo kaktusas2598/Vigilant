@@ -21,7 +21,6 @@ namespace Vigilant {
 
     class Level {
         public:
-            Level();
             ~Level();
 
             void update();
@@ -30,6 +29,9 @@ namespace Vigilant {
             std::vector<TileSet>* getTilesets() {return &tileSets; }
             std::vector<Layer*>* getLayers() { return &layers; }
         private:
+            friend class LevelParser;
+            Level() {} // Constructor is private to ensure Level is only created by LevelParser
+
             std::vector<TileSet> tileSets;
             std::vector<Layer*> layers;
     };

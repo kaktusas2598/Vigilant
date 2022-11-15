@@ -37,7 +37,9 @@ namespace Vigilant {
 	}
 
 
-	void IEngine::init(std::string title, int screenHeight, int screenWidth, unsigned int currentFlags, bool sdlEnabled){
+	void IEngine::init(std::string title, int height, int width, unsigned int currentFlags, bool sdlEnabled){
+		screenHeight = height;
+		screenWidth = width;
 
 		// Initialize SDL
 		if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
