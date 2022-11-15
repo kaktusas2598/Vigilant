@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="32" tileheight="32" infinite="0" backgroundcolor="#00ffff" nextlayerid="5" nextobjectid="1">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="32" tileheight="32" infinite="0" backgroundcolor="#00ffff" nextlayerid="6" nextobjectid="6">
  <tileset firstgid="1" name="Atlas" tilewidth="32" tileheight="32" tilecount="336" columns="14" spacing="0" margin="0">
   <image source="assets/Atlas.png" width="464" height="784"/>
  </tileset>
@@ -51,4 +51,22 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup id="5" name="Object Layer 1">
+  <object id="1" name="Dude" class="Player" x="12.4977" y="457.058" width="50" height="50">
+   <properties>
+    <property name="numFrames" type="int" value="12"/>
+    <property name="textureHeight" type="int" value="50"/>
+    <property name="textureID" value="player"/>
+    <property name="textureWidth" type="int" value="50"/>
+   </properties>
+  </object>
+  <object id="5" name="Guy" class="Enemy" x="291.91" y="249.954" width="50" height="50">
+   <properties>
+    <property name="numFrames" type="int" value="12"/>
+    <property name="textureHeight" type="int" value="50"/>
+    <property name="textureID" value="player"/>
+    <property name="textureWidth" type="int" value="50"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>
