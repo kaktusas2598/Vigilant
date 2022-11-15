@@ -13,7 +13,7 @@ namespace Vigilant {
     void PlayState::update(float deltaTime) {
         level->update();
 
-        if (TheInputManager::Instance()->isKeyDown(SDL_SCANCODE_ESCAPE)) {
+        if (TheInputManager::Instance()->isKeyPressed(SDLK_ESCAPE)) {
             TheEngine::Instance()->getStateMachine()->getCurrentState()->setScreenState(ScreenState::CHANGE_NEXT);
         }
         
