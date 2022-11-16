@@ -16,7 +16,9 @@ namespace Vigilant {
             Level* parseLevel(const char* levelFile);
         private:
             void parseTileSets(TiXmlElement *tilesetRoot, std::vector<TileSet>* tilesets);
+            void parseTextures(TiXmlElement *textureRoot);
             void parseTileLayer(TiXmlElement *tileElement, std::vector<Layer*>* layers, const std::vector<TileSet>* tilesets);
+            void parseObjectLayer(TiXmlElement *objectRoot, std::vector<Layer*>* layers);
 
             int tileSize;
             int width;

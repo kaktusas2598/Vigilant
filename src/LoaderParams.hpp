@@ -1,3 +1,5 @@
+#ifndef __LoaderParams__
+#define __LoaderParams__
 #include <string>
 
 namespace Vigilant {
@@ -30,3 +32,5 @@ namespace Vigilant {
             int m_animSpeed;
     };
 }
+
+#endif // __LoaderParams__

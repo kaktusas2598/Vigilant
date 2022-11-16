@@ -1,10 +1,12 @@
 #include "LevelParser.hpp"
 #include "Level.hpp"
 #include "TileLayer.hpp"
+#include "ObjectLayer.hpp"
 #include "TextureManager.hpp"
+#include "EntityFactory.hpp"
+#include "IEntity.hpp"
+#include "LoaderParams.hpp"
 #include <string>
-
-#include "rapidcsv.h"
 
 namespace Vigilant {
 
@@ -19,15 +21,27 @@ namespace Vigilant {
         root->Attribute("width", &width);
         root->Attribute("height", &height);
 
+        // Parse properties for entity texture sources
+        for (TiXmlElement* e = root->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
+            if (e->Value() == std::string("properties")) {
+                parseTextures(e);
+            }
+        }
+
         for (TiXmlElement* e = root->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
             if (e->Value() == std::string("tileset")) {
                 parseTileSets(e, level->getTilesets());
             }
         }
 
+        // Parse object and tile layers
         for (TiXmlElement* e = root->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
-            if (e->Value() == std::string("layer")) {
-                parseTileLayer(e, level->getLayers(), level->getTilesets());
+            if (e->Value() == std::string("objectgroup") || e->Value() == std::string("layer")) {
+                if (e->FirstChildElement()->Value() == std::string("object")) {
+                    parseObjectLayer(e, level->getLayers());
+                } else if (e->FirstChildElement()->Value() == std::string("data")) {
+                    parseTileLayer(e, level->getLayers(), level->getTilesets());
+                }
             }
         }
         
@@ -75,11 +89,10 @@ namespace Vigilant {
                 // decodedIDs = base64_decode(t);
             }
 
-            // Parsing CSV map data
+            // Parsing CSV map data, probably not the best solution, need to investigate how much memory this uses
             std::vector<int> layerRow;
             std::string row;
             std::istringstream tokenStream(t);
-            // Parse each CSV line, probably not the best solution, need to investigate how much memory this uses
             while(std::getline(tokenStream, row, ' ')) {
                 layerRow.clear();
                 std::istringstream rowStream(row);
@@ -88,8 +101,7 @@ namespace Vigilant {
                     layerRow.push_back(stoi(tileId));
                 }
                 data.push_back(layerRow); 
-            }
-            
+            }            
 
             // uncompress zlib compression
             // uLongf numGids = width * height * sizeof(int);
@@ -112,5 +124,46 @@ namespace Vigilant {
             layer->setTileIDs(data);
             layers->push_back(layer);
         }
+    }
+
+    void LevelParser::parseTextures(TiXmlElement *textureRoot) {
+        for (TiXmlElement* e = textureRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
+            TheTextureManager::Instance()->load(e->Attribute("value"), e->Attribute("name"));
+        }
+    }
+
+    void LevelParser::parseObjectLayer(TiXmlElement *objectRoot, std::vector<Layer*>* layers) {
+        ObjectLayer* objLayer = new ObjectLayer();
+
+        for (TiXmlElement* e = objectRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
+            if (e->Value() == std::string("object")) {
+                int x, y, width, height, numFrames, callbackId = 0;
+                std::string textureId;
+
+                e->Attribute("x", &x);
+                e->Attribute("y", &y);
+                e->Attribute("width", &width);
+                e->Attribute("height", &height);
+                IEntity* entity = TheEntityFactory::Instance()->create(e->Attribute("class"));
+
+                for (TiXmlElement* properties = e->FirstChildElement(); properties != NULL; properties = properties->NextSiblingElement()) {
+                    if (properties->Value() == std::string("properties")) {
+                        for (TiXmlElement* property = properties->FirstChildElement(); property != NULL; property = property->NextSiblingElement()) {
+                            if (property->Attribute("name") == std::string("numFrames")) {
+                                property->Attribute("value", &numFrames);
+                            } else if (property->Attribute("name") == std::string("textureID")) {
+                                textureId = property->Attribute("value");
+                            } else if (property->Attribute("name") == std::string("callbackID")) {
+                                property->Attribute("value", &callbackId);
+                            }
+                            // TODO: Parse more properties like animation speed and so on
+                        }
+                    }
+                }
+                entity->load(new LoaderParams(x, y, width, height, textureId, numFrames, callbackId));
+                objLayer->getEntities()->push_back(entity);
+            }
+        }
+        layers->push_back(objLayer);
     }
 }
