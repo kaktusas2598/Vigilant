@@ -22,11 +22,11 @@ namespace Vigilant {
         void drawTile(std::string id, int margin, int spacing, int x, int y, int width, int height, int currentRow, int currentFrame);
         void setRenderer(SDL_Renderer *rnd) { renderer = rnd; }
 
+        SDL_Texture* getTexture(std::string id) { return m_textureMap[id]; }
+
         // This class is a singleton
-        static TextureManager* Instance()
-        {
-            if(s_pInstance == 0)
-            {
+        static TextureManager* Instance() {
+            if(s_pInstance == 0) {
                 s_pInstance = new TextureManager();
                 return s_pInstance;
             }
