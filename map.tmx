@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="32" tileheight="32" infinite="0" backgroundcolor="#00ffff" nextlayerid="6" nextobjectid="6">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="32" tileheight="32" infinite="0" backgroundcolor="#00ffff" nextlayerid="7" nextobjectid="15">
  <properties>
   <property name="player" value="assets/player.png"/>
  </properties>
- <tileset firstgid="1" name="Atlas" tilewidth="32" tileheight="32" tilecount="336" columns="14"  spacing="0" margin="0">
+ <tileset firstgid="1" name="Atlas" tilewidth="32" tileheight="32" tilecount="336" columns="14" spacing="0" margin="0">
   <image source="assets/Atlas.png" width="464" height="784"/>
  </tileset>
  <layer id="1" name="Tile Layer 1" width="30" height="20">
@@ -54,7 +54,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="5" name="Object Layer 1">
+ <objectgroup id="5" name="Object Layer" type="entity">
   <object id="1" name="Dude" class="Player" x="12.4977" y="457.058" width="50" height="50">
    <properties>
     <property name="numFrames" type="int" value="12"/>
@@ -67,5 +67,12 @@
     <property name="textureID" value="player"/>
    </properties>
   </object>
+ </objectgroup>
+ <objectgroup id="6" name="Collision Layer" type="collider">
+  <object id="6" x="0" y="513" width="960" height="40"/>
+  <object id="11" x="301" y="303" width="36" height="15"/>
+  <object id="12" x="144" y="368" width="33" height="13"/>
+  <object id="13" x="77" y="462" width="34" height="14"/>
+  <object id="14" x="431" y="401" width="34" height="13"/>
  </objectgroup>
 </map>
