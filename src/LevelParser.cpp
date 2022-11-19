@@ -2,11 +2,15 @@
 #include "Level.hpp"
 #include "TileLayer.hpp"
 #include "ObjectLayer.hpp"
+#include "CollisionLayer.hpp"
 #include "TextureManager.hpp"
 #include "EntityFactory.hpp"
 #include "IEntity.hpp"
 #include "LoaderParams.hpp"
 #include <string>
+#include "CollisionLayer.hpp"
+// For SDL_Rect, want to replace with own structure for representing colliders
+#include <SDL2/SDL.h>
 
 namespace Vigilant {
 
@@ -38,7 +42,12 @@ namespace Vigilant {
         for (TiXmlElement* e = root->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
             if (e->Value() == std::string("objectgroup") || e->Value() == std::string("layer")) {
                 if (e->FirstChildElement()->Value() == std::string("object")) {
-                    parseObjectLayer(e, level->getLayers());
+                    if (e->Attribute("type") == std::string("entity")) {
+                        parseObjectLayer(e, level->getLayers());
+                    } else if (e->Attribute("type") == std::string("collider")) {
+                        CollisionLayer* colLayer = parseCollisionLayer(e, level->getLayers());
+                        level->setCollisionLayer(colLayer);
+                    }
                 } else if (e->FirstChildElement()->Value() == std::string("data")) {
                     parseTileLayer(e, level->getLayers(), level->getTilesets());
                 }
@@ -165,5 +174,23 @@ namespace Vigilant {
             }
         }
         layers->push_back(objLayer);
+    }
+    
+    CollisionLayer* LevelParser::parseCollisionLayer(TiXmlElement* collisionRoot, std::vector<Layer*>* layers) {
+        CollisionLayer *colLayer = new CollisionLayer();
+
+        for (TiXmlElement* e = collisionRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
+            int x, y, width, height;
+
+            e->Attribute("x", &x);
+            e->Attribute("y", &y);
+            e->Attribute("width", &width);
+            e->Attribute("height", &height);
+            // IEntity* entity = TheEntityFactory::Instance()->create(e->Attribute("class"));
+            // entity->load(new LoaderParams(x, y, width, height, textureId, numFrames, callbackId));
+            colLayer->getColliders().push_back(SDL_Rect{x, y, width, height});
+            
+        }
+        return colLayer;
     }
 }

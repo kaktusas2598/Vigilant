@@ -4,19 +4,21 @@
 #include "Window.hpp"
 #include "InputManager.hpp"
 #include "StateMachine.hpp"
+#include "ECS.hpp"
 
 #include <stdio.h>
 #include <memory>
 #include <vector>
-
-// TODO: TEMP, DELETE
-# include <SDL2/SDL_image.h>
 
 namespace Vigilant {
 
 	class StateMachine;
 	class IGameState;
 	class IEntity;
+
+	class RenderSystem;
+	class PhysicsSystem;
+	class CollisionSystem;
 
 	/*! \brief IEngine
 	 *         Main Engine Class.
@@ -61,6 +63,10 @@ namespace Vigilant {
 			int getScreenWidth() const { return screenWidth; }
 			int getScreenHeight() const { return screenHeight; }
 
+			std::shared_ptr<CollisionSystem> getCollisionSystem() const { return collisionSystem; }
+			std::shared_ptr<PhysicsSystem> getPhysicsSystem() const { return physicsSystem; }
+			std::shared_ptr<RenderSystem> getRenderSystem() const { return renderSystem; }
+
 		private:
 			IEngine();
 			~IEngine();
@@ -82,6 +88,12 @@ namespace Vigilant {
 			std::vector<IEntity*> entities;
 
 			bool SDLRenderingEnabled = false;
+
+			std::vector<Entity> vEntities;
+
+			std::shared_ptr<RenderSystem> renderSystem;
+			std::shared_ptr<PhysicsSystem> physicsSystem;
+			std::shared_ptr<CollisionSystem> collisionSystem;
 	};
 
 	typedef IEngine TheEngine;

@@ -6,15 +6,22 @@
 #include "MainMenuState.hpp"
 #include "PlayState.hpp"
 #include "TextureManager.hpp"
-
+#include "SoundManager.hpp"
 #include "MenuButton.hpp"
 #include "Player.hpp"
 #include "Enemy.hpp"
+
+#include "Coordinator.hpp"
+#include "RenderSystem.hpp"
+#include "PhysicsSystem.hpp"
+#include "CollisionSystem.hpp"
 #include <string>
+
+// #include <random>
 
 namespace Vigilant {
 
-	IEngine* IEngine::s_pInstance = 0;
+	IEngine* IEngine::s_pInstance = nullptr;
 
 	IEngine::IEngine()
 	{
@@ -41,6 +48,9 @@ namespace Vigilant {
 		screenHeight = height;
 		screenWidth = width;
 
+		// Temporary test for audio - button audio
+		TheSoundManager::Instance()->load("assets/button.wav","button", SOUND_SFX);
+
 		// Initialize SDL
 		if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 		{
@@ -62,6 +72,28 @@ namespace Vigilant {
 		TheEntityFactory::Instance()->registerType("MenuButton", new MenuButtonCreator());
 		TheEntityFactory::Instance()->registerType("Player", new PlayerCreator());
 		TheEntityFactory::Instance()->registerType("Enemy", new EnemyCreator());
+		
+		// ECS
+		TheCoordinator::Instance()->init();
+		// Register components in ECS so they all get IDs
+		TheCoordinator::Instance()->registerComponent<Transform>();
+		TheCoordinator::Instance()->registerComponent<RigidBody>();
+		TheCoordinator::Instance()->registerComponent<Gravity>();
+		TheCoordinator::Instance()->registerComponent<Sprite>();
+		// Register systems in ECS
+		renderSystem = TheCoordinator::Instance()->registerSystem<RenderSystem>();
+		physicsSystem = TheCoordinator::Instance()->registerSystem<PhysicsSystem>();
+		collisionSystem = TheCoordinator::Instance()->registerSystem<CollisionSystem>();
+		// Setup bit signatures for systems
+		Signature signature;
+		signature.set(TheCoordinator::Instance()->getComponentType<Transform>());
+		signature.set(TheCoordinator::Instance()->getComponentType<Sprite>());
+		signature.set(TheCoordinator::Instance()->getComponentType<RigidBody>());
+		signature.set(TheCoordinator::Instance()->getComponentType<Gravity>());
+		TheCoordinator::Instance()->setSystemSignature<RenderSystem>(signature);
+		TheCoordinator::Instance()->setSystemSignature<PhysicsSystem>(signature);
+		TheCoordinator::Instance()->setSystemSignature<CollisionSystem>(signature);
+
 		// TheGameObjectFactory::Instance()->registerType("AnimatedGraphic", new AnimatedGraphicCreator());
 		//initialize the current game
 		// onInit();
@@ -117,9 +149,7 @@ namespace Vigilant {
 
 			//SEMI FIXED TIME STEP ??
 			int updateCount = 0;
-			while (totalDeltaTime > 0.0f && updateCount < MAX_PHYSICS_STEPS && m_isRunning)
-			{
-				// TODO: I added this adhoc
+			while (totalDeltaTime > 0.0f && updateCount < MAX_PHYSICS_STEPS && m_isRunning) {
 				SDL_Event event;
 				while (SDL_PollEvent(&event)) {
 					handleEvents(event);
@@ -156,7 +186,13 @@ namespace Vigilant {
 
 		if (SDLRenderingEnabled) {
 			SDL_RenderClear(m_window.getSDLRenderer()); // clear the renderer to the draw color
-			m_stateMachine->getCurrentState()->draw(deltaTime);
+			// m_stateMachine->getCurrentState()->draw(deltaTime);
+			if (m_currentState && m_currentState->getScreenState() == ScreenState::RUNNING) {
+				m_currentState->draw(deltaTime);
+			}
+
+			renderSystem->render();
+			
 			SDL_RenderPresent(m_window.getSDLRenderer()); // draw to the screen
 		} else {
 			//TODO: below is temporary code to test OpenGL drawing
@@ -172,11 +208,6 @@ namespace Vigilant {
 			glVertex2f(500, 500);
 			glEnd();
 			///////////////////////
-		}
-
-		if (m_currentState && m_currentState->getScreenState() == ScreenState::RUNNING)
-		{
-			m_currentState->draw(deltaTime);
 		}
 	}
 
