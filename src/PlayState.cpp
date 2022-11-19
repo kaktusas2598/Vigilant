@@ -12,12 +12,15 @@
 #include <vector>
 #include "CollisionSystem.hpp"
 #include "PhysicsSystem.hpp"
+#include "InputSystem.hpp"
+#include "RenderSystem.hpp"
 
 namespace Vigilant {
 
     const std::string PlayState::playID = "PLAY";
 
     void PlayState::update(float deltaTime) {
+        TheEngine::Instance()->getInputSystem()->update(deltaTime);
         level->update();
         // Level checks collisions against map and only after we update physics
         TheEngine::Instance()->getCollisionSystem()->checkMapCollision(level->getCollisionLayer());
@@ -38,7 +41,7 @@ namespace Vigilant {
 
     void PlayState::draw(float deltaTime) {
         level->render();
-
+        TheEngine::Instance()->getRenderSystem()->render();
         // for (int i = 0; i < gameEntities.size(); i++) {
         //     gameEntities[i]->draw(deltaTime);
         // }
@@ -63,6 +66,14 @@ namespace Vigilant {
 			TheCoordinator::Instance()->addComponent(entity, RigidBody{.velocityX = 1, .velocityY = (float)randomNumber, .accelerationX = 1, .accelerationY = 1});
 			TheCoordinator::Instance()->addComponent(entity, Gravity{0, 8});
 		}
+        //PLAYER test
+        Entity player = TheCoordinator::Instance()->createEntity();
+        entities.push_back(player);
+        TheCoordinator::Instance()->addComponent(player, Transform{.x = 20, .y = 500});
+        TheCoordinator::Instance()->addComponent(player, Sprite{.width = 50, .height = 50, .textureID = "player", .numFrames = 12});
+        TheCoordinator::Instance()->addComponent(player, RigidBody{.velocityX = 0, .velocityY = 0, .accelerationX = 0, .accelerationY = 0});
+        TheCoordinator::Instance()->addComponent(player, Gravity{0, 8});
+        TheCoordinator::Instance()->addComponent(player, Playable{});
     }
 
     void PlayState::onExit() {

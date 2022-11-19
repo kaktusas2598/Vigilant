@@ -15,9 +15,8 @@
 #include "RenderSystem.hpp"
 #include "PhysicsSystem.hpp"
 #include "CollisionSystem.hpp"
+#include "InputSystem.hpp"
 #include <string>
-
-// #include <random>
 
 namespace Vigilant {
 
@@ -80,19 +79,39 @@ namespace Vigilant {
 		TheCoordinator::Instance()->registerComponent<RigidBody>();
 		TheCoordinator::Instance()->registerComponent<Gravity>();
 		TheCoordinator::Instance()->registerComponent<Sprite>();
-		// Register systems in ECS
-		renderSystem = TheCoordinator::Instance()->registerSystem<RenderSystem>();
-		physicsSystem = TheCoordinator::Instance()->registerSystem<PhysicsSystem>();
-		collisionSystem = TheCoordinator::Instance()->registerSystem<CollisionSystem>();
-		// Setup bit signatures for systems
-		Signature signature;
-		signature.set(TheCoordinator::Instance()->getComponentType<Transform>());
-		signature.set(TheCoordinator::Instance()->getComponentType<Sprite>());
-		signature.set(TheCoordinator::Instance()->getComponentType<RigidBody>());
-		signature.set(TheCoordinator::Instance()->getComponentType<Gravity>());
-		TheCoordinator::Instance()->setSystemSignature<RenderSystem>(signature);
-		TheCoordinator::Instance()->setSystemSignature<PhysicsSystem>(signature);
-		TheCoordinator::Instance()->setSystemSignature<CollisionSystem>(signature);
+		TheCoordinator::Instance()->registerComponent<Playable>();
+
+		// Set correct components for each system so that correct entities end up being checked
+		physicsSystem = TheCoordinator::Instance()->registerSystem<PhysicsSystem>(); {
+			Signature signature;
+			signature.set(TheCoordinator::Instance()->getComponentType<Gravity>());
+			signature.set(TheCoordinator::Instance()->getComponentType<RigidBody>());
+			signature.set(TheCoordinator::Instance()->getComponentType<Transform>());
+			TheCoordinator::Instance()->setSystemSignature<PhysicsSystem>(signature);
+		}
+		
+		renderSystem = TheCoordinator::Instance()->registerSystem<RenderSystem>(); {
+			Signature signature;
+			signature.set(TheCoordinator::Instance()->getComponentType<Sprite>());
+			signature.set(TheCoordinator::Instance()->getComponentType<Transform>());
+			TheCoordinator::Instance()->setSystemSignature<RenderSystem>(signature);
+		}
+		
+		collisionSystem = TheCoordinator::Instance()->registerSystem<CollisionSystem>();  {
+			Signature signature;
+			signature.set(TheCoordinator::Instance()->getComponentType<Sprite>());
+			signature.set(TheCoordinator::Instance()->getComponentType<Transform>());
+			signature.set(TheCoordinator::Instance()->getComponentType<RigidBody>());
+			TheCoordinator::Instance()->setSystemSignature<CollisionSystem>(signature);
+		}
+
+		inputSystem = TheCoordinator::Instance()->registerSystem<InputSystem>(); {
+			Signature signature;
+			signature.set(TheCoordinator::Instance()->getComponentType<Transform>());
+			signature.set(TheCoordinator::Instance()->getComponentType<Playable>());
+			signature.set(TheCoordinator::Instance()->getComponentType<RigidBody>());
+			TheCoordinator::Instance()->setSystemSignature<InputSystem>(signature);
+		}
 
 		// TheGameObjectFactory::Instance()->registerType("AnimatedGraphic", new AnimatedGraphicCreator());
 		//initialize the current game
@@ -191,7 +210,7 @@ namespace Vigilant {
 				m_currentState->draw(deltaTime);
 			}
 
-			renderSystem->render();
+			// renderSystem->render();
 			
 			SDL_RenderPresent(m_window.getSDLRenderer()); // draw to the screen
 		} else {

@@ -19,6 +19,7 @@ namespace Vigilant {
 	class RenderSystem;
 	class PhysicsSystem;
 	class CollisionSystem;
+	class InputSystem;
 
 	/*! \brief IEngine
 	 *         Main Engine Class.
@@ -66,6 +67,7 @@ namespace Vigilant {
 			std::shared_ptr<CollisionSystem> getCollisionSystem() const { return collisionSystem; }
 			std::shared_ptr<PhysicsSystem> getPhysicsSystem() const { return physicsSystem; }
 			std::shared_ptr<RenderSystem> getRenderSystem() const { return renderSystem; }
+			std::shared_ptr<InputSystem> getInputSystem() const { return inputSystem; }
 
 		private:
 			IEngine();
@@ -94,6 +96,7 @@ namespace Vigilant {
 			std::shared_ptr<RenderSystem> renderSystem;
 			std::shared_ptr<PhysicsSystem> physicsSystem;
 			std::shared_ptr<CollisionSystem> collisionSystem;
+			std::shared_ptr<InputSystem> inputSystem;
 	};
 
 	typedef IEngine TheEngine;

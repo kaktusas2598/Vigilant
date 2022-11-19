@@ -32,12 +32,21 @@ namespace Vigilant {
         int height;
         std::string textureID;
         int numFrames = 0;
+
+        // Different animations
+        // sprite h/w vs spritesheet hw
+        // animation IDs
     };
 
     struct Gravity {
         float forceX;
         float forceY;
         // Vector2D force;
+    };
+
+    // TODO: rename back to Player once Player class is gone
+    struct Playable {
+        int health = 100;
     };
 }
 
