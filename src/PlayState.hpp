@@ -5,6 +5,7 @@
 
 #include "IGameState.hpp"
 #include "SDLEntity.hpp"
+#include "Coordinator.hpp"
 #include "Level.hpp"
 // class IEntity;
 // class SDLEntity;
@@ -30,6 +31,7 @@ namespace Vigilant {
 
         static const std::string playID;
         std::vector<IEntity*> gameEntities;
+        std::vector<Entity> entities;
         
         bool checkCollision(SDLEntity* p1, SDLEntity* p2);
     };
