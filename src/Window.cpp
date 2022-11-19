@@ -13,10 +13,6 @@ namespace Vigilant {
 		if (GLContextEnabled) {
 			flags = SDL_WINDOW_OPENGL;
 		}
-		
-		// Alternative way to do rendering would be to use SDL_Renderer: that way we don't need to use
-		// SDL_GL_CreateContext(), but are effectively dropping OpenGL support
-		// TODO: Consider implementing alternative rendering options: SDL
 
 		if (currentFlags & INVISIBLE)
 		{
