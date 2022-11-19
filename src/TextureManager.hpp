@@ -33,6 +33,8 @@ namespace Vigilant {
             return s_pInstance;
         }
 
+        void clearTextureMap();
+        void clearFromTextureMap(std::string id);
     private:
 
         TextureManager() {}

@@ -65,4 +65,12 @@ namespace Vigilant {
 
         SDL_RenderCopyEx(renderer, m_textureMap[id], &srcRect, &destRect, 0, 0, SDL_FLIP_NONE);
     }
+
+    void TextureManager::clearTextureMap() {
+        m_textureMap.clear();
+    }
+
+    void TextureManager::clearFromTextureMap(std::string id) {
+        m_textureMap.erase(id);
+    }
 }
