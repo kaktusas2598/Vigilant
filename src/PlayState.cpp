@@ -62,7 +62,7 @@ namespace Vigilant {
 			entities.push_back(entity);
 			int randomNumber = distr(rng);
 			TheCoordinator::Instance()->addComponent(entity, Transform{.x = (float)randomNumber, .y = 300});
-			TheCoordinator::Instance()->addComponent(entity, Sprite{.width = 50, .height = 50, .textureID = "player", .numFrames = 12});
+			TheCoordinator::Instance()->addComponent(entity, Sprite{.width = 48, .height = 48, .textureID = "player", .numFrames = 12});
 			TheCoordinator::Instance()->addComponent(entity, RigidBody{.velocityX = 1, .velocityY = (float)randomNumber, .accelerationX = 1, .accelerationY = 1});
 			TheCoordinator::Instance()->addComponent(entity, Gravity{0, 8});
 		}
@@ -70,7 +70,7 @@ namespace Vigilant {
         Entity player = TheCoordinator::Instance()->createEntity();
         entities.push_back(player);
         TheCoordinator::Instance()->addComponent(player, Transform{.x = 20, .y = 500});
-        TheCoordinator::Instance()->addComponent(player, Sprite{.width = 50, .height = 50, .textureID = "player", .numFrames = 12});
+        TheCoordinator::Instance()->addComponent(player, Sprite{.width = 48, .height = 48, .textureID = "player", .numFrames = 6});
         TheCoordinator::Instance()->addComponent(player, RigidBody{.velocityX = 0, .velocityY = 0, .accelerationX = 0, .accelerationY = 0});
         TheCoordinator::Instance()->addComponent(player, Gravity{0, 8});
         TheCoordinator::Instance()->addComponent(player, Playable{});

@@ -20,7 +20,7 @@ namespace Vigilant {
                 && mousePosition.getY() < (m_position.getY() + m_height) && mousePosition.getY() > m_position.getY()) {
             if (TheInputManager::Instance()->isKeyPressed(SDL_BUTTON_LEFT)/* && isReleased*/) {
                 m_currentFrame = CLICKED;
-                TheSoundManager::Instance()->playSound("button", 1);
+                TheSoundManager::Instance()->playSound("button", 0);
                 callback();
                 isReleased = false;
             } /*else if (TheInputManager::Instance()->isKeyDown(SDL_BUTTON_LEFT)) {
