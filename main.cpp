@@ -1,10 +1,24 @@
 #include <iostream>
+#include <string>
 
 #include "INIReader.h"
 #include "src/IEngine.hpp"
 
+// Lua test
+#include "src/LuaScript.hpp"
+
 int main(int argc, char *argv[]) {
 	
+	Vigilant::LuaScript script("Player.lua");
+    float posX = script.get<float>("player.position.X");
+    float posY = script.get<float>("player.position.Y");
+    std::string filename = script.get<std::string>("player.filename");
+    int hp = script.get<int>("player.HP");
+
+    std::cout<<"Position X = "<<posX<<", Y = "<<posY<<std::endl;
+    std::cout<<"Filename:"<<filename<<std::endl;
+    std::cout<<"HP:"<<hp<<std::endl;
+
 	// Load engine config
 	INIReader reader("config.ini");
 	if (reader.ParseError() != 0) {

@@ -27,7 +27,8 @@
                 "-lopengl32",
                 "-lm",
                 "-lSDL2_image",
-                "-lSDL2_mixer"
+                "-lSDL2_mixer",
+                "-llua54"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"

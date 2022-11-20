@@ -63,7 +63,9 @@
         "stop_token": "cpp",
         "thread": "cpp",
         "cinttypes": "cpp",
-        "codecvt": "cpp"
+        "codecvt": "cpp",
+        "any": "cpp",
+        "optional": "cpp"
     },
     "makefile.launchConfigurations": [
         {
