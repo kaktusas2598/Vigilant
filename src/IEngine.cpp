@@ -1,22 +1,21 @@
 #include "IEngine.hpp"
 #include "FrameLimiter.hpp"
 #include "ErrorHandler.hpp"
-// #include "StateMachine.hpp"
 #include "IGameState.hpp"
 #include "MainMenuState.hpp"
 #include "PlayState.hpp"
-#include "TextureManager.hpp"
-#include "SoundManager.hpp"
 #include "MenuButton.hpp"
 #include "ScrollingBackground.hpp"
 #include "Player.hpp"
 #include "Enemy.hpp"
 
+// ECS related includes
 #include "Coordinator.hpp"
 #include "RenderSystem.hpp"
 #include "PhysicsSystem.hpp"
 #include "CollisionSystem.hpp"
 #include "InputSystem.hpp"
+
 #include <string>
 
 namespace Vigilant {
@@ -47,10 +46,6 @@ namespace Vigilant {
 	void IEngine::init(std::string title, int height, int width, unsigned int currentFlags, bool sdlEnabled){
 		screenHeight = height;
 		screenWidth = width;
-
-		// Temporary test for audio - button audio
-		TheSoundManager::Instance()->load("assets/button.wav","button", SOUND_SFX);
-		TheSoundManager::Instance()->load("assets/jump.wav","jump", SOUND_SFX);
 
 		// Initialize SDL
 		if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
@@ -331,15 +326,6 @@ namespace Vigilant {
 
 	void IEngine::exit(){
 
-		std::cout << "Cleaning game..\n";
-		if (SDLRenderingEnabled) {
-			SDL_DestroyWindow(m_window.getSDLWindow());
-			SDL_DestroyRenderer(m_window.getSDLRenderer());
-			SDL_Quit();
-		} else {
-
-		}
-
 		m_currentState->onExit();
 
 		if (m_stateMachine)
@@ -349,5 +335,13 @@ namespace Vigilant {
 		}
 
 		m_isRunning = false;
+
+		if (SDLRenderingEnabled) {
+			SDL_DestroyWindow(m_window.getSDLWindow());
+			SDL_DestroyRenderer(m_window.getSDLRenderer());
+			SDL_Quit();
+		} else {
+			// GL cleanup goes here
+		}
 	}
 }

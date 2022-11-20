@@ -14,12 +14,10 @@ namespace Vigilant {
 	 */
     class StateParser {
         public:
-            bool parseState(const char* stateFile, std::string stateID,
-            std::vector<IEntity*> *pEntities,  std::vector<std::string> *pTextureIDs);
+            bool parseState(const char* stateFile, std::string stateID, std::vector<IEntity*> *pEntities,  std::vector<std::string> *pTextureIDs, std::vector<std::string> *pSoundsIDs);
         private:
-            void parseObjects(TiXmlElement* pStateRoot,
-            std::vector<IEntity*> *pEntities);
-            void parseTextures(TiXmlElement* pStateRoot,
-            std::vector<std::string> *pTextureIDs);
+            void parseObjects(TiXmlElement* pStateRoot, std::vector<IEntity*> *pEntities);
+            void parseTextures(TiXmlElement* pStateRoot, std::vector<std::string> *pTextureIDs);
+            void parseSounds(TiXmlElement* pStateRoot, std::vector<std::string> *pSoundIDs);
     };
 }

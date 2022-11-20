@@ -79,5 +79,6 @@ namespace Vigilant
 			IEngine* m_game = nullptr; ///< Pointer to Engine
 			int m_screenIndex = -1;
 			std::vector<std::string> textureIDs;
+			std::vector<std::string> soundIDs;
 	};
 }

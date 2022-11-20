@@ -52,7 +52,7 @@ namespace Vigilant {
         level = levelParser.parseLevel("map.tmx");
 
         StateParser stateParser;
-        stateParser.parseState("state.xml", playID, &gameEntities, &textureIDs);
+        stateParser.parseState("state.xml", playID, &gameEntities, &textureIDs, &soundIDs);
 
         std::random_device rd;
 		std::mt19937 rng{rd()}; // Initialize Mersenne Twister pseudo-random number generator

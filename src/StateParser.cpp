@@ -1,10 +1,11 @@
 #include "StateParser.hpp"
 #include "ErrorHandler.hpp"
 #include "TextureManager.hpp"
+#include "SoundManager.hpp"
 #include "EntityFactory.hpp"
 
 namespace Vigilant {
-    bool StateParser::parseState(const char* stateFile, std::string stateID, std::vector<IEntity*> *pEntities,  std::vector<std::string> *pTextureIDs) {
+    bool StateParser::parseState(const char* stateFile, std::string stateID, std::vector<IEntity*> *pEntities,  std::vector<std::string> *pTextureIDs, std::vector<std::string> *pSoundsIDs) {
         TiXmlDocument xmlDoc;
 
         if (!xmlDoc.LoadFile(stateFile)) {
@@ -29,6 +30,14 @@ namespace Vigilant {
         }
         parseTextures(textureRoot, pTextureIDs);
 
+        TiXmlElement *soundRoot = 0;
+        for (TiXmlElement *e = stateRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
+            if (e->Value() == std::string("SOUNDS")) {
+                soundRoot = e;
+            }
+        }
+        parseSounds(soundRoot, pSoundsIDs);
+
         TiXmlElement *objectRoot = 0;
         for (TiXmlElement *e = stateRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
             if (e->Value() == std::string("OBJECTS")) {
@@ -46,6 +55,26 @@ namespace Vigilant {
             std::string id = e->Attribute("ID");
             pTextureIDs->push_back(id);
             TheTextureManager::Instance()->load(filename, id);
+        }
+    }
+
+    void StateParser::parseSounds(TiXmlElement* pStateRoot, std::vector<std::string> *pSoundIDs) {
+        for (TiXmlElement *e = pStateRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
+            std::string filename = e->Attribute("filename");
+            std::string id = e->Attribute("ID");
+            int type;
+            SoundType soundType;
+            e->Attribute("type", &type);
+            switch (type) {
+            case 0:
+                soundType = SOUND_MUSIC;
+                break;
+            default:
+                soundType = SOUND_SFX;
+                break;
+            }
+            pSoundIDs->push_back(id);
+            TheSoundManager::Instance()->load(filename, id, soundType);
         }
     }
 

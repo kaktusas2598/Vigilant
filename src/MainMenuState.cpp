@@ -5,17 +5,19 @@
 #include "IEngine.hpp"
 #include "StateMachine.hpp"
 
+// TODO: would be better to clear textures in base class
+#include "TextureManager.hpp"
+
 namespace Vigilant {
     const std::string MainMenuState::menuID = "MENU";
 
     void MainMenuState::onEntry() {
         StateParser stateParser;
-        stateParser.parseState("state.xml", menuID, &gameEntities, &textureIDs);
+        stateParser.parseState("state.xml", menuID, &gameEntities, &textureIDs,&soundIDs);
 
         m_callbacks.push_back(s_menuToPlay);
         m_callbacks.push_back(s_exitFromMenu);
         setCallbacks(m_callbacks);
-        // return true;
     }
 
     void MainMenuState::onExit() {
@@ -25,10 +27,8 @@ namespace Vigilant {
         gameEntities.clear();
 
         for(int i = 0; i < textureIDs.size(); i++) {
-            //TODO : Implement texture manager clear from texture map method
-            // TheTextureManager::Instance()->
+            TheTextureManager::Instance()->clearFromTextureMap(textureIDs[i]);
         }
-        // return true;
     }
 
     void MainMenuState::update(float deltaTime) {

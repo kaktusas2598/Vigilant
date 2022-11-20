@@ -7,6 +7,9 @@
             <texture filename="assets/quit.png" ID="exitbutton"/>
 			<texture filename="assets/clouds2.png" ID="clouds2"/>
         </TEXTURES>
+		<SOUNDS>
+			<sound filename="assets/button.wav" ID="button" type = "1"/>
+		</SOUNDS>
         <OBJECTS>
             <!-- Buttons measure for 1024 x 768 resolution-->
             <!-- <object type="MenuButton" x="362" y="234" width="300" height="100" textureID="playbutton"  numFrames="0" callbackID="1"/>
@@ -22,6 +25,9 @@
 			<texture filename="assets/player.png" ID="player"/>
             <texture filename="assets/run.png" ID="run"/>
 		</TEXTURES>
+		<SOUNDS>
+			<sound filename="assets/jump.wav" ID="jump" type = "1"/>
+		</SOUNDS>
 		<OBJECTS>
 			<object type="Player" x="150" y="150" width="34" height="40" textureID="run" numFrames="10"/>
             <object type="Player" x="100" y="100" width="50" height="50" textureID="run" numFrames="12"/>
