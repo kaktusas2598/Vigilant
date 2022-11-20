@@ -33,6 +33,7 @@ namespace Vigilant {
             return s_pInstance;
         }
 
+        std::map<std::string, SDL_Texture*> getTextureMap() { return m_textureMap; }
         void clearTextureMap();
         void clearFromTextureMap(std::string id);
     private:

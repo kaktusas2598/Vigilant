@@ -8,6 +8,7 @@
 #include "TextureManager.hpp"
 #include "SoundManager.hpp"
 #include "MenuButton.hpp"
+#include "ScrollingBackground.hpp"
 #include "Player.hpp"
 #include "Enemy.hpp"
 
@@ -49,6 +50,7 @@ namespace Vigilant {
 
 		// Temporary test for audio - button audio
 		TheSoundManager::Instance()->load("assets/button.wav","button", SOUND_SFX);
+		TheSoundManager::Instance()->load("assets/jump.wav","jump", SOUND_SFX);
 
 		// Initialize SDL
 		if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
@@ -69,6 +71,7 @@ namespace Vigilant {
 		}
 
 		TheEntityFactory::Instance()->registerType("MenuButton", new MenuButtonCreator());
+		TheEntityFactory::Instance()->registerType("ScrollingBackground", new ScrollingBackgroundCreator());
 		TheEntityFactory::Instance()->registerType("Player", new PlayerCreator());
 		TheEntityFactory::Instance()->registerType("Enemy", new EnemyCreator());
 		
@@ -110,6 +113,7 @@ namespace Vigilant {
 			signature.set(TheCoordinator::Instance()->getComponentType<Transform>());
 			signature.set(TheCoordinator::Instance()->getComponentType<Playable>());
 			signature.set(TheCoordinator::Instance()->getComponentType<RigidBody>());
+			signature.set(TheCoordinator::Instance()->getComponentType<Sprite>());
 			TheCoordinator::Instance()->setSystemSignature<InputSystem>(signature);
 		}
 
