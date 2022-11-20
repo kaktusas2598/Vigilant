@@ -11,15 +11,16 @@
  * GLSL shader program loading
  * Texture loading (With stb_image.h and SDL2_image)
  * Menu buttons with callbacks
+ * Basic Audio Support (one shot sfx and music)
+ * Tiled map loading from tmx files including collision layers
+ * Entity Component System (Based on the one created by Austin Mortan)
 
 #### Planned feature list:
 
- * Tileable map loading and possibly level editor
+ * Multiple animation support
  * 3D Rendering with OpenGL
- * Audio support
  * Model Loading (simple .obj loader or assimp?)
  * Rigid Body Dynamics support
- * Entity-Component Model
  * TTF Font loading
  * Data Driven Design
  * Lua Support (For scripting states and entities)
@@ -29,14 +30,13 @@
 ### Used Libraries
 
  * [OpenGL](https://www.opengl.org) - for 2D rendering and eventually 3D;
- * [SDL2](https://www.libsdl.org/) - for window creation and input handling;
+ * [SDL2](https://www.libsdl.org/) - for window creation and input handling, optional 2D rendering;
  * [GLEW](https://glew.sourceforge.net/) - extension library for loading OpenGL functions
  * [IMGUI](https://github.com/ocornut/imgui) - Bloat-free Immediate Mode Graphical User interface for C++ with minimal dependencies;
  * [GLM](https://glm.g-truc.net/0.9.8/index.html) - C++ Mathematics library for graphics applications.
  * [TinyXML](https://www.grinninglizard.com/tinyxml/) - For XML file parsing
  * [inih](https://github.com/jtilly/inih) - header only C++ version of inih - ini file loader and parser
  + stb_image Public Domain Image Loading Library for C++
- * SpriteFont class from Seeds of Andromeda, will implement my own, as I can't get it working at the moment.
 
  #### Build Notes
 
