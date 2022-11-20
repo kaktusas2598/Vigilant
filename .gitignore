@@ -7,6 +7,5 @@ glm
 *.dll
 *.exe
 *.zip
-assets/*
 tiled.tiled-project
 tiled.tiled-session
