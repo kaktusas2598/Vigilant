@@ -7,7 +7,7 @@
 
 namespace Vigilant {
 
-    // class IEntity;
+    // class Entity;
 
     class CollisionLayer : public Layer {
         public:
@@ -16,7 +16,7 @@ namespace Vigilant {
 
             std::vector<SDL_Rect>& getColliders() { return colliders; }
         private:
-            // std::vector<IEntity*> entities;
+            // std::vector<Entity*> entities;
             std::vector<SDL_Rect> colliders;
             bool collisionRenderingEnabled;
     };

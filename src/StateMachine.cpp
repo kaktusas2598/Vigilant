@@ -1,10 +1,10 @@
 #include "StateMachine.hpp"
 #include "IGameState.hpp"
-#include "IEngine.hpp"
+#include "Engine.hpp"
 
 namespace Vigilant {
 
-	StateMachine::StateMachine(IEngine* game) :
+	StateMachine::StateMachine(Engine* game) :
 		m_game(game)
 	{
 		//empty

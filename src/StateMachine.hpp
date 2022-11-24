@@ -8,7 +8,7 @@
 
 namespace Vigilant
 {
-	class IEngine;
+	class Engine;
 	class IGameState;
 
 	/*! \brief StateMachine
@@ -16,12 +16,12 @@ namespace Vigilant
 	*
 	* Finite State Machine. Manages std::vector of IGameState instances
 	* Limitations: changes between states sequentually 
-	*  @sa IGameState, IEngine
+	*  @sa IGameState, Engine
 	*/
 	class StateMachine
 	{
 		public:
-			StateMachine(IEngine* game);
+			StateMachine(Engine* game);
 			~StateMachine();
 
 			IGameState* moveNext();
@@ -35,7 +35,7 @@ namespace Vigilant
 			IGameState* getCurrentState();
 
 		protected:
-			IEngine* m_game = nullptr; ///< Pointer to main engine's class
+			Engine* m_game = nullptr; ///< Pointer to main engine's class
 			std::vector<IGameState*> m_states; ///< Collection of states
 			int m_currentStateIndex = -1; ///< Indicates index of current state in states collection, -1 indicates none
 	};

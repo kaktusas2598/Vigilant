@@ -1,5 +1,5 @@
 #include "ObjectLayer.hpp"
-#include "IEntity.hpp"
+#include "Entity.hpp"
 
 namespace Vigilant {
     

@@ -8,7 +8,7 @@
 #include <SDL2/SDL.h>
 
 //TEMP
-#include "IEngine.hpp"
+#include "Engine.hpp"
 #include "TextureManager.hpp"
 
 namespace Vigilant {

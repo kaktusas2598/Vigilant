@@ -1,11 +1,11 @@
 #include "LuaScript.hpp"
-#include "ErrorHandler.hpp"
 
 namespace Vigilant {
 
     LuaScript::LuaScript(const std::string& fileName) {
         L = luaL_newstate();
         if (luaL_loadfile(L, fileName.c_str()) || lua_pcall(L, 0, 0, 0)) {
+            std::string errorMessage = lua_tostring(L, -1);
             exitWithError("Could not load script " + fileName);
             L = 0; 
         }
@@ -41,6 +41,38 @@ namespace Vigilant {
         }
         clean();
         return v;
+    }
+
+    std::vector<std::string> LuaScript::getTableKeys(const std::string& name) {
+        // Lua function for getting table keys, will return "key1, key2, etc"
+        std::string code = 
+        "function getKeys(name) "
+        "s = \"\""
+        "for k, v in pairs(_G[name]) do "
+        "    s = s..k..\",\" "
+        "    end "
+        "return s "
+        "end"; // function for getting table keys
+        luaL_loadstring(L, code.c_str());
+        lua_pcall(L, 0, 0, 0);
+        lua_setglobal(L, "getKeys");
+        lua_pushstring(L, name.c_str());
+        lua_pcall(L, 1, 0, 0);
+
+        std::string luaReturn = lua_tostring(L, -1);
+        std::vector<std::string> tableKeys;
+        std::string temp = "";
+
+        for(unsigned int i = 0; i < luaReturn.size(); i++) {
+            if (luaReturn.at(i) != ',') {
+                temp += luaReturn.at(i);
+            } else {
+                tableKeys.push_back(temp);
+                temp = "";
+            }
+        }
+        clean();
+        return tableKeys;
     }
 
 }

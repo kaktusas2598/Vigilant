@@ -1,6 +1,6 @@
 #include "TileLayer.hpp"
 
-#include "IEngine.hpp"
+#include "Engine.hpp"
 #include "TextureManager.hpp"
 #include "Level.hpp"
 #include <iostream>
@@ -15,7 +15,7 @@ namespace Vigilant {
         // Will be used for scrolling maps later
         position += velocity;
         // TEMPORARY FOR SCROLLING TEST, will have to delete as this will cause segfault
-        // velocity.setX(1);
+        velocity.setX(1);
     }
 
     void TileLayer::render() {

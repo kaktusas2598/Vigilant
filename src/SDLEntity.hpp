@@ -1,11 +1,11 @@
 #ifndef __SDLEntity__
 #define __SDLEntity__
 
-#include "IEntity.hpp"
+#include "Entity.hpp"
 #include "Vector2D.hpp"
 
 namespace Vigilant {
-    class SDLEntity : public IEntity
+    class SDLEntity : public Entity
     {
         public:
             SDLEntity();

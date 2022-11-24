@@ -20,7 +20,7 @@ namespace Vigilant
 	 *
 	 *  Manages unordered map currently and previously pressed keys and also holds mouse coordinates.
 	 *  Can be used to set pressed keys and mouse coords, and also to query for presse keys or coordinates.
-	 *  @sa IEngine::handleEvents
+	 *  @sa Engine::handleEvents
 	 * 
 	 */
 	class InputManager {

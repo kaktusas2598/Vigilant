@@ -33,7 +33,7 @@ namespace Vigilant {
 	};
 
     class MenuButtonCreator: public BaseCreator {
-        IEntity* createEntity() const {
+        Entity* createEntity() const {
             return new MenuButton();
         }
     };

@@ -6,16 +6,16 @@
 
 namespace Vigilant {
 
-    class IEntity;
+    class Entity;
 
     class ObjectLayer : public Layer {
         public:
             virtual void update();
             virtual void render();
 
-            std::vector<IEntity*>* getEntities() { return &entities; };
+            std::vector<Entity*>* getEntities() { return &entities; };
         private:
-            std::vector<IEntity*> entities;
+            std::vector<Entity*> entities;
     };
 }
 

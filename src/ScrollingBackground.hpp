@@ -38,7 +38,7 @@ namespace Vigilant {
 
     class ScrollingBackgroundCreator : public BaseCreator {
         public:
-            virtual IEntity* createEntity() const {
+            virtual Entity* createEntity() const {
                 return new ScrollingBackground();
             }
     };

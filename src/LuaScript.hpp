@@ -12,6 +12,14 @@ extern "C" {
 # include "lualib.h"
 }
 
+#include "ErrorHandler.hpp"
+
+/*
+ * To ensure that we're not reading undefined variables from Lua state we must make sure to always close scripts when done:
+ * 1. Open script luaL_dofile(L, filename)
+ * 2. Load Data
+ * 3. Close script lua_close(L)
+ */
 namespace Vigilant {
     class LuaScript {
         public:
@@ -96,7 +104,36 @@ namespace Vigilant {
             T lua_getdefault() {
                 return 0;
             }
+
+            template<typename T>
+            std::vector<T> getArray(const std::string& name) {
+                std::vector<T> v;
+                if(!lua_gettostack(name)) {
+                    exitWithError("Lua: Array not found");
+                    clean();
+                    return std::vector<T>();
+                }
+
+                lua_pushnil(L);
+                while (lua_next(L, -2)) {
+                    // -1 means top of the Lua stack
+                    if(lua_isnumber(L, -1)) {
+                        v.push_back((int) lua_tonumber(L, -1));
+                    }
+                    lua_pop(L, 1);
+                }
+                clean();
+                return v;
+            }
         private:
+            bool luaOk(lua_State* L, int call) {
+                if (call != LUA_OK) {
+                    std::string errorMessage = lua_tostring(L, -1);
+                    exitWithError(errorMessage);
+                    return false;
+                }
+            }
+
             lua_State* L;
             int level;
     };
@@ -138,6 +175,26 @@ namespace Vigilant {
     template <>
     inline std::string LuaScript::lua_getdefault<std::string>() {
         return "null";
+    }
+
+    template<>
+    inline std::vector<std::string> LuaScript::getArray(const std::string& name) {
+        std::vector<std::string> v;
+        if(!lua_gettostack(name)) {
+            exitWithError("Lua: Array not found");
+            clean();
+            return std::vector<std::string>();
+        }
+
+        lua_pushnil(L);
+        while (lua_next(L, -2)) {
+            if (lua_isstring(L, -1)) {
+                v.push_back((std::string) lua_tostring(L, -1));
+            }
+            lua_pop(L, 1);
+        }
+        clean();
+        return v;
     }
 }
  

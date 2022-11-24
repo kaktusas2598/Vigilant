@@ -43,7 +43,7 @@ namespace Vigilant {
 			 * @param title Title to be displayed on window title bar
 			 * @param screenHeight Screen height in pixels
 			 * @param screenWidth Screen width in pixels
-			 * @sa IEngine::init()
+			 * @sa Engine::init()
 			 */
 			void create(std::string title, int screenHeight, int screenWidth, unsigned int currentFlags);
 			/**

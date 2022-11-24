@@ -1,0 +1,46 @@
+#ifndef __Logger__
+#define __Logger__
+
+#include "ErrorHandler.hpp"
+#include <fstream>
+
+/**
+ * This class is only used for internal logging
+*/
+namespace Vigilant {
+    class Logger {
+        public:
+            static Logger* Instance() {
+                if(s_pInstance == 0) {
+                    s_pInstance = new Logger();
+                    return s_pInstance;
+                }
+                return s_pInstance;   
+            }
+
+            void info(const char* message) {
+                logFile << "[INFO]: " << message << std::endl;
+            }
+
+            void error(const char* message) {
+                logFile << "[ERROR]: " << message << std::endl;
+            }
+        private:
+            Logger() {
+                logFile.open("debug.log");
+                if( !logFile ) { // file couldn't be opened
+                    exitWithError("Debug file couldn't be opened");
+                }
+            }
+            ~Logger() {
+                logFile.close();
+            }
+            static Logger* s_pInstance;
+            
+            std::ofstream logFile;
+    };
+
+    Logger* Logger::s_pInstance = nullptr;
+}
+
+#endif // __Logger__

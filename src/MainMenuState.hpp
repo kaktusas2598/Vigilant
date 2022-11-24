@@ -1,7 +1,7 @@
 #ifndef __MainMenuState__
 #define __MainMenuState__
 
-#include "IEntity.hpp"
+#include "Entity.hpp"
 #include "MenuState.hpp"
 
 namespace Vigilant {
@@ -25,7 +25,7 @@ namespace Vigilant {
             static void s_exitFromMenu();
 
             static const std::string menuID;
-            std::vector<IEntity*> gameEntities;
+            std::vector<Entity*> gameEntities;
     };
 }
 

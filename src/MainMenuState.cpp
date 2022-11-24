@@ -2,7 +2,7 @@
 
 #include "StateParser.hpp"
 #include "MenuButton.hpp"
-#include "IEngine.hpp"
+#include "Engine.hpp"
 #include "StateMachine.hpp"
 
 // TODO: would be better to clear textures in base class

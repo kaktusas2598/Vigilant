@@ -5,7 +5,7 @@
 #include "CollisionLayer.hpp"
 #include "TextureManager.hpp"
 #include "EntityFactory.hpp"
-#include "IEntity.hpp"
+#include "Entity.hpp"
 #include "LoaderParams.hpp"
 #include <string>
 #include "CollisionLayer.hpp"
@@ -153,7 +153,7 @@ namespace Vigilant {
                 e->Attribute("y", &y);
                 e->Attribute("width", &width);
                 e->Attribute("height", &height);
-                IEntity* entity = TheEntityFactory::Instance()->create(e->Attribute("class"));
+                Entity* entity = TheEntityFactory::Instance()->create(e->Attribute("class"));
 
                 for (TiXmlElement* properties = e->FirstChildElement(); properties != NULL; properties = properties->NextSiblingElement()) {
                     if (properties->Value() == std::string("properties")) {
@@ -186,7 +186,7 @@ namespace Vigilant {
             e->Attribute("y", &y);
             e->Attribute("width", &width);
             e->Attribute("height", &height);
-            // IEntity* entity = TheEntityFactory::Instance()->create(e->Attribute("class"));
+            // Entity* entity = TheEntityFactory::Instance()->create(e->Attribute("class"));
             // entity->load(new LoaderParams(x, y, width, height, textureId, numFrames, callbackId));
             colLayer->getColliders().push_back(SDL_Rect{x, y, width, height});
             

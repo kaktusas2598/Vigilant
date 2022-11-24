@@ -20,7 +20,7 @@ namespace Vigilant {
 
 	class PlayerCreator: public BaseCreator {
 		public:
-			IEntity* createEntity() const {
+			Entity* createEntity() const {
 				return new Player();
 			}
 	};

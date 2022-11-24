@@ -1,6 +1,6 @@
 #include "ScrollingBackground.hpp"
 #include "TextureManager.hpp"
-#include "IEngine.hpp"
+#include "Engine.hpp"
 
 namespace Vigilant {
 

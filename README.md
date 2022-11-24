@@ -13,12 +13,12 @@
  * Menu buttons with callbacks
  * Basic Audio Support (one shot sfx and music)
  * Tiled map loading from tmx files including collision layers
- * Entity Component System (Based on the one created by Austin Mortan)
 
 #### Planned feature list:
 
  * Multiple animation support
  * 3D Rendering with OpenGL
+ * Entity Component System
  * Model Loading (simple .obj loader or assimp?)
  * Rigid Body Dynamics support
  * TTF Font loading

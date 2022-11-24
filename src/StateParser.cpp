@@ -5,7 +5,7 @@
 #include "EntityFactory.hpp"
 
 namespace Vigilant {
-    bool StateParser::parseState(const char* stateFile, std::string stateID, std::vector<IEntity*> *pEntities,  std::vector<std::string> *pTextureIDs, std::vector<std::string> *pSoundsIDs) {
+    bool StateParser::parseState(const char* stateFile, std::string stateID, std::vector<Entity*> *pEntities,  std::vector<std::string> *pTextureIDs, std::vector<std::string> *pSoundsIDs) {
         TiXmlDocument xmlDoc;
 
         if (!xmlDoc.LoadFile(stateFile)) {
@@ -78,7 +78,7 @@ namespace Vigilant {
         }
     }
 
-    void StateParser::parseObjects(TiXmlElement* pStateRoot, std::vector<IEntity*> *entities) {
+    void StateParser::parseObjects(TiXmlElement* pStateRoot, std::vector<Entity*> *entities) {
         for (TiXmlElement *e = pStateRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
             int x,y, width, height, numFrames, callbackID, animSpeed;
             std::string textureID;
@@ -92,7 +92,7 @@ namespace Vigilant {
             e->Attribute("animSpeed", &animSpeed);
             textureID = e->Attribute("textureID");
 
-            IEntity* entity = TheEntityFactory::Instance()->create(e->Attribute("type"));
+            Entity* entity = TheEntityFactory::Instance()->create(e->Attribute("type"));
             entity->load(new LoaderParams(x, y, width, height, textureID, numFrames, callbackID, animSpeed));
             entities->push_back(entity);
         }

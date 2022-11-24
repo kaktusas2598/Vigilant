@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "IGameState.hpp"
-#include "IEntity.hpp"
+#include "Entity.hpp"
 
 namespace Vigilant {
 

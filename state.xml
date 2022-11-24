@@ -33,6 +33,10 @@
             <object type="Player" x="100" y="100" width="50" height="50" textureID="run" numFrames="12"/>
             <object type="Enemy" x="500" y="100" width="48" height="48" textureID="player" numFrames="6"/>
         </OBJECTS>
+        <SCRIPTS>
+            <script name="player" filename="scripts/player.lua" type="object"/>
+            <script name="automation" filename="scripts/automation.lua" type="automation"/>
+        </SCRIPTS>
     </PLAY>
     <!-- The Game Over State -->
     <GAMEOVER>

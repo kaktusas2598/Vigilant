@@ -2,7 +2,7 @@
 #include "TextureManager.hpp"
 
 namespace Vigilant {
-    SDLEntity::SDLEntity(): IEntity(), m_position(0,0), m_velocity(0,0), m_acceleration(0,0) {}
+    SDLEntity::SDLEntity(): Entity(), m_position(0,0), m_velocity(0,0), m_acceleration(0,0) {}
 
     void SDLEntity::load(const LoaderParams* params) {
         m_position = Vector2D(params->getX(), params->getY());

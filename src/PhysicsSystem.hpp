@@ -26,6 +26,13 @@ namespace Vigilant {
                     transform.y = position.getY();
                     rigidBody.velocityX = velocity.getX();
                     rigidBody.velocityY = velocity.getY();
+
+                    
+                    // auto const& playable = TheCoordinator::Instance()->getComponent<Playable>(entity);
+                    // int test;
+                    // if (playable != NULL) {
+                    //     // TODO check if jump started
+                    // }
                 }
             }
     };

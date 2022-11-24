@@ -6,7 +6,7 @@
 
 namespace Vigilant
 {
-	class IEngine;
+	class Engine;
 
 	/**
 	 * Enumeration of available states per IGameState
@@ -64,7 +64,7 @@ namespace Vigilant
 			virtual void draw(float deltaTime) = 0;
 
 			/// Sets m_game to be the parent game
-			void setParentGame(IEngine* game) { m_game = game; }
+			void setParentGame(Engine* game) { m_game = game; }
 			void setRunning() {
 				m_currentScreenState = ScreenState::RUNNING;
 			}
@@ -76,7 +76,7 @@ namespace Vigilant
 		protected:
 
 			ScreenState m_currentScreenState = ScreenState::NONE;
-			IEngine* m_game = nullptr; ///< Pointer to Engine
+			Engine* m_game = nullptr; ///< Pointer to Engine
 			int m_screenIndex = -1;
 			std::vector<std::string> textureIDs;
 			std::vector<std::string> soundIDs;

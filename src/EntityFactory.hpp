@@ -4,7 +4,7 @@
 #include <string>
 #include <map>
 
-#include "IEntity.hpp"
+#include "Entity.hpp"
 #include "ErrorHandler.hpp"
 
 /**
@@ -14,7 +14,7 @@ namespace Vigilant {
 
     class BaseCreator {
         public:
-            virtual IEntity *createEntity() const = 0;
+            virtual Entity *createEntity() const = 0;
             virtual ~BaseCreator() {}
     };
 
@@ -42,7 +42,7 @@ namespace Vigilant {
                 return true;
             }
 
-            IEntity* create(std::string typeID) {
+            Entity* create(std::string typeID) {
                 std::map<std::string, BaseCreator*>::iterator it = creators.find(typeID);
 
                 if (it == creators.end()) {

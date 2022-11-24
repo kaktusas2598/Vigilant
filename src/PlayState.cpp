@@ -1,7 +1,7 @@
 #include "PlayState.hpp"
 
 #include "InputManager.hpp"
-#include "IEngine.hpp"
+#include "Engine.hpp"
 #include "StateParser.hpp"
 #include "LevelParser.hpp"
 #include "StateMachine.hpp"
@@ -10,28 +10,24 @@
 #include "ComponentTypes.hpp"
 #include <random>
 #include <vector>
-#include "CollisionSystem.hpp"
-#include "PhysicsSystem.hpp"
-#include "InputSystem.hpp"
-#include "RenderSystem.hpp"
 
 namespace Vigilant {
 
     const std::string PlayState::playID = "PLAY";
 
     void PlayState::update(float deltaTime) {
-        TheEngine::Instance()->getInputSystem()->update(deltaTime);
         level->update();
+        //TODO: Keep lua thread running? coroutine?
         // Level checks collisions against map and only after we update physics
-        TheEngine::Instance()->getCollisionSystem()->checkMapCollision(level->getCollisionLayer());
-        TheEngine::Instance()->getPhysicsSystem()->update(deltaTime);
+        // TheEngine::Instance()->getCollisionSystem()->checkMapCollision(level->getCollisionLayer());
+        // TheEngine::Instance()->getPhysicsSystem()->update(deltaTime);
         if (TheInputManager::Instance()->isKeyPressed(SDLK_ESCAPE)) {
             TheEngine::Instance()->getStateMachine()->getCurrentState()->setScreenState(ScreenState::CHANGE_NEXT);
         }
         
-        // for (int i = 0; i < gameEntities.size(); i++) {
-        //     gameEntities[i]->update(deltaTime);
-        // }
+        for (int i = 0; i < gameEntities.size(); i++) {
+            gameEntities[i]->update(deltaTime);
+        }
         
         if (checkCollision(dynamic_cast<SDLEntity*>(gameEntities[0]), dynamic_cast<SDLEntity*>(gameEntities[1])))
         {
@@ -41,10 +37,9 @@ namespace Vigilant {
 
     void PlayState::draw(float deltaTime) {
         level->render();
-        TheEngine::Instance()->getRenderSystem()->render();
-        // for (int i = 0; i < gameEntities.size(); i++) {
-        //     gameEntities[i]->draw(deltaTime);
-        // }
+        for (int i = 0; i < gameEntities.size(); i++) {
+            gameEntities[i]->draw(deltaTime);
+        }
     }
 
     void PlayState::onEntry() {
@@ -54,26 +49,7 @@ namespace Vigilant {
         StateParser stateParser;
         stateParser.parseState("state.xml", playID, &gameEntities, &textureIDs, &soundIDs);
 
-        std::random_device rd;
-		std::mt19937 rng{rd()}; // Initialize Mersenne Twister pseudo-random number generator
-		std::uniform_int_distribution<int> distr(1, 50); // random numbers in range from 1 to 100
-		for (std::size_t i = 0; i < 1000; ++i) {
-			Entity entity = TheCoordinator::Instance()->createEntity();
-			entities.push_back(entity);
-			int randomNumber = distr(rng);
-			TheCoordinator::Instance()->addComponent(entity, Transform{.x = (float)randomNumber, .y = 300});
-			TheCoordinator::Instance()->addComponent(entity, Sprite{.width = 48, .height = 48, .textureID = "player", .numFrames = 12});
-			TheCoordinator::Instance()->addComponent(entity, RigidBody{.velocityX = 1, .velocityY = (float)randomNumber, .accelerationX = 1, .accelerationY = 1});
-			TheCoordinator::Instance()->addComponent(entity, Gravity{0, 8});
-		}
-        //PLAYER test
-        Entity player = TheCoordinator::Instance()->createEntity();
-        entities.push_back(player);
-        TheCoordinator::Instance()->addComponent(player, Transform{.x = 20, .y = 500});
-        TheCoordinator::Instance()->addComponent(player, Sprite{.width = 48, .height = 48, .textureID = "player", .numFrames = 6});
-        TheCoordinator::Instance()->addComponent(player, RigidBody{.velocityX = 0, .velocityY = 0, .accelerationX = 0, .accelerationY = 0});
-        TheCoordinator::Instance()->addComponent(player, Gravity{0, 8});
-        TheCoordinator::Instance()->addComponent(player, Playable{});
+        // TODO: Load LUA Scripts here
     }
 
     void PlayState::onExit() {
@@ -85,9 +61,6 @@ namespace Vigilant {
 
         for(int i = 0; i < textureIDs.size(); i++) {
             TheTextureManager::Instance()->clearFromTextureMap(textureIDs[i]);
-        }
-        for (int i = 0; i < entities.size(); i++) {
-            TheCoordinator::Instance()->destoyEntity(entities[i]);
         }
     }
 
