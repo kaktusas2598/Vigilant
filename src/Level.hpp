@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include "CollisionLayer.hpp"
+#include "TileLayer.hpp"
 
 namespace Vigilant {
 
@@ -28,6 +29,10 @@ namespace Vigilant {
 
             std::vector<TileSet>* getTilesets() {return &tileSets; }
             std::vector<Layer*>* getLayers() { return &layers; }
+
+            std::vector<TileLayer*>* getCollisionLayers() { return &collisionLayers; }
+            const std::vector<TileLayer*>& getCollidableLayers() { return collisionLayers; }
+
             CollisionLayer* getCollisionLayer() { return collisionLayer; }
             void setCollisionLayer(CollisionLayer* colLayer) { collisionLayer = colLayer; }
         private:
@@ -36,6 +41,9 @@ namespace Vigilant {
 
             std::vector<TileSet> tileSets;
             std::vector<Layer*> layers;
+            // Collision layers defined per tile
+            std::vector<TileLayer*> collisionLayers;
+            // Collision layer defined by individual bounding boxes
             CollisionLayer* collisionLayer;
     };
 }

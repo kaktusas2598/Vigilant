@@ -11,6 +11,7 @@ namespace Vigilant {
     class Layer;
     class CollisionLayer;
     struct TileSet;
+    class TileLayer;
     
     class LevelParser {
         public:
@@ -18,7 +19,12 @@ namespace Vigilant {
         private:
             void parseTileSets(TiXmlElement *tilesetRoot, std::vector<TileSet>* tilesets);
             void parseTextures(TiXmlElement *textureRoot);
-            void parseTileLayer(TiXmlElement *tileElement, std::vector<Layer*>* layers, const std::vector<TileSet>* tilesets);
+            void parseTileLayer(
+                TiXmlElement *tileElement,
+                std::vector<Layer*>* layers,
+                const std::vector<TileSet>* tilesets,
+                std::vector<TileLayer*>* collisionLayers
+            );
             void parseObjectLayer(TiXmlElement *objectRoot, std::vector<Layer*>* layers);
             CollisionLayer* parseCollisionLayer(TiXmlElement* collisionRoot, std::vector<Layer*>* layers);
 

@@ -13,6 +13,7 @@ extern "C" {
 }
 
 #include "ErrorHandler.hpp"
+#include "Logger.hpp"
 
 /*
  * To ensure that we're not reading undefined variables from Lua state we must make sure to always close scripts when done:
@@ -25,6 +26,9 @@ namespace Vigilant {
         public:
             LuaScript(const std::string& filename);
             ~LuaScript();
+
+            // Loads and runs Lua script, make sure to register C++ functions before running this
+            void open();
 
             void printError(const std::string& variableName, const std::string& reason);
             std::vector<int> getIntVector(const std::string& name);
@@ -125,6 +129,8 @@ namespace Vigilant {
                 clean();
                 return v;
             }
+
+            lua_State* getLuaState() { return L; }
         private:
             bool luaOk(lua_State* L, int call) {
                 if (call != LUA_OK) {
@@ -136,6 +142,7 @@ namespace Vigilant {
 
             lua_State* L;
             int level;
+            std::string fileName;
     };
 
     // Template specializations

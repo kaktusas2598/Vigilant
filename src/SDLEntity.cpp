@@ -26,7 +26,16 @@ namespace Vigilant {
     }
 
     void SDLEntity::update(float deltaTime) {
+        Vector2D gravityForce{0.0f, 5.0f};
+
         m_velocity += m_acceleration;
-        m_position += m_velocity;
+        // m_position += m_velocity;
+        m_position += m_velocity * deltaTime;
+        m_velocity += gravityForce * deltaTime;
+
+        // transform.x = position.getX();
+        // transform.y = position.getY();
+        // rigidBody.velocityX = velocity.getX();
+        // rigidBody.velocityY = velocity.getY();
     }
 }

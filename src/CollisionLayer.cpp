@@ -1,5 +1,4 @@
 #include "CollisionLayer.hpp"
-#include "CollisionSystem.hpp"
 
 namespace Vigilant {
     

@@ -16,16 +16,23 @@ namespace Vigilant {
             virtual void update();
             virtual void render();
 
-            void setTileIDs(const std::vector<std::vector<int>> &data) {
-                tileIDs = data;
-            }
-            void setTileSize(int tilesize) {
-                tileSize = tilesize;
-            }
+            void setTileIDs(const std::vector<std::vector<int>> &data) { tileIDs = data; }
+            void setTileSize(int tilesize) { tileSize = tilesize; }
+            void setMapWidth(int w) { mapWidth = w; }
+            void setMapHeight(int h) { mapHeight = h; }
+
+            int getTileSize() { return tileSize; }
+            const std::vector<std::vector<int>>& getTileIDs() { return tileIDs; }
+            Vector2D getPosition() const { return position; }
+
         private:
+            // Tilesheet properties
             int numColumns;
             int numRows;
             int tileSize;
+
+            int mapHeight;
+            int mapWidth;            
 
             // For scrolling maps
             Vector2D position;

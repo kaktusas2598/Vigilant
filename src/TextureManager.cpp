@@ -1,6 +1,8 @@
 #include "TextureManager.hpp"
 #include <SDL2/SDL_image.h>
 
+#include "Engine.hpp"
+
 namespace Vigilant {
 
     TextureManager* TextureManager::s_pInstance = 0;
@@ -60,8 +62,8 @@ namespace Vigilant {
         srcRect.y = margin + (spacing + height) * currentRow;
         srcRect.w = destRect.w = width;
         srcRect.h = destRect.h = height;
-        destRect.x = x;
-        destRect.y = y;    
+        destRect.x = x - TheEngine::Instance()->camera.x;
+        destRect.y = y - TheEngine::Instance()->camera.y;    
 
         SDL_RenderCopyEx(renderer, m_textureMap[id], &srcRect, &destRect, 0, 0, SDL_FLIP_NONE);
     }

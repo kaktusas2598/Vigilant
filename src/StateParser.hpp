@@ -16,9 +16,9 @@ namespace Vigilant {
         public:
             bool parseState(const char* stateFile, std::string stateID, std::vector<Entity*> *pEntities,  std::vector<std::string> *pTextureIDs, std::vector<std::string> *pSoundsIDs);
         private:
-            void parseObjects(TiXmlElement* pStateRoot, std::vector<Entity*> *pEntities);
+            void parseObjects(TiXmlElement* pStateRoot, std::vector<Entity*> *entities);
             void parseTextures(TiXmlElement* pStateRoot, std::vector<std::string> *pTextureIDs);
             void parseSounds(TiXmlElement* pStateRoot, std::vector<std::string> *pSoundIDs);
-            void parseScripts(TiXmlElement* pScriptRoot, std::vector<std::string> *pScriptIDs);
+            void parseScripts(TiXmlElement* pScriptRoot, std::vector<Entity*> *entities);
     };
 }

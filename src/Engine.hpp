@@ -63,6 +63,7 @@ namespace Vigilant {
 			int getScreenWidth() const { return screenWidth; }
 			int getScreenHeight() const { return screenHeight; }
 
+			SDL_Rect camera;
 		private:
 			Engine();
 			~Engine();

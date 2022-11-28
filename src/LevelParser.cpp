@@ -8,7 +8,9 @@
 #include "Entity.hpp"
 #include "LoaderParams.hpp"
 #include <string>
-#include "CollisionLayer.hpp"
+
+#include "Engine.hpp"
+
 // For SDL_Rect, want to replace with own structure for representing colliders
 #include <SDL2/SDL.h>
 
@@ -48,8 +50,12 @@ namespace Vigilant {
                         CollisionLayer* colLayer = parseCollisionLayer(e, level->getLayers());
                         level->setCollisionLayer(colLayer);
                     }
-                } else if (e->FirstChildElement()->Value() == std::string("data")) {
-                    parseTileLayer(e, level->getLayers(), level->getTilesets());
+                    // Tile Layer or tile layer with properties such as "collidable"
+                } else if (e->FirstChildElement()->Value() == std::string("data") ||
+                    (e->FirstChildElement()->NextSiblingElement() != 0
+                        && e->FirstChildElement()->NextSiblingElement()->Value() == std::string("data"))
+                        ) {
+                    parseTileLayer(e, level->getLayers(), level->getTilesets(), level->getCollisionLayers());
                 }
             }
         }
@@ -80,59 +86,81 @@ namespace Vigilant {
 
     }
 
-    void LevelParser::parseTileLayer(TiXmlElement *tileElement, std::vector<Layer*>* layers, const std::vector<TileSet>* tilesets) {
-            TileLayer* layer = new TileLayer(tileSize, *tilesets);
+    void LevelParser::parseTileLayer(TiXmlElement *tileElement, std::vector<Layer*>* layers, const std::vector<TileSet>* tilesets, std::vector<TileLayer*>* collisionLayers) {
+        TileLayer* layer = new TileLayer(tileSize, *tilesets);
+        bool collidable = false;
 
-            std::vector<std::vector<int>> data; // tile data
-            // std::string decodedIDs;
-            TiXmlElement *dataNode;
-            for (TiXmlElement* e = tileElement->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
-                if (e->Value() == std::string("data")) {
-                    dataNode = e;
-            }
-
-            std::string t; // mine
-            for (TiXmlNode* e = dataNode->FirstChild(); e != NULL; e = e->NextSibling()) {
-                TiXmlText* text = e->ToText();
-                /*std::string*/ t = text->Value();
-                // decodedIDs = base64_decode(t);
-            }
-
-            // Parsing CSV map data, probably not the best solution, need to investigate how much memory this uses
-            std::vector<int> layerRow;
-            std::string row;
-            std::istringstream tokenStream(t);
-            while(std::getline(tokenStream, row, ' ')) {
-                layerRow.clear();
-                std::istringstream rowStream(row);
-                std::string tileId;
-                while(std::getline(rowStream, tileId, ',')) {
-                    layerRow.push_back(stoi(tileId));
+        std::vector<std::vector<int>> data; // tile data
+        // std::string decodedIDs;
+        TiXmlElement *dataNode;
+        for(TiXmlElement* e = tileElement->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
+            if(e->Value() == std::string("properties")) {
+                for(TiXmlElement* property = e->FirstChildElement(); property != NULL; property = property->NextSiblingElement()) {
+                    if(property->Value() == std::string("property")) {
+                        if(property->Attribute("name") == std::string("collidable")) {
+                            collidable = true;
+                        }
+                    }
                 }
-                data.push_back(layerRow); 
-            }            
-
-            // uncompress zlib compression
-            // uLongf numGids = width * height * sizeof(int);
-            // long numGids = width * height * sizeof(int);
-            // std::vector<unsigned> gids(numGids);
-            // uncompress((Bytef*)&gids[0], &numGids,(const
-            // Bytef*)decodedIDs.c_str(), decodedIDs.size());
-
-            // std::vector<int> layerRow(width);
-            // for (int j = 0; j < height; j++) {
-            //     data.push_back(layerRow);
-            // }
-
-            // for (int rows = 0; rows < height; rows++) {
-            //     for (int cols = 0; cols < width; cols++) {
-            //         // data[rows][cols] = gids[rows * width + cols];
-            //     }
-            // }
-
-            layer->setTileIDs(data);
-            layers->push_back(layer);
+            }
+            
+            if(e->Value() == std::string("data")) {
+                dataNode = e;
+            }
         }
+
+        std::string t; // mine
+        for (TiXmlNode* e = dataNode->FirstChild(); e != NULL; e = e->NextSibling()) {
+            TiXmlText* text = e->ToText();
+            /*std::string*/ t = text->Value();
+            // decodedIDs = base64_decode(t);
+        }
+
+        // Parsing CSV map data, probably not the best solution, need to investigate how much memory this uses
+        std::vector<int> layerRow;
+        std::string row;
+        std::istringstream tokenStream(t);
+        while(std::getline(tokenStream, row, ' ')) {
+            layerRow.clear();
+            std::istringstream rowStream(row);
+            std::string tileId;
+            while(std::getline(rowStream, tileId, ',')) {
+                layerRow.push_back(stoi(tileId));
+            }
+            data.push_back(layerRow); 
+        }            
+
+        // uncompress zlib compression
+        // uLongf numGids = width * height * sizeof(int);
+        // long numGids = width * height * sizeof(int);
+        // std::vector<unsigned> gids(numGids);
+        // uncompress((Bytef*)&gids[0], &numGids,(const
+        // Bytef*)decodedIDs.c_str(), decodedIDs.size());
+
+        // std::vector<int> layerRow(width);
+        // for (int j = 0; j < height; j++) {
+        //     data.push_back(layerRow);
+        // }
+
+        // for (int rows = 0; rows < height; rows++) {
+        //     for (int cols = 0; cols < width; cols++) {
+        //         // data[rows][cols] = gids[rows * width + cols];
+        //     }
+        // }
+
+        layer->setTileIDs(data);
+        layer->setMapWidth(width);
+        layer->setMapWidth(height);
+
+        //Initialise game camera
+        // TODO: probably not the best place to do this, but it needs to know map size
+		TheEngine::Instance()->camera = {0, 0, width, height};
+
+        if (collidable) {
+            collisionLayers->push_back(layer);
+        }
+
+        layers->push_back(layer);
     }
 
     void LevelParser::parseTextures(TiXmlElement *textureRoot) {

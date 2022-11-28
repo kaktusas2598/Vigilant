@@ -3,7 +3,8 @@
 #include "Engine.hpp"
 #include "TextureManager.hpp"
 #include "Level.hpp"
-#include <iostream>
+
+#include "Logger.hpp"
 
 namespace Vigilant {
     TileLayer::TileLayer (int tilesize, const std::vector<TileSet> &tilesets) : tileSize(tilesize), tileSets(tilesets), position(0,0), velocity(0,0) {
@@ -12,10 +13,13 @@ namespace Vigilant {
     }
 
     void TileLayer::update() {
-        // Will be used for scrolling maps later
-        position += velocity;
-        // TEMPORARY FOR SCROLLING TEST, will have to delete as this will cause segfault
-        velocity.setX(1);
+        // For scrolling maps
+        // if(position.getX() < ((mapWidth * tileSize) - TheEngine::Instance()->getGameWidth()) - tileSize) {
+        //     velocity.setX(TheEngine::Instance()->getScrollSpeed());
+        //     position += velocity;
+        // } else {
+        //     velocity.setX(0);
+        // }
     }
 
     void TileLayer::render() {
@@ -54,7 +58,7 @@ namespace Vigilant {
                 return tileSets[i];
             }
         }
-        std::cout << "did not find tileset, returning empty tileset\n";
+        Logger::Instance()->error("Could not find tileset, returning empty one.");
         TileSet t;
         return t;
     }

@@ -1,8 +1,12 @@
 #include "StateParser.hpp"
+
 #include "ErrorHandler.hpp"
 #include "TextureManager.hpp"
 #include "SoundManager.hpp"
+#include "ScriptingEngine.hpp"
 #include "EntityFactory.hpp"
+
+#include "Logger.hpp"
 
 namespace Vigilant {
     bool StateParser::parseState(const char* stateFile, std::string stateID, std::vector<Entity*> *pEntities,  std::vector<std::string> *pTextureIDs, std::vector<std::string> *pSoundsIDs) {
@@ -36,7 +40,9 @@ namespace Vigilant {
                 soundRoot = e;
             }
         }
-        parseSounds(soundRoot, pSoundsIDs);
+
+        if (soundRoot != 0)
+            parseSounds(soundRoot, pSoundsIDs);
 
         TiXmlElement *objectRoot = 0;
         for (TiXmlElement *e = stateRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
@@ -44,12 +50,25 @@ namespace Vigilant {
                 objectRoot = e;
             }
         }
-        parseObjects(objectRoot, pEntities);
+
+        if (objectRoot != 0)
+            parseObjects(objectRoot, pEntities);
+
+        TiXmlElement *scriptRoot = 0;
+        for (TiXmlElement *e = stateRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
+            if (e->Value() == std::string("SCRIPTS")) {
+                scriptRoot = e;
+            }
+        }
+
+        if (scriptRoot != 0)
+            parseScripts(scriptRoot, pEntities);
 
         return true;
     }
 
     void StateParser::parseTextures(TiXmlElement* pStateRoot, std::vector<std::string> *pTextureIDs) {
+        Logger::Instance()->info("Loading textures.");
         for (TiXmlElement *e = pStateRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
             std::string filename = e->Attribute("filename");
             std::string id = e->Attribute("ID");
@@ -59,6 +78,7 @@ namespace Vigilant {
     }
 
     void StateParser::parseSounds(TiXmlElement* pStateRoot, std::vector<std::string> *pSoundIDs) {
+        Logger::Instance()->info("Loading sounds.");
         for (TiXmlElement *e = pStateRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
             std::string filename = e->Attribute("filename");
             std::string id = e->Attribute("ID");
@@ -78,6 +98,8 @@ namespace Vigilant {
         }
     }
 
+
+    // TODO: Deprecate once loading from sripts have been implemented
     void StateParser::parseObjects(TiXmlElement* pStateRoot, std::vector<Entity*> *entities) {
         for (TiXmlElement *e = pStateRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
             int x,y, width, height, numFrames, callbackID, animSpeed;
@@ -95,6 +117,28 @@ namespace Vigilant {
             Entity* entity = TheEntityFactory::Instance()->create(e->Attribute("type"));
             entity->load(new LoaderParams(x, y, width, height, textureID, numFrames, callbackID, animSpeed));
             entities->push_back(entity);
+        }
+    }
+
+    
+    void StateParser::parseScripts(TiXmlElement* pScriptRoot, std::vector<Entity*> *entities) {
+        Logger::Instance()->info("Initialising scripts.");
+        for (TiXmlElement *e = pScriptRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
+            std::string name, fileName, type;
+
+            name = e->Attribute("name");
+            fileName = e->Attribute("filename");
+            type = e->Attribute("type");
+
+            if (type == "entity") {
+                // TODO: this is temporary way to parse scripts for initialising entities
+                Entity* entity = new Entity();
+                entity->loadScript(name, fileName);
+
+                // Entity* entity = TheEntityFactory::Instance()->create(e->Attribute("type"));
+                // entity->load(new LoaderParams(x, y, width, height, textureID, numFrames, callbackID, animSpeed));
+                entities->push_back(entity);
+            }
         }
     }
 }
