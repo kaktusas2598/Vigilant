@@ -2,6 +2,7 @@
 #define __Logger__
 
 #include "ErrorHandler.hpp"
+#include "LuaScript.hpp"
 #include <fstream>
 
 /**
@@ -25,6 +26,8 @@ namespace Vigilant {
             void error(const char* message) {
                 logFile << "[ERROR]: " << message << std::endl;
             }
+
+            void dumpStack (lua_State *L);
         private:
             Logger() {
                 logFile.open("debug.log");
@@ -39,8 +42,6 @@ namespace Vigilant {
             
             std::ofstream logFile;
     };
-
-    Logger* Logger::s_pInstance = nullptr;
 }
 
 #endif // __Logger__
