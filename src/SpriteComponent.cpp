@@ -63,10 +63,11 @@ namespace Vigilant {
         SDL_Rect srcRect;
         SDL_Rect destRect;
 
-        // int currentFrame = int(((SDL_GetTicks() / 100) % 6));
+        // FIXME: for some reason SpriteComponent::update() is called after render(), therefore had to calculate frame here
+        currentFrame = int(((SDL_GetTicks() / 100) % animationList[currentAnimation].numFrames));
         
         srcRect.x = width * currentFrame;
-        srcRect.y = height * (animationList[currentAnimation].row - 1);
+        srcRect.y = height * animationList[currentAnimation].row;
         srcRect.w = width;
         srcRect.h = height;
         destRect.w = width * owner->transform->getScaleX();
