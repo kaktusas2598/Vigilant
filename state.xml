@@ -29,13 +29,13 @@
 			<sound filename="assets/jump.wav" ID="jump" type = "1"/>
 		</SOUNDS>
 		<OBJECTS>
-			<object type="Player" x="150" y="150" width="34" height="40" textureID="run" numFrames="10"/>
-            <object type="Player" x="100" y="100" width="50" height="50" textureID="run" numFrames="12"/>
+			<object type="Player" x="150" y="150" width="48" height="48" textureID="player" numFrames="6"/>
+            <object type="Player" x="100" y="100" width="48" height="48" textureID="player" numFrames="6"/>
             <object type="Enemy" x="500" y="100" width="48" height="48" textureID="player" numFrames="6"/>
         </OBJECTS>
         <SCRIPTS>
-            <script name="player" filename="scripts/player.lua" type="object"/>
-            <script name="automation" filename="scripts/automation.lua" type="automation"/>
+            <script name="player" filename="scripts/player.lua" type="entity"/>
+            <script name="enemy" filename="scripts/enemy.lua" type="entity"/>
         </SCRIPTS>
     </PLAY>
     <!-- The Game Over State -->

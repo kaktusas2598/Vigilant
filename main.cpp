@@ -4,20 +4,7 @@
 #include "INIReader.h"
 #include "src/Engine.hpp"
 
-// Lua test
-#include "src/LuaScript.hpp"
-
 int main(int argc, char *argv[]) {
-	
-	Vigilant::LuaScript script("scripts/player.lua");
-    float posX = script.get<float>("player.transform.X");
-    float posY = script.get<float>("player.transform.Y");
-    std::string filename = script.get<std::string>("player.sprite.filename");
-    int hp = script.get<int>("player.HP");
-
-    std::cout<<"Position X = "<<posX<<", Y = "<<posY<<std::endl;
-    std::cout<<"Filename:"<<filename<<std::endl;
-    std::cout<<"HP:"<<hp<<std::endl;
 
 	// Load engine config
 	INIReader reader("config.ini");
