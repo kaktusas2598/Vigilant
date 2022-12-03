@@ -10,9 +10,6 @@
 #include "MenuButton.hpp"
 #include "ScrollingBackground.hpp"
 
-#include "Player.hpp"
-#include "Enemy.hpp"
-
 #include <string>
 #include "Logger.hpp"
 
@@ -66,14 +63,10 @@ namespace Vigilant {
 			TheTextureManager::Instance()->setRenderer(m_window.getSDLRenderer());
 		}
 
+		// TODO: get rid of these and implement using ECS
 		TheEntityFactory::Instance()->registerType("MenuButton", new MenuButtonCreator());
 		TheEntityFactory::Instance()->registerType("ScrollingBackground", new ScrollingBackgroundCreator());
-		TheEntityFactory::Instance()->registerType("Player", new PlayerCreator());
-		TheEntityFactory::Instance()->registerType("Enemy", new EnemyCreator());
-		// TODO: Bullets, animations
 		
-
-		// TheGameObjectFactory::Instance()->registerType("AnimatedGraphic", new AnimatedGraphicCreator());
 		//initialize the current game
 		// onInit();
 

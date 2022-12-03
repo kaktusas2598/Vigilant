@@ -3,7 +3,6 @@
 #include "ErrorHandler.hpp"
 #include "TextureManager.hpp"
 #include "SoundManager.hpp"
-#include "ScriptingEngine.hpp"
 #include "EntityFactory.hpp"
 
 #include "Logger.hpp"
