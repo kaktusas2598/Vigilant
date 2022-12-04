@@ -2,10 +2,10 @@
 <map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="32" tileheight="32" infinite="0" backgroundcolor="#00ffff" nextlayerid="7" nextobjectid="15">
  <properties>
   <property name="player" value="assets/player.png"/>
-  <property name="clouds" value="assets/clouds.png"/>
+  <property name="clouds" value="assets/ui/clouds.png"/>
  </properties>
  <tileset firstgid="1" name="Atlas" tilewidth="32" tileheight="32" tilecount="336" columns="14" spacing="0" margin="5">
-  <image source="assets/Atlas.png" width="464" height="784"/>
+  <image source="assets/tilesets/Atlas.png" width="464" height="784"/>
  </tileset>
  <objectgroup name="Object Layer 2" width="800" height="600" type="entity">
   <object name="Background" class="ScrollingBackground" x="0" y="0" width="800" height="600">

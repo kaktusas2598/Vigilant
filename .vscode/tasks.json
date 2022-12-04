@@ -2,7 +2,7 @@
     "tasks": [
         {
             "type": "shell",
-            "label": "Vigilant",
+            "label": "VigilantCompileTask",
             "command": "C:\\msys64\\mingw64\\bin\\g++.exe",
             "args": [
                 "*.cpp",
@@ -30,6 +30,19 @@
                 "-lSDL2_mixer",
                 "-llua54"
             ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": "build"
+        },
+        {
+            "type": "shell",
+            "label": "VigilantDebugTask",
+            "command": "${workspaceFolder}//main.exe",
+            "args": [],
             "options": {
                 "cwd": "${workspaceFolder}"
             },

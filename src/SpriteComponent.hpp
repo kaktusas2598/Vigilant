@@ -37,10 +37,14 @@ namespace Vigilant {
                 animationList.emplace(name, animation);
             } 
             void setAnimation(std::string name) {
+                isAnimated = true;
                 if (animationList.find(name) != animationList.end())
                     currentAnimation = name;
                 else 
                     Logger::Instance()->error("Animation not found.");
+            }
+            void stopAnimation(std::string) {
+                isAnimated = false;
             }
 
             void setWidth(int w) { width = w; }

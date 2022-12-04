@@ -3,12 +3,12 @@
     <!--The Menu State-->
     <MENU>
         <TEXTURES>
-            <texture filename="assets/button.png" ID="playbutton"/>
-            <texture filename="assets/quit.png" ID="exitbutton"/>
-			<texture filename="assets/clouds2.png" ID="clouds2"/>
+            <texture filename="assets/ui/button.png" ID="playbutton"/>
+            <texture filename="assets/ui/quit.png" ID="exitbutton"/>
+			<texture filename="assets/ui/clouds2.png" ID="clouds2"/>
         </TEXTURES>
 		<SOUNDS>
-			<sound filename="assets/button.wav" ID="button" type = "1"/>
+			<sound filename="assets/sounds/button.wav" ID="button" type = "1"/>
 		</SOUNDS>
         <OBJECTS>
             <!-- Buttons measure for 1024 x 768 resolution-->
@@ -22,12 +22,16 @@
     <!--The Play State-->
     <PLAY>
         <TEXTURES>
-			<texture filename="assets/player.png" ID="player"/>
-            <texture filename="assets/run.png" ID="run"/>
+			<texture filename="assets/sprites/player.png" ID="player"/>
+            <texture filename="assets/sprites/run.png" ID="run"/>
 		</TEXTURES>
 		<SOUNDS>
-			<sound filename="assets/jump.wav" ID="jump" type = "1"/>
+			<sound filename="assets/sounds/jump.wav" ID="jump" type = "1"/>
+			<sound filename="assets/sounds/DST_ElectroRock.ogg" ID="mainTheme" type = "0"/>
 		</SOUNDS>
+		<MAPS>
+			<map filename="assets/rpg.tmx" index="1"/>
+		</MAPS>
 		<!--<OBJECTS>
 			<object type="Player" x="150" y="150" width="48" height="48" textureID="player" numFrames="6"/>
             <object type="Player" x="100" y="100" width="48" height="48" textureID="player" numFrames="6"/>

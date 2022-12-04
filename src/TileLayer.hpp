@@ -25,6 +25,9 @@ namespace Vigilant {
             const std::vector<std::vector<int>>& getTileIDs() { return tileIDs; }
             Vector2D getPosition() const { return position; }
 
+	    void setVisible(bool visible) { isVisible = visible; }
+	    bool getVisible() { return isVisible; }
+
         private:
             // Tilesheet properties
             int numColumns;
@@ -32,11 +35,14 @@ namespace Vigilant {
             int tileSize;
 
             int mapHeight;
-            int mapWidth;            
+            int mapWidth;
 
             // For scrolling maps
             Vector2D position;
             Vector2D velocity;
+
+			// Useful for collision layer
+			bool isVisible;
 
             const std::vector<TileSet> &tileSets;
             std::vector<std::vector<int>> tileIDs;

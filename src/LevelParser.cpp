@@ -20,12 +20,16 @@ namespace Vigilant {
         TiXmlDocument levelDoc;
         levelDoc.LoadFile(levelFile);
 
-        Level* level = new Level(); 
+        Level* level = new Level();
 
         TiXmlElement* root = levelDoc.RootElement();
+        // Don't see a reason to store these params in LevelParser, they are unique to each level
         root->Attribute("tilewidth", &tileSize);
         root->Attribute("width", &width);
         root->Attribute("height", &height);
+
+        level->setWidth(tileSize * width);
+        level->setHeight(tileSize * height);
 
         // Parse properties for entity texture sources
         for (TiXmlElement* e = root->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
@@ -59,7 +63,7 @@ namespace Vigilant {
                 }
             }
         }
-        
+
         return level;
     }
 
@@ -71,13 +75,19 @@ namespace Vigilant {
         );
 
         TileSet tileset;
+        tileset.spacing = 0;
+        tileset.margin = 0;
+
         tilesetRoot->FirstChildElement()->Attribute("width", &tileset.width);
         tilesetRoot->FirstChildElement()->Attribute("height", &tileset.height);
         tilesetRoot->Attribute("firstgid", &tileset.firstGridID);
         tilesetRoot->Attribute("tilewidth", &tileset.tileWidth);
         tilesetRoot->Attribute("tileheight", &tileset.tileHeight);
-        tilesetRoot->Attribute("spacing", &tileset.spacing);
-        tilesetRoot->Attribute("margin", &tileset.margin);
+        if (tilesetRoot->Attribute("spacing"))
+			tilesetRoot->Attribute("spacing", &tileset.spacing);
+        if (tilesetRoot->Attribute("margin"))
+			tilesetRoot->Attribute("margin", &tileset.margin);
+        // tilesetRoot->Attribute("columns", &tileset.numColumns);
         tileset.name = tilesetRoot->Attribute("name");
 
         tileset.numColumns = tileset.width / (tileset.tileWidth + tileset.spacing);
@@ -103,7 +113,7 @@ namespace Vigilant {
                     }
                 }
             }
-            
+
             if(e->Value() == std::string("data")) {
                 dataNode = e;
             }
@@ -127,8 +137,8 @@ namespace Vigilant {
             while(std::getline(rowStream, tileId, ',')) {
                 layerRow.push_back(stoi(tileId));
             }
-            data.push_back(layerRow); 
-        }            
+            data.push_back(layerRow);
+        }
 
         // uncompress zlib compression
         // uLongf numGids = width * height * sizeof(int);
@@ -150,13 +160,16 @@ namespace Vigilant {
 
         layer->setTileIDs(data);
         layer->setMapWidth(width);
-        layer->setMapWidth(height);
+        layer->setMapHeight(height);
 
         //Initialise game camera
         // TODO: probably not the best place to do this, but it needs to know map size
-		TheEngine::Instance()->camera = {0, 0, width, height};
+		// TheEngine::Instance()->camera = {0, 0, width, height};
+        // FIXME: using screen measurements causes segfault in TileLayer::render()
+        TheEngine::Instance()->camera = {0, 0, TheEngine::Instance()->getScreenWidth(), TheEngine::Instance()->getScreenHeight()};
 
         if (collidable) {
+	    layer->setVisible(false);
             collisionLayers->push_back(layer);
         }
 
@@ -203,7 +216,7 @@ namespace Vigilant {
         }
         layers->push_back(objLayer);
     }
-    
+
     CollisionLayer* LevelParser::parseCollisionLayer(TiXmlElement* collisionRoot, std::vector<Layer*>* layers) {
         CollisionLayer *colLayer = new CollisionLayer();
 
@@ -217,7 +230,7 @@ namespace Vigilant {
             // Entity* entity = TheEntityFactory::Instance()->create(e->Attribute("class"));
             // entity->load(new LoaderParams(x, y, width, height, textureId, numFrames, callbackId));
             colLayer->getColliders().push_back(SDL_Rect{x, y, width, height});
-            
+
         }
         return colLayer;
     }

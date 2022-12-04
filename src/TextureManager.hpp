@@ -9,8 +9,8 @@ namespace Vigilant {
 
     /**
      * Alternative to GLTextures for now, texture loading and drawing is subject to change
-     * 
-     * 
+     *
+     *
      */
     class TextureManager
     {
@@ -44,7 +44,7 @@ namespace Vigilant {
         static TextureManager* s_pInstance;
         // Optional for SDL Rendering
         SDL_Renderer *renderer;
-        
+
     };
 
     typedef TextureManager TheTextureManager;

@@ -16,10 +16,10 @@ namespace Vigilant {
     }
 
     void LuaScript::open() {
-         if (luaL_loadfile(L, fileName.c_str()) || lua_pcall(L, 0, 0, 0)) {
+		 if (luaL_loadfile(L, fileName.c_str()) || lua_pcall(L, 0, 0, 0)) {
             std::string errorMessage = lua_tostring(L, -1);
             exitWithError("Could not load script " + fileName);
-            L = 0; 
+            L = 0;
         }
     }
 
@@ -50,7 +50,7 @@ namespace Vigilant {
     // Only works for global tables at the
     std::vector<std::string> LuaScript::getTableKeys(const std::string& name) {
         // Lua function for getting table keys, will return "key1, key2, etc"
-        std::string code = 
+        std::string code =
         "function getKeys(name) "
         "s = \"\""
         "for k, v in pairs(_G[name]) do "

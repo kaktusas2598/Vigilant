@@ -68,19 +68,25 @@ namespace Vigilant {
                     int height = sprite->getHeight() * entity->transform->getScaleY();
 
                     // FIXME: seg fault when going from the map (tileid cannot be deduced)
-                    if (velocityX >= 0 || velocityY >= 0) {
-                        tileColumn = ((entityX + width) / tileLayer->getTileSize());
-                        tileRow = ((entityY + height) / tileLayer->getTileSize());
-                        tileid = tiles[tileRow + y][tileColumn + x];
-                    } else if(velocityX < 0 || velocityY < 0) {
-                        tileColumn = entityX / tileLayer->getTileSize();
-                        tileRow = entityY / tileLayer->getTileSize();
-                        tileid = tiles[tileRow + y][tileColumn + x];
+                    // also camera is not accounted here which cause inaccurate collision
+                    // TheEngine::Instance()->camera.x = gameEntities[i]->transform->getX() - TheEngine::Instance()->camera.w/2;
+                    // TheEngine::Instance()->camera.y = gameEntities[i]->transform->getY() - TheEngine::Instance()->camera.h/2;
+                    if (entityX > 0 && entityY > 0) {
+                        if (velocityX >= 0 || velocityY >= 0) {
+                            tileColumn = ((entityX + width) / tileLayer->getTileSize());
+                            tileRow = ((entityY + height) / tileLayer->getTileSize());
+                            tileid = tiles[tileRow + y][tileColumn + x];
+                        } else if(velocityX < 0 || velocityY < 0) {
+                            tileColumn = entityX / tileLayer->getTileSize();
+                            tileRow = entityY / tileLayer->getTileSize();
+                            tileid = tiles[tileRow + y][tileColumn + x];
+                        }
                     }
                     
                     if (tileid != 0) {
-                        entity->getComponent<PhysicsComponent>()->setVelocityX(velocityX * -1);
-                        entity->getComponent<PhysicsComponent>()->setVelocityY(velocityY * -1);
+                        // Reversing velocities is not a good solution for collision resolution
+                        entity->getComponent<PhysicsComponent>()->setVelocityX(0);
+                        entity->getComponent<PhysicsComponent>()->setVelocityY(0);
 
                         // TODO: collision resolution
                         // entity->collision();

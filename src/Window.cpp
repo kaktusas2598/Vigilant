@@ -1,6 +1,10 @@
 #include "Window.hpp"
 #include "ErrorHandler.hpp"
 
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_sdl.h"
+#include "imgui/imgui_impl_sdlrenderer.h"
+
 namespace Vigilant {
 
 	void Window::create(std::string title, int screenHeight, int screenWidth, unsigned int currentFlags){
@@ -59,7 +63,19 @@ namespace Vigilant {
 			}
 		}
 
-		
+		// Setup Dear ImGui context
+		IMGUI_CHECKVERSION();
+		ImGui::CreateContext();
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+	 	// Setup Dear ImGui style
+		ImGui::StyleColorsDark();
+
+		// Setup Platform/Renderer backends
+		ImGui_ImplSDL2_InitForSDLRenderer(m_pWindow, renderer);
+		ImGui_ImplSDLRenderer_Init(renderer);
+
+
 
 		//TODO: this seems out of place, gl vertex arrays should probably go to rendering
 		// bind a VAO

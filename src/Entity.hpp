@@ -23,7 +23,7 @@
 namespace Vigilant {
 	/** \brief Entity
 	*
-	*  Different from traditional ECS model where Entity is basically just a number 
+	*  Different from traditional ECS model where Entity is basically just a number
 	*  TODO: Future plans: Implement Entity Component System to decouple things like Renderer, Audio and so on
 	*/
 	class Entity {
@@ -48,7 +48,7 @@ namespace Vigilant {
 
 			virtual void load(const LoaderParams *params) {} //= 0;
 
-			
+
 
 			// Temporary place, this method should go to dedicated scripting classes
 			bool luaOk(lua_State* L, int call) {
@@ -69,6 +69,13 @@ namespace Vigilant {
 				return 0;
 			}
 
+			static int lua_playMusic(lua_State *L) {
+				std::string soundID = (std::string)lua_tostring(L, 1);
+				TheSoundManager::Instance()->playMusic(soundID, 0);
+				return 0;
+			}
+
+
 			static int lua_createEntity(lua_State *L) {
 				Entity* entity = (Entity*)lua_newuserdata(L, sizeof(Entity));
 				entity->transform->setX(0);
@@ -83,7 +90,7 @@ namespace Vigilant {
 				std::string fileName = (std::string)lua_tostring(L, 2);
 
 				Entity* entity = (Entity*)lua_newuserdata(L, sizeof(Entity));
-				// entity->addComponent<SpriteComponent>();
+				entity->addComponent<SpriteComponent>();
 				// entity->getComponent<SpriteComponent>()->
 				return 1;
 			}
@@ -105,6 +112,7 @@ namespace Vigilant {
 				// Register C++ -> Lua wrappers
 				// Must be done before running lua script
 				lua_register(script.getLuaState(), "playSound", lua_playSound);
+				lua_register(script.getLuaState(), "playMusic", lua_playMusic);
 				// lua_register(script.getLuaState(), "createEntity", lua_createEntity);
 
 				script.open();
@@ -145,7 +153,7 @@ namespace Vigilant {
 												lua_getfield(script.getLuaState(), -1, "name");
 												std::string name = (std::string)lua_tostring(script.getLuaState(), -1);
 												lua_pop(script.getLuaState(), 1);
-												
+
 												lua_getfield(script.getLuaState(), -1, "numFrames");
 												int numFrames = (int)lua_tonumber(script.getLuaState(), -1);
 												lua_pop(script.getLuaState(), 1);
@@ -160,7 +168,7 @@ namespace Vigilant {
 												if (name == "default") {
 													getComponent<SpriteComponent>()->setAnimation(name);
 												}
-												
+
 												// Pop a key off for next iteration
 												lua_pop(script.getLuaState(), 1);
 											}
@@ -203,9 +211,9 @@ namespace Vigilant {
 				transform->setScaleX(script.get<float>(id + ".transform.scaleX"));
 				transform->setScaleY(script.get<float>(id + ".transform.scaleY"));
 
-				
+
 				// lua_istable(script.getLuaState(), -1)
-				
+
 
 				/*if(luaOk(L, luaL_dofile(L, fileName.c_str()))) {
 
@@ -224,7 +232,7 @@ namespace Vigilant {
 				// lua_close(script.getLuaState());
 
 			}
-			
+
 			template <typename T>
 			std::shared_ptr<T> addComponent() {
 				if (!std::is_base_of<Component, T>::value) {
@@ -253,7 +261,7 @@ namespace Vigilant {
 				}
 				return nullptr;
 			}
-			
+
 			std::shared_ptr<TransformComponent> transform;
 
 		protected:

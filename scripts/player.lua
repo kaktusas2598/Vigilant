@@ -14,33 +14,29 @@ player = {
         aceclerationX = 0.0,
         accelerationY = 0.0,
         gravityX = 0.0,
-        gravityY = 3.0
+        gravityY = 0.0
     },
     sprite = {
         filename = "assets/player.png",
         id = "player",
         animation = {
-            {
-                name = "default",
+			{
+                name = "down",
                 row = 0,
                 numFrames = 6
             },
+
             {
-                name = "run",
+                name = "default",
                 row = 1,
                 numFrames = 6
             },
             {
-                name = "fight",
+                name = "up",
                 row = 2,
-                numFrames = 4
-            },
-            {
-                name = "fall",
-                row = 4,
-                numFrames = 3
+                numFrames = 6
             }
-        },
+		},
         width = 48,
         height = 48
     },
@@ -55,7 +51,7 @@ player = {
 
 -- TODO: call C++ functions/callbacks
 -- Write Lua Wrappers for animation/render, physics, collision
--- 
+--
 
 function testFunc(a, b)
     print ("Lua says hello!"..a..b)
@@ -70,6 +66,7 @@ end
 -- playSound("jump")
 -- playSound("jump")
 -- playSound("jump")
+playMusic("mainTheme")
 -- end
 
 

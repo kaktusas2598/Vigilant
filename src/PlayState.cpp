@@ -22,15 +22,15 @@ namespace Vigilant {
         if (TheInputManager::Instance()->isKeyPressed(SDLK_ESCAPE)) {
             TheEngine::Instance()->getStateMachine()->getCurrentState()->setScreenState(ScreenState::CHANGE_NEXT);
         }
-        
-        for (int i = 0; i < gameEntities.size(); i++) {
+
+        for (size_t i = 0; i < gameEntities.size(); i++) {
             gameEntities[i]->update(deltaTime);
 
             Collision::checkMapCollision(gameEntities[i], level->getCollidableLayers());
         }
 
         // Find player and update camera
-        for (int i = 0; i < gameEntities.size(); i++) {
+        for (size_t i = 0; i < gameEntities.size(); i++) {
             auto isPlayer = gameEntities[i]->getComponent<InputComponent>();
             if (isPlayer) {
                 TheEngine::Instance()->camera.x = gameEntities[i]->transform->getX() - TheEngine::Instance()->camera.w/2;
@@ -46,14 +46,16 @@ namespace Vigilant {
             TheEngine::Instance()->camera.y = 0;
         }
 
-        if (TheEngine::Instance()->camera.x > TheEngine::Instance()->camera.w) {
+        //if (TheEngine::Instance()->camera.x > TheEngine::Instance()->camera.w) {
+        if (TheEngine::Instance()->camera.x > (level->getWidth() - TheEngine::Instance()->camera.w)) {
             TheEngine::Instance()->camera.x = TheEngine::Instance()->camera.w;
         }
 
-        if (TheEngine::Instance()->camera.y > TheEngine::Instance()->camera.h) {
+        //if (TheEngine::Instance()->camera.y > TheEngine::Instance()->camera.h) {
+		if (TheEngine::Instance()->camera.y > (level->getHeight() - TheEngine::Instance()->camera.h)) {
             TheEngine::Instance()->camera.y = TheEngine::Instance()->camera.h;
         }
-        
+
         // if (checkCollision(dynamic_cast<SDLEntity*>(gameEntities[0]), dynamic_cast<SDLEntity*>(gameEntities[1]))) {
             // TheEngine::Instance()->getStateMachine()->getCurrentState()->setScreenState(ScreenState::CHANGE_NEXT);
         // }
@@ -61,7 +63,7 @@ namespace Vigilant {
 
     void PlayState::draw(float deltaTime) {
         level->render();
-        for (int i = 0; i < gameEntities.size(); i++) {
+        for (size_t i = 0; i < gameEntities.size(); i++) {
             gameEntities[i]->draw(deltaTime);
         }
     }
@@ -75,13 +77,13 @@ namespace Vigilant {
     }
 
     void PlayState::onExit() {
-        for (int i = 0; i < gameEntities.size(); i++) {
+        for (size_t i = 0; i < gameEntities.size(); i++) {
             gameEntities[i]->clean();
         }
 
         gameEntities.clear();
 
-        for(int i = 0; i < textureIDs.size(); i++) {
+        for(size_t i = 0; i < textureIDs.size(); i++) {
             TheTextureManager::Instance()->clearFromTextureMap(textureIDs[i]);
         }
     }
@@ -107,7 +109,7 @@ namespace Vigilant {
         if (topA >= bottomB) { return false; }
         if (rightA <= leftB) { return false; }
         if (leftA >= rightB) { return false; }
-        
+
         return true;
     }
 }

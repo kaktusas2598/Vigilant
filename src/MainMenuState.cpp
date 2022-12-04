@@ -21,30 +21,30 @@ namespace Vigilant {
     }
 
     void MainMenuState::onExit() {
-        for(int i = 0; i < gameEntities.size(); i++) {
+        for(size_t i = 0; i < gameEntities.size(); i++) {
             gameEntities[i]->clean();
         }
         gameEntities.clear();
 
-        for(int i = 0; i < textureIDs.size(); i++) {
+        for(size_t i = 0; i < textureIDs.size(); i++) {
             TheTextureManager::Instance()->clearFromTextureMap(textureIDs[i]);
         }
     }
 
     void MainMenuState::update(float deltaTime) {
-        for(int i = 0; i < gameEntities.size(); i++) {
+        for(size_t i = 0; i < gameEntities.size(); i++) {
             gameEntities[i]->update(deltaTime);
         }
     }
 
     void MainMenuState::draw(float deltaTime) {
-        for(int i = 0; i < gameEntities.size(); i++) {
+        for(size_t i = 0; i < gameEntities.size(); i++) {
             gameEntities[i]->draw(deltaTime);
         }
     }
 
     void MainMenuState::setCallbacks(const std::vector<Callback>& callbacks) {
-        for (int i = 0; i < gameEntities.size(); i++) {
+        for (size_t i = 0; i < gameEntities.size(); i++) {
             // if they are of type MenuButton then assign a callback based on the id passed in from the file
             if (dynamic_cast<MenuButton*>(gameEntities[i])) {
                 MenuButton* pButton = dynamic_cast<MenuButton*>(gameEntities[i]);

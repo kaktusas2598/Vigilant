@@ -13,6 +13,10 @@
 #include <string>
 #include "Logger.hpp"
 
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_sdl.h"
+#include "imgui/imgui_impl_sdlrenderer.h"
+
 namespace Vigilant {
 
 	Engine* Engine::s_pInstance = nullptr;
@@ -57,7 +61,7 @@ namespace Vigilant {
 		SDLRenderingEnabled = sdlEnabled;
 		m_window.setSDLRendering(SDLRenderingEnabled);
 		m_window.create(title, screenHeight, screenWidth, currentFlags);
-		
+
 		if (SDLRenderingEnabled) {
 			Logger::Instance()->info("Setting up SDL renderer.");
 			TheTextureManager::Instance()->setRenderer(m_window.getSDLRenderer());
@@ -66,7 +70,7 @@ namespace Vigilant {
 		// TODO: get rid of these and implement using ECS
 		TheEntityFactory::Instance()->registerType("MenuButton", new MenuButtonCreator());
 		TheEntityFactory::Instance()->registerType("ScrollingBackground", new ScrollingBackgroundCreator());
-		
+
 		//initialize the current game
 		// onInit();
 
@@ -124,6 +128,7 @@ namespace Vigilant {
 			while (totalDeltaTime > 0.0f && updateCount < MAX_PHYSICS_STEPS && m_isRunning) {
 				SDL_Event event;
 				while (SDL_PollEvent(&event)) {
+					ImGui_ImplSDL2_ProcessEvent(&event);
 					handleEvents(event);
 				}
 
@@ -131,7 +136,7 @@ namespace Vigilant {
 				float deltaTime = std::min(totalDeltaTime, MAX_DELTA_TIME);
 
 				deltaTime = deltaTime / DESIRED_FPS;
-				
+
 				update(deltaTime);
 
 				render(deltaTime);
@@ -156,13 +161,29 @@ namespace Vigilant {
 	*/
 	void Engine::render(float deltaTime){
 
+		// Start the Dear ImGui frame
+		ImGui_ImplSDLRenderer_NewFrame();
+		ImGui_ImplSDL2_NewFrame();
+		ImGui::NewFrame();
+		// Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+		//ImGui::ShowDemoWindow(&show_demo_window);
+
+		ImGui::Begin("Debug Log");                          // Create a window called "Hello, world!" and append into it.
+		//ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+		//ImGui::SameLine();
+		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		ImGui::End();
+
 		if (SDLRenderingEnabled) {
+			ImGui::Render();
+			//SDL_SetRenderDrawColor(m_window.getSDLRenderer(), (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255), (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 255));
+
 			SDL_RenderClear(m_window.getSDLRenderer()); // clear the renderer to the draw color
 			// m_stateMachine->getCurrentState()->draw(deltaTime);
 			if (m_currentState && m_currentState->getScreenState() == ScreenState::RUNNING) {
 				m_currentState->draw(deltaTime);
 			}
-			
+			ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
 			SDL_RenderPresent(m_window.getSDLRenderer()); // draw to the screen
 		} else {
 			//TODO: below is temporary code to test OpenGL drawing
@@ -287,6 +308,10 @@ namespace Vigilant {
 		}
 
 		m_isRunning = false;
+
+		ImGui_ImplSDLRenderer_Shutdown();
+		ImGui_ImplSDL2_Shutdown();
+		ImGui::DestroyContext();
 
 		if (SDLRenderingEnabled) {
 			SDL_DestroyWindow(m_window.getSDLWindow());

@@ -56,7 +56,7 @@ namespace Vigilant {
 			void setRunning(bool running) { m_isRunning = running; }
 
 			const float getFps() const { return m_fps; }
-			
+
 			StateMachine* getStateMachine() { return m_stateMachine.get(); }
 			SDL_Renderer* getSDLRenderer() { return m_window.getSDLRenderer(); } ///<Optional SDL_Renderer getter
 

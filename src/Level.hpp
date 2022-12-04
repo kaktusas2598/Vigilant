@@ -33,11 +33,21 @@ namespace Vigilant {
             std::vector<TileLayer*>* getCollisionLayers() { return &collisionLayers; }
             const std::vector<TileLayer*>& getCollidableLayers() { return collisionLayers; }
 
+            void setWidth(int w) { width = w; }
+            void setHeight(int h) { height = h; }
+
+            int getWidth() const { return width; }
+            int getHeight() const { return height; }
+
             CollisionLayer* getCollisionLayer() { return collisionLayer; }
             void setCollisionLayer(CollisionLayer* colLayer) { collisionLayer = colLayer; }
         private:
             friend class LevelParser;
             Level() {} // Constructor is private to ensure Level is only created by LevelParser
+
+			// level width an dheight in px
+			int width;
+			int height;
 
             std::vector<TileSet> tileSets;
             std::vector<Layer*> layers;
