@@ -37,7 +37,7 @@ namespace Vigilant {
                 if (topA >= bottomB) { return false; }
                 if (rightA <= leftB) { return false; }
                 if (leftA >= rightB) { return false; }
-                
+
                 return true;
             }
 
@@ -46,10 +46,12 @@ namespace Vigilant {
                 // TODO sprite should not be needed
                 auto physics = entity->getComponent<PhysicsComponent>();
                 auto sprite = entity->getComponent<SpriteComponent>();
+                int origX = entity->transform->getX();
+                int origY = entity->transform->getY();
                 if (physics == 0 && sprite == 0) {
                     return;
                 }
-                
+
                 for(std::vector<TileLayer*>::const_iterator it = collisionLayers.begin(); it != collisionLayers.end(); ++it) {
                     TileLayer* tileLayer = (*it);
                     std::vector<std::vector<int>> tiles = tileLayer->getTileIDs();
@@ -82,10 +84,12 @@ namespace Vigilant {
                             tileid = tiles[tileRow + y][tileColumn + x];
                         }
                     }
-                    
+
                     if (tileid != 0) {
+                        entity->transform->setX(origX);
+                        entity->transform->setY(origY);
                         // Reversing velocities is not a good solution for collision resolution
-                        entity->getComponent<PhysicsComponent>()->setVelocityX(0);
+						entity->getComponent<PhysicsComponent>()->setVelocityX(0);
                         entity->getComponent<PhysicsComponent>()->setVelocityY(0);
 
                         // TODO: collision resolution
@@ -130,7 +134,7 @@ namespace Vigilant {
                 //     }
                 // }
             }
-            
+
     };
 }
 

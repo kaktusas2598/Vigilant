@@ -45,9 +45,9 @@ namespace Vigilant {
             friend class LevelParser;
             Level() {} // Constructor is private to ensure Level is only created by LevelParser
 
-			// level width an dheight in px
-			int width;
-			int height;
+            // level width and height in px
+            int width;
+            int height;
 
             std::vector<TileSet> tileSets;
             std::vector<Layer*> layers;

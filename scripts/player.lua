@@ -66,7 +66,7 @@ end
 -- playSound("jump")
 -- playSound("jump")
 -- playSound("jump")
-playMusic("mainTheme")
+--playMusic("mainTheme")
 -- end
 
 

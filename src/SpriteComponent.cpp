@@ -19,13 +19,13 @@ namespace Vigilant {
         } else {
             flip = SDL_FLIP_NONE;
         }
-        
+
         if (isAnimated) {
             drawFrame(flip);
         } else {
             draw(flip);
         }
-        
+
     }
 
     void SpriteComponent::update(float deltaTime) {
@@ -45,8 +45,8 @@ namespace Vigilant {
         srcRect.h = height;
         destRect.w = width * owner->transform->getScaleX();
         destRect.h = height * owner->transform->getScaleY();
-        destRect.x = owner->transform->getX();// - TheEngine::Instance()->camera.x;
-        destRect.y = owner->transform->getY();// - TheEngine::Instance()->camera.y;
+        destRect.x = owner->transform->getX() - TheEngine::Instance()->camera.x;
+        destRect.y = owner->transform->getY() - TheEngine::Instance()->camera.y;
 
         SDL_RenderCopyEx(
             TheEngine::Instance()->getSDLRenderer(),
@@ -65,15 +65,15 @@ namespace Vigilant {
 
         // FIXME: for some reason SpriteComponent::update() is called after render(), therefore had to calculate frame here
         currentFrame = int(((SDL_GetTicks() / 100) % animationList[currentAnimation].numFrames));
-        
+
         srcRect.x = width * currentFrame;
         srcRect.y = height * animationList[currentAnimation].row;
         srcRect.w = width;
         srcRect.h = height;
         destRect.w = width * owner->transform->getScaleX();
         destRect.h = height * owner->transform->getScaleY();
-        destRect.x = owner->transform->getX();// - TheEngine::Instance()->camera.x;
-        destRect.y = owner->transform->getY();// - TheEngine::Instance()->camera.y;
+        destRect.x = owner->transform->getX() - TheEngine::Instance()->camera.x;
+        destRect.y = owner->transform->getY() - TheEngine::Instance()->camera.y;
 
         SDL_RenderCopyEx(
             TheEngine::Instance()->getSDLRenderer(),

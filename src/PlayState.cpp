@@ -48,12 +48,14 @@ namespace Vigilant {
 
         //if (TheEngine::Instance()->camera.x > TheEngine::Instance()->camera.w) {
         if (TheEngine::Instance()->camera.x > (level->getWidth() - TheEngine::Instance()->camera.w)) {
-            TheEngine::Instance()->camera.x = TheEngine::Instance()->camera.w;
+            //TheEngine::Instance()->camera.x = TheEngine::Instance()->camera.w;
+            TheEngine::Instance()->camera.x = level->getWidth() - TheEngine::Instance()->camera.w;
         }
 
         //if (TheEngine::Instance()->camera.y > TheEngine::Instance()->camera.h) {
 		if (TheEngine::Instance()->camera.y > (level->getHeight() - TheEngine::Instance()->camera.h)) {
-            TheEngine::Instance()->camera.y = TheEngine::Instance()->camera.h;
+            //TheEngine::Instance()->camera.y = TheEngine::Instance()->camera.h;
+            TheEngine::Instance()->camera.y = level->getHeight() - TheEngine::Instance()->camera.h;
         }
 
         // if (checkCollision(dynamic_cast<SDLEntity*>(gameEntities[0]), dynamic_cast<SDLEntity*>(gameEntities[1]))) {

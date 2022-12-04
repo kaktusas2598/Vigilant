@@ -52,10 +52,10 @@ namespace Vigilant {
                     continue;
                 }
 
-                if(((j * tileSize) - x2) - TheEngine::Instance()->camera.x < -tileSize ||
-                    ((j * tileSize) - x2) - TheEngine::Instance()->camera.x > TheEngine::Instance()->getScreenWidth()) {
-                    continue;
-                }
+                //if(((j * tileSize) - x2) - TheEngine::Instance()->camera.x < -tileSize ||
+                    //((j * tileSize) - x2) - TheEngine::Instance()->camera.x > TheEngine::Instance()->getScreenWidth()) {
+                    //continue;
+                //}
 
                 TileSet tileset = getTilesetByID(id);
                 id--;
