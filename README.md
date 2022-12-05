@@ -2,6 +2,9 @@
 
 2D (Eventually 3D) Game/Physics engine I am working on.
 
+![Vigilant Engine Demo](assets/screenshot.PNG?raw=true "Vigilant Engine Demo: 2D RPG")
+
+
 #### Supported features:
 
  * SDL2 2D rendering (OpenGL support will be coming later)
@@ -13,6 +16,7 @@
  * Menu buttons with callbacks
  * Basic Audio Support (one shot sfx and music)
  * Tiled map loading from tmx files including collision layers
+ * Basic Rigid Body Dynamics
 
 #### Planned feature list:
 
@@ -20,9 +24,7 @@
  * 3D Rendering with OpenGL
  * Entity Component System
  * Model Loading (simple .obj loader or assimp?)
- * Rigid Body Dynamics support
  * TTF Font loading
- * Data Driven Design
  * Lua Support (For scripting states and entities)
  * Immediate mode GUI using Dear IMGUI (Altrough I am still looking at other options like Nuklear)
 
@@ -44,3 +46,12 @@
 
  Outdated Notes:
  To compile Box2D on MacOS Sierra, I copied header files to my /usr/local/include and moved compile static library (.a file) to /usr/local/lib/
+
+### Linux Dependencies
+
+```
+sudo apt-get install -y libsdl2-dev
+sudo apt-get install -y libsdl2-image-dev
+sudo apt-get install -y libsdl2-mixer-dev
+sudo apt install lua5.4
+```
