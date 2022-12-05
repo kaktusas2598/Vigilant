@@ -31,7 +31,7 @@ namespace Vigilant {
             int tileSize;
             int width;
             int height;
-	    float scale;
+	    double scale;
     };
         
 }

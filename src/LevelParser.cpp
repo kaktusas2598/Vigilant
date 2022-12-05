@@ -27,9 +27,8 @@ namespace Vigilant {
         root->Attribute("tilewidth", &tileSize);
         root->Attribute("width", &width);
         root->Attribute("height", &height);
-
-        level->setWidth(tileSize * width);
-        level->setHeight(tileSize * height);
+	    
+        scale = 1.0f;
 
         // Parse properties for entity texture sources
         for (TiXmlElement* e = root->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
@@ -37,6 +36,9 @@ namespace Vigilant {
                 parseTextures(e);
             }
         }
+
+        level->setWidth(tileSize * width * scale);
+        level->setHeight(tileSize * height * scale);
 
         for (TiXmlElement* e = root->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
             if (e->Value() == std::string("tileset")) {
@@ -97,7 +99,7 @@ namespace Vigilant {
     }
 
     void LevelParser::parseTileLayer(TiXmlElement *tileElement, std::vector<Layer*>* layers, const std::vector<TileSet>* tilesets, std::vector<TileLayer*>* collisionLayers) {
-        TileLayer* layer = new TileLayer(tileSize, *tilesets);
+        TileLayer* layer = new TileLayer(tileSize, scale, *tilesets);
         bool collidable = false;
 
         std::vector<std::vector<int>> data; // tile data
@@ -178,6 +180,9 @@ namespace Vigilant {
 
     void LevelParser::parseTextures(TiXmlElement *textureRoot) {
         for (TiXmlElement* e = textureRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
+	    if (e->Attribute("name") == std::string("scale")) {
+	        e->Attribute("value", &scale);
+	    }
             TheTextureManager::Instance()->load(e->Attribute("value"), e->Attribute("name"));
         }
     }

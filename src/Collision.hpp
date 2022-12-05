@@ -59,8 +59,8 @@ namespace Vigilant {
                     Vector2D layerPos = tileLayer->getPosition();
                     int x, y, tileColumn, tileRow, tileid = 0;
 
-                    x = layerPos.getX() / tileLayer->getTileSize();
-                    y = layerPos.getY() / tileLayer->getTileSize();
+                    x = layerPos.getX() / (tileLayer->getTileSize() * tileLayer->getScale());
+                    y = layerPos.getY() / (tileLayer->getTileSize() * tileLayer->getScale());
 
                     float velocityX = physics->getVelocityX();
                     float velocityY = physics->getVelocityY();
@@ -69,19 +69,19 @@ namespace Vigilant {
                     int width = sprite->getWidth() * entity->transform->getScaleX();
                     int height = sprite->getHeight() * entity->transform->getScaleY();
 
-                    // FIXME: seg fault when going from the map (tileid cannot be deduced)
-                    // also camera is not accounted here which cause inaccurate collision
                     // TheEngine::Instance()->camera.x = gameEntities[i]->transform->getX() - TheEngine::Instance()->camera.w/2;
                     // TheEngine::Instance()->camera.y = gameEntities[i]->transform->getY() - TheEngine::Instance()->camera.h/2;
                     if (entityX > 0 && entityY > 0) {
                         if (velocityX >= 0 || velocityY >= 0) {
-                            tileColumn = ((entityX + width) / tileLayer->getTileSize());
-                            tileRow = ((entityY + height) / tileLayer->getTileSize());
-                            tileid = tiles[tileRow + y][tileColumn + x];
+                            tileColumn = ((entityX + width) / (tileLayer->getTileSize() * tileLayer->getScale()));
+                            tileRow = ((entityY + height) / (tileLayer->getTileSize() * tileLayer->getScale()));
+                            if (tileRow < tileLayer->getMapHeight() && tileColumn < tileLayer->getMapWidth())
+                                tileid = tiles[tileRow + y][tileColumn + x];
                         } else if(velocityX < 0 || velocityY < 0) {
-                            tileColumn = entityX / tileLayer->getTileSize();
-                            tileRow = entityY / tileLayer->getTileSize();
-                            tileid = tiles[tileRow + y][tileColumn + x];
+                            tileColumn = entityX / (tileLayer->getTileSize() * tileLayer->getScale());
+                            tileRow = entityY / (tileLayer->getTileSize() * tileLayer->getScale());
+                            if (tileRow < tileLayer->getMapHeight() && tileColumn < tileLayer->getMapWidth())
+                                tileid = tiles[tileRow + y][tileColumn + x];
                         }
                     }
 

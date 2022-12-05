@@ -7,11 +7,11 @@
 #include "Logger.hpp"
 
 namespace Vigilant {
-    TileLayer::TileLayer (int tilesize, const std::vector<TileSet> &tilesets) : tileSize(tilesize), tileSets(tilesets), position(0,0), velocity(0,0), isVisible(true) {
+    TileLayer::TileLayer (int tilesize, double scale, const std::vector<TileSet> &tilesets) : tileSize(tilesize), scale(scale), tileSets(tilesets), position(0,0), velocity(0,0), isVisible(true) {
         // Number of tile columns and rows needed to fill the screen
-        numColumns = TheEngine::Instance()->getScreenWidth() / tileSize;
-        numRows = TheEngine::Instance()->getScreenHeight() / tileSize;
-
+        // Adding 2 to each fixes gaps in rendering at the far sides of the screen, but TileLayer and collision system needs to check array bounds
+        numColumns = TheEngine::Instance()->getScreenWidth() / (tileSize * scale) + 2;
+        numRows = TheEngine::Instance()->getScreenHeight() / (tileSize * scale) + 2;
     }
 
     void TileLayer::update() {
@@ -36,17 +36,21 @@ namespace Vigilant {
         position.setX(TheEngine::Instance()->camera.x);
         position.setY(TheEngine::Instance()->camera.y);
 
-        x = position.getX() / tileSize;
-        y = position.getY() / tileSize;
+        x = position.getX() / (tileSize * scale);
+        y = position.getY() / (tileSize * scale);
 
-        x2 = int(position.getX()) % tileSize;
-        y2 = int(position.getY()) % tileSize;
+        x2 = int(position.getX()) % int(tileSize * scale);
+        y2 = int(position.getY()) % int(tileSize * scale);
 
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numColumns; j++) {
+                
+                // Do not try to render tiles out of map boundaries
+                if (i + y >= mapHeight || j + x >= mapWidth)
+                    continue;
 
-                 // segfault if screen column bigger than level column
-                 // also seg if i + y and camera.y affects map
+                // segfault if screen column bigger than level column
+                // also seg if i + y and camera.y affects map
                 int id = tileIDs[i + y][j + x]; //i + y
                 if (id == 0) {
                     continue;
@@ -65,11 +69,13 @@ namespace Vigilant {
 
                 // draw the tile into position while offsetting its x position by subtracting the camera position
                 TheTextureManager::Instance()->drawTile(tileset.name, tileset.margin, tileset.spacing,
-                    ((j * tileSize) - x2),// - TheEngine::Instance()->camera.x, //x
-                    ((i * tileSize) - y2), //y
+                    ((j * tileSize * scale) - x2),// - TheEngine::Instance()->camera.x, //x
+                    ((i * tileSize * scale) - y2), //y
                     tileSize, tileSize, // width, height
                     (id - (tileset.firstGridID - 1)) / tileset.numColumns, // row
-                    (id - (tileset.firstGridID - 1)) % tileset.numColumns); // column
+                    (id - (tileset.firstGridID - 1)) % tileset.numColumns, // column
+                    scale
+                    );
             }
         }
     }

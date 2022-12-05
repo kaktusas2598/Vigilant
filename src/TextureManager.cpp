@@ -55,13 +55,15 @@ namespace Vigilant {
         SDL_RenderCopyEx(renderer, m_textureMap[id], &srcRect, &destRect, 0, 0, flip);
     }
 
-    void TextureManager::drawTile(std::string id, int margin, int spacing, int x, int y, int width, int height, int currentRow, int currentFrame) {
+    void TextureManager::drawTile(std::string id, int margin, int spacing, int x, int y, int width, int height, int currentRow, int currentFrame, double scale) {
         SDL_Rect srcRect;
         SDL_Rect destRect;
         srcRect.x = margin + (spacing + width) * currentFrame;
         srcRect.y = margin + (spacing + height) * currentRow;
-        srcRect.w = destRect.w = width;
-        srcRect.h = destRect.h = height;
+        srcRect.w = width;
+        srcRect.h = height;
+        destRect.w = width * scale;
+        destRect.h = height * scale;
         destRect.x = x; //- TheEngine::Instance()->camera.x;
         destRect.y = y; //- TheEngine::Instance()->camera.y;
 

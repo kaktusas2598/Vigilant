@@ -11,7 +11,7 @@ namespace Vigilant {
 
     class TileLayer : public Layer {
         public:
-            TileLayer(int tilesize, const std::vector<TileSet> &tilesets);
+            TileLayer(int tilesize, double scale, const std::vector<TileSet> &tilesets);
 
             virtual void update();
             virtual void render();
@@ -21,7 +21,10 @@ namespace Vigilant {
             void setMapWidth(int w) { mapWidth = w; }
             void setMapHeight(int h) { mapHeight = h; }
 
-            int getTileSize() { return tileSize; }
+            int getTileSize() const { return tileSize; }
+            double getScale() const { return scale; }
+            int getMapWidth() const { return mapWidth; }
+            int getMapHeight() const { return mapHeight; }
             const std::vector<std::vector<int>>& getTileIDs() { return tileIDs; }
             Vector2D getPosition() const { return position; }
 
@@ -36,6 +39,8 @@ namespace Vigilant {
 
             int mapHeight;
             int mapWidth;
+
+            double scale;
 
             // For scrolling maps
             Vector2D position;

@@ -5,6 +5,7 @@
   <property name="explosion" value="assets/explosion.png"/>
   <property name="largeexplosion" value="assets/largeexplosion.png"/>
   <property name="player" value="assets/sprites/player.png"/>
+  <property name="scale" type="float" value="2"/>
   <property name="smallexplosion" value="assets/smallexplosion.png"/>
  </properties>
  <tileset firstgid="1" name="nature" tilewidth="32" tileheight="32" tilecount="180" columns="20">
