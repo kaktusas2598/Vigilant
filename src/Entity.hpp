@@ -181,13 +181,18 @@ namespace Vigilant {
 						}
 						getComponent<SpriteComponent>()->setAnimated(isAnimated);
 					} else if (componentName == "physics") {
+						float mass = script.get<float>(id + ".physics.mass");
 						float velocityX = script.get<float>(id + ".physics.velocityX");
 						float velocityY = script.get<float>(id + ".physics.velocityY");
 						float aceclerationX = script.get<float>(id + ".physics.aceclerationX");
 						float accelerationY = script.get<float>(id + ".physics.accelerationY");
 						float gravityX = script.get<float>(id + ".physics.gravityX");
 						float gravityY = script.get<float>(id + ".physics.gravityY");
+						float frictionCoef = script.get<float>(id + ".physics.friction");
+
 						addComponent<PhysicsComponent>();
+						getComponent<PhysicsComponent>()->setMass(mass);
+						getComponent<PhysicsComponent>()->setFrictionCoefficient(frictionCoef);
 						getComponent<PhysicsComponent>()->load(
 							velocityX,
 							velocityY,

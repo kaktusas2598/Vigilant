@@ -2,6 +2,7 @@
 #define __PhysicsComponent__
 
 #include "Component.hpp"
+#include "Vector2D.hpp"
 
 namespace Vigilant {
 
@@ -11,34 +12,59 @@ namespace Vigilant {
             void update(float deltaTime);
 
             void load(float velX, float velY, float accX, float accY, float gX, float gY) {
-                velocityX = velX;
-                velocityY = velY;
-                accelerationX = accX;
-                accelerationY = accY;
-                gravityX = gX;
-                gravityY = gY;
+            	velocity.setX(velX);
+            	velocity.setY(velY);
+            	acceleration.setX(accX);
+            	acceleration.setY(accY);
+            	gravity.setX(accX);
+            	gravity.setY(accY);
             }
 
-            float getVelocityX() const { return velocityX; }
-            float getVelocityY() const { return velocityY; }
-            float getAccelerationX() const { return accelerationX; }
-            float getAccelerationY() const { return accelerationY; }
-            float getGravityX() const { return gravityX; }
-            float getGravityY() const { return gravityY; }
+            float getMass() const { return mass; }
+            void setMass(float m) { mass = m; }
 
-            void setVelocityX(float X) { velocityX = X; }
-            void setVelocityY(float Y) { velocityY = Y; }
-            void setAccelerationX(float X) { accelerationX = X; }
-            void setAccelerationY(float Y) { accelerationY = Y; }
-            void setGravityX(float X) { gravityY = X; }
-            void setGravityY(float Y) { gravityY = Y; }
+			float getVelocityX() { return velocity.getX(); }
+			float getVelocityY() { return velocity.getY(); }
+            //float getAccelerationX() const { return accelerationX; }
+            //float getAccelerationY() const { return accelerationY; }
+            //float getGravityX() const { return gravityX; }
+            //float getGravityY() const { return gravityY; }
+
+			//float getForceX() const { return forceX; }
+            //float getForceY() const { return forceY; }
+
+            void setVelocityX(float X) { velocity.setX(X); }
+            void setVelocityY(float Y) { velocity.setY(Y); }
+            void setAccelerationX(float X) { acceleration.setX(X); }
+            void setAccelerationY(float Y) { acceleration.setY(Y); }
+            void setGravityX(float X) { gravity.setX(X); }
+            void setGravityY(float Y) { gravity.setY(Y); }
+
+            void setFriction(float X, float Y) {
+				friction.setX(X);
+				friction.setY(Y);
+            }
+            void setFrictionCoefficient(float f) { frictionCoefficient = f; }
+
+            void applyForce(float X, float Y) {
+				force.setX(X);
+				force.setY(Y);
+            }
+			void applyForceX(float X) { force.setX(X); }
+            void applyForceY(float Y) { force.setY(Y); }
+            void unsetForce() {
+				force.setX(0);
+				force.setY(0);
+            }
+
         private:
-            float velocityX;
-            float velocityY;
-            float accelerationX;
-            float accelerationY;
-            float gravityX;
-            float gravityY;
+            float mass;
+			float frictionCoefficient;
+			Vector2D velocity;
+			Vector2D acceleration;
+			Vector2D gravity;
+			Vector2D force;
+			Vector2D friction;
     };
 }
 

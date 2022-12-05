@@ -9,12 +9,14 @@ enemy = {
 
     },
     physics = {
+    	mass = 1000.0,
         velocityX = 0.0,
         velocityY = 0.0,
         aceclerationX = 0.0,
         accelerationY = 0.0,
         gravityX = 0.0,
-        gravityY = 0.0
+        gravityY = 0.0,
+        friction = 3.0
     },
     sprite = {
         filename = "assets/player.png",

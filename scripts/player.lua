@@ -9,12 +9,14 @@ player = {
 
     },
     physics = {
+        mass = 1.5,
         velocityX = 0.0,
         velocityY = 0.0,
         aceclerationX = 0.0,
         accelerationY = 0.0,
         gravityX = 0.0,
-        gravityY = 0.0
+        gravityY = 0.0,
+        friction = 0.6,
     },
     sprite = {
         filename = "assets/player.png",
@@ -66,7 +68,7 @@ end
 -- playSound("jump")
 -- playSound("jump")
 -- playSound("jump")
---playMusic("mainTheme")
+-- playMusic("mainTheme")
 -- end
 
 
