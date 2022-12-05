@@ -7,6 +7,7 @@
             "args": [
                 "*.cpp",
                 "src/*.cpp",
+                "src/include/imgui/*.cpp",
                 "-o",
                 "main",
                 "-IC:\\msys64\\mingw64\\include",
