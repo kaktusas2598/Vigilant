@@ -28,8 +28,8 @@ namespace Vigilant {
             const std::vector<std::vector<int>>& getTileIDs() { return tileIDs; }
             Vector2D getPosition() const { return position; }
 
-	    void setVisible(bool visible) { isVisible = visible; }
-	    bool getVisible() { return isVisible; }
+			void setVisible(bool visible) { isVisible = visible; }
+			bool getVisible() { return isVisible; }
 
         private:
             // Tilesheet properties
@@ -46,8 +46,8 @@ namespace Vigilant {
             Vector2D position;
             Vector2D velocity;
 
-			// Useful for collision layer
-			bool isVisible;
+            // Useful for collision layer
+            bool isVisible;
 
             const std::vector<TileSet> &tileSets;
             std::vector<std::vector<int>> tileIDs;

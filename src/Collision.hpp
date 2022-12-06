@@ -10,6 +10,7 @@
 
 #include "PhysicsComponent.hpp"
 #include "SpriteComponent.hpp"
+#include "ColliderComponent.hpp"
 
 namespace Vigilant {
 
@@ -46,6 +47,7 @@ namespace Vigilant {
                 // TODO sprite should not be needed
                 auto physics = entity->getComponent<PhysicsComponent>();
                 auto sprite = entity->getComponent<SpriteComponent>();
+                auto collider = entity->getComponent<ColliderComponent>();
                 int origX = entity->transform->getX();
                 int origY = entity->transform->getY();
                 if (physics == 0 && sprite == 0) {
@@ -66,21 +68,33 @@ namespace Vigilant {
                     float velocityY = physics->getVelocityY();
                     float entityX = entity->transform->getX();
                     float entityY = entity->transform->getY();
-                    int width = sprite->getWidth() * entity->transform->getScaleX();
-                    int height = sprite->getHeight() * entity->transform->getScaleY();
 
-                    // TheEngine::Instance()->camera.x = gameEntities[i]->transform->getX() - TheEngine::Instance()->camera.w/2;
-                    // TheEngine::Instance()->camera.y = gameEntities[i]->transform->getY() - TheEngine::Instance()->camera.h/2;
+                    // Calculate real entity position based on collider box
+                    // This will only work fine if sprites are perfectly centered in each frame
+                    float colliderOffsetX = (sprite->getWidth() - collider->getCollider().w)/2 * entity->transform->getScaleX();
+                    float colliderOffsetY = (sprite->getHeight() - collider->getCollider().h)/2 * entity->transform->getScaleY();
+                    if (velocityX > 0)
+                    	entityX += colliderOffsetX;
+					else
+						entityX -= colliderOffsetX;
+					if (velocityY > 0)
+                    	entityY += colliderOffsetY;
+					else
+						entityY -= colliderOffsetY;
+
+                    int width = collider->getCollider().w * entity->transform->getScaleX();
+                    int height = collider->getCollider().h * entity->transform->getScaleY();
+
                     if (entityX > 0 && entityY > 0) {
                         if (velocityX >= 0 || velocityY >= 0) {
                             tileColumn = ((entityX + width) / (tileLayer->getTileSize() * tileLayer->getScale()));
                             tileRow = ((entityY + height) / (tileLayer->getTileSize() * tileLayer->getScale()));
-                            if (tileRow < tileLayer->getMapHeight() && tileColumn < tileLayer->getMapWidth())
+                            if (tileRow + y < tileLayer->getMapHeight() && tileColumn + x < tileLayer->getMapWidth())
                                 tileid = tiles[tileRow + y][tileColumn + x];
                         } else if(velocityX < 0 || velocityY < 0) {
                             tileColumn = entityX / (tileLayer->getTileSize() * tileLayer->getScale());
                             tileRow = entityY / (tileLayer->getTileSize() * tileLayer->getScale());
-                            if (tileRow < tileLayer->getMapHeight() && tileColumn < tileLayer->getMapWidth())
+                            if (tileRow + x < tileLayer->getMapHeight() && tileColumn + y < tileLayer->getMapWidth())
                                 tileid = tiles[tileRow + y][tileColumn + x];
                         }
                     }
@@ -93,6 +107,7 @@ namespace Vigilant {
                         entity->getComponent<PhysicsComponent>()->setVelocityY(0);
 
                         // TODO: collision resolution
+                        // Needs to be some kind of event which can be then sent to Lua
                         // entity->collision();
                     }
                 }

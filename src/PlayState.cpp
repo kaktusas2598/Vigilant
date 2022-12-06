@@ -10,6 +10,8 @@
 
 #include "Collision.hpp"
 
+#include "imgui/imgui.h"
+
 namespace Vigilant {
 
     const std::string PlayState::playID = "PLAY";
@@ -68,10 +70,21 @@ namespace Vigilant {
         for (size_t i = 0; i < gameEntities.size(); i++) {
             gameEntities[i]->draw(deltaTime);
         }
+        static bool layerVisibility[10] = {false};
+        int i = 0;
+        for (auto it = level->getCollisionLayers()->begin(); it != level->getCollisionLayers()->end(); ++it) {
+            // Seems like member needs to be static but that doesnt make sense for tile layer
+            ImGui::Begin("Debug Log");
+			ImGui::Checkbox("Show solids", &layerVisibility[i]);
+            ImGui::End();
+			(*it)->setVisible(layerVisibility[i]);
+            i++;
+        }
     }
 
     void PlayState::onEntry() {
         LevelParser levelParser;
+        // TODO: implement level loading without hardcoding name
         level = levelParser.parseLevel("map.tmx");
 
         StateParser stateParser;

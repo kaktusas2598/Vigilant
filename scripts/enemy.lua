@@ -47,6 +47,8 @@ enemy = {
         height = 48
     },
     collider = {
+    	width = 15,
+    	height = 35,
         type = "npc"
     },
     HP = 20

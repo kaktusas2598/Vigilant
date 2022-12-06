@@ -11,7 +11,5 @@ namespace Vigilant {
     void ColliderComponent::update(float deltaTime) {
         collider.x = owner->transform->getX();
         collider.y = owner->transform->getY();
-        collider.w = owner->getComponent<SpriteComponent>()->getWidth() * owner->transform->getScaleX();
-        collider.h = owner->getComponent<SpriteComponent>()->getHeight() * owner->transform->getScaleY();
     }
 }

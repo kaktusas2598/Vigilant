@@ -161,6 +161,7 @@ namespace Vigilant {
 	*/
 	void Engine::render(float deltaTime){
 
+		// These commands probably should go just before update() method so that states can setup their own ui
 		// Start the Dear ImGui frame
 		ImGui_ImplSDLRenderer_NewFrame();
 		ImGui_ImplSDL2_NewFrame();
@@ -175,7 +176,7 @@ namespace Vigilant {
 		ImGui::End();
 
 		if (SDLRenderingEnabled) {
-			ImGui::Render();
+			// ImGui::Render(); in imgui example Render() was placed here before SDL_RenderClear
 			//SDL_SetRenderDrawColor(m_window.getSDLRenderer(), (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255), (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 255));
 
 			SDL_RenderClear(m_window.getSDLRenderer()); // clear the renderer to the draw color
@@ -183,8 +184,10 @@ namespace Vigilant {
 			if (m_currentState && m_currentState->getScreenState() == ScreenState::RUNNING) {
 				m_currentState->draw(deltaTime);
 			}
+			ImGui::Render();
 			ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
 			SDL_RenderPresent(m_window.getSDLRenderer()); // draw to the screen
+			ImGui::EndFrame();
 		} else {
 			//TODO: below is temporary code to test OpenGL drawing
 			glClearDepth(1.0);

@@ -44,7 +44,7 @@ namespace Vigilant {
 
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numColumns; j++) {
-                
+
                 // Do not try to render tiles out of map boundaries
                 if (i + y >= mapHeight || j + x >= mapWidth)
                     continue;

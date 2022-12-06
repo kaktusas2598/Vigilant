@@ -205,8 +205,10 @@ namespace Vigilant {
 						addComponent<InputComponent>();
 					} else if (componentName == "collider") {
 						std::string tag = script.get<std::string>(id + ".collider.type");
+						int width = script.get<int>(id + ".collider.width");
+						int height = script.get<int>(id + ".collider.height");
 						addComponent<ColliderComponent>();
-						getComponent<ColliderComponent>()->load(tag);
+						getComponent<ColliderComponent>()->load(tag, width, height);
 					}
 				}
 

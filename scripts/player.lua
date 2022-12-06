@@ -9,14 +9,14 @@ player = {
 
     },
     physics = {
-        mass = 1.5,
+        mass = 1.0,
         velocityX = 0.0,
         velocityY = 0.0,
         aceclerationX = 0.0,
         accelerationY = 0.0,
         gravityX = 0.0,
         gravityY = 0.0,
-        friction = 0.6,
+        friction = 0.2,
     },
     sprite = {
         filename = "assets/player.png",
@@ -44,6 +44,8 @@ player = {
     },
     collider = {
         type = "player",
+        width = 15;
+        height = 35;
 	collide = function(this, second) end
     },
     input = {},
