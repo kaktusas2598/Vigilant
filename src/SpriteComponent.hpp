@@ -13,6 +13,9 @@ namespace Vigilant {
     struct Animation {
         int row; // Row in spritesheet for concrete animation
         int numFrames; // Number of Frames
+        // TODO:
+        // int column; // Column in tilesheet where animation starts
+        // bool loop; // Will denote if animation plays once or loops
     };
 
     class SpriteComponent : public Component {
@@ -24,7 +27,7 @@ namespace Vigilant {
                 width = w;
                 height = h;
             }
-            
+
             void render();
             void update(float deltaTime);
             void draw(SDL_RendererFlip flip);
@@ -35,12 +38,12 @@ namespace Vigilant {
             }
             void addAnimation(std::string name, Animation animation) {
                 animationList.emplace(name, animation);
-            } 
+            }
             void setAnimation(std::string name) {
                 isAnimated = true;
                 if (animationList.find(name) != animationList.end())
                     currentAnimation = name;
-                else 
+                else
                     Logger::Instance()->error("Animation not found.");
             }
             void stopAnimation(std::string) {
@@ -64,7 +67,7 @@ namespace Vigilant {
             int width;
             int height;
             std::string textureID;
-            std::map<std::string, Animation> animationList;            
+            std::map<std::string, Animation> animationList;
     };
 }
 

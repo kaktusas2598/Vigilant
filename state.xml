@@ -24,6 +24,7 @@
         <TEXTURES>
 			<texture filename="assets/sprites/player.png" ID="player"/>
             <texture filename="assets/sprites/run.png" ID="run"/>
+            <texture filename="assets/particles/bullet1.png" ID="bullet"/>
 		</TEXTURES>
 		<SOUNDS>
 			<sound filename="assets/sounds/jump.wav" ID="jump" type = "1"/>

@@ -173,6 +173,7 @@ namespace Vigilant {
 		//ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
 		//ImGui::SameLine();
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		ImGui::Text("Active entities: %d", Entity::livingCount);
 		ImGui::End();
 
 		if (SDLRenderingEnabled) {

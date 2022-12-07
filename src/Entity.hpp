@@ -19,6 +19,7 @@
 
 // Temp for testing
 #include "SoundManager.hpp"
+#include <iostream>
 
 namespace Vigilant {
 	/** \brief Entity
@@ -32,6 +33,8 @@ namespace Vigilant {
 			// TODO: once Entity isn't pure abstract anymore, move this to public
             Entity() {
 				transform = addComponent<TransformComponent>();
+				alive = true;
+				livingCount++;
 			}
 
 			virtual void update(float deltaTime) {
@@ -47,6 +50,10 @@ namespace Vigilant {
             virtual void clean() {} //= 0;
 
 			virtual void load(const LoaderParams *params) {} //= 0;
+
+			void destroy() {
+				alive = false;
+			}
 
 
 
@@ -269,12 +276,19 @@ namespace Vigilant {
 				return nullptr;
 			}
 
+			bool isAlive() { return alive; }
+
 			std::shared_ptr<TransformComponent> transform;
+			static int livingCount;
 
 		protected:
-			virtual ~Entity(){}
+			virtual ~Entity(){
+				std::cout << "Virtual private Entity destructor called." << std::endl;
+				livingCount--;
+			}
 
 			std::vector<std::shared_ptr<Component>> components;
+			bool alive;
 	};
 }
 

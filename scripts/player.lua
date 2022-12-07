@@ -27,7 +27,6 @@ player = {
                 row = 0,
                 numFrames = 6
             },
-
             {
                 name = "default",
                 row = 1,

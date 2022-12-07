@@ -6,6 +6,7 @@
 #include "LevelParser.hpp"
 #include "StateMachine.hpp"
 #include "TextureManager.hpp"
+#include "EntityManager.hpp"
 #include <vector>
 
 #include "Collision.hpp"
@@ -25,6 +26,11 @@ namespace Vigilant {
             TheEngine::Instance()->getStateMachine()->getCurrentState()->setScreenState(ScreenState::CHANGE_NEXT);
         }
 
+        EntityManager::Instance()->update(deltaTime);
+
+        for (auto& e: EntityManager::Instance()->getEntities())
+            Collision::checkMapCollision(e, level->getCollidableLayers());
+        
         for (size_t i = 0; i < gameEntities.size(); i++) {
             gameEntities[i]->update(deltaTime);
 
@@ -63,10 +69,14 @@ namespace Vigilant {
         // if (checkCollision(dynamic_cast<SDLEntity*>(gameEntities[0]), dynamic_cast<SDLEntity*>(gameEntities[1]))) {
             // TheEngine::Instance()->getStateMachine()->getCurrentState()->setScreenState(ScreenState::CHANGE_NEXT);
         // }
+
+        EntityManager::Instance()->refresh();
     }
 
     void PlayState::draw(float deltaTime) {
         level->render();
+        EntityManager::Instance()->render(deltaTime);
+
         for (size_t i = 0; i < gameEntities.size(); i++) {
             gameEntities[i]->draw(deltaTime);
         }
@@ -92,11 +102,15 @@ namespace Vigilant {
     }
 
     void PlayState::onExit() {
+        
         for (size_t i = 0; i < gameEntities.size(); i++) {
-            gameEntities[i]->clean();
+            gameEntities[i]->destroy(); // mark for destroy
+            gameEntities[i]->clean(); // clean literally does nothing now
         }
 
         gameEntities.clear();
+        
+        EntityManager::Instance()->refresh(); // will destroy entities
 
         for(size_t i = 0; i < textureIDs.size(); i++) {
             TheTextureManager::Instance()->clearFromTextureMap(textureIDs[i]);

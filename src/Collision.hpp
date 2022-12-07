@@ -11,6 +11,7 @@
 #include "PhysicsComponent.hpp"
 #include "SpriteComponent.hpp"
 #include "ColliderComponent.hpp"
+#include "ProjectileComponent.hpp"
 
 namespace Vigilant {
 
@@ -42,15 +43,22 @@ namespace Vigilant {
                 return true;
             }
 
+            static void checkPlayerEntityCollision(Entity* player, const std::vector<Entity*> entities) {
+                // TODO: implement
+            }
+
             static void checkMapCollision(Entity* entity, const std::vector<TileLayer*>& collisionLayers) {
                 // Check if entity has required components
                 // TODO sprite should not be needed
                 auto physics = entity->getComponent<PhysicsComponent>();
                 auto sprite = entity->getComponent<SpriteComponent>();
                 auto collider = entity->getComponent<ColliderComponent>();
+                auto projectile = entity->getComponent<ProjectileComponent>();
                 int origX = entity->transform->getX();
                 int origY = entity->transform->getY();
-                if (physics == 0 && sprite == 0) {
+                // Projectiles: Sprite, Collider, Projectile
+                // Actors: Sprite, Collider, Physics
+                if ( sprite == 0 || collider == 0) {
                     return;
                 }
 
@@ -60,12 +68,20 @@ namespace Vigilant {
 
                     Vector2D layerPos = tileLayer->getPosition();
                     int x, y, tileColumn, tileRow, tileid = 0;
+                    float velocityX, velocityY;
 
                     x = layerPos.getX() / (tileLayer->getTileSize() * tileLayer->getScale());
                     y = layerPos.getY() / (tileLayer->getTileSize() * tileLayer->getScale());
 
-                    float velocityX = physics->getVelocityX();
-                    float velocityY = physics->getVelocityY();
+                    if (physics) {
+                        velocityX = physics->getVelocityX();
+                        velocityY = physics->getVelocityY();
+                    } else if(projectile) {
+                        velocityX = projectile->getVelocityX();
+                        velocityY = projectile->getVelocityY();
+                    } else {
+                        return; // If not rigid body nor a projectile
+                    }
                     float entityX = entity->transform->getX();
                     float entityY = entity->transform->getY();
 
@@ -99,12 +115,17 @@ namespace Vigilant {
                         }
                     }
 
+                    // Collision between entity and a tile detected!
                     if (tileid != 0) {
                         entity->transform->setX(origX);
                         entity->transform->setY(origY);
                         // Reversing velocities is not a good solution for collision resolution
-						entity->getComponent<PhysicsComponent>()->setVelocityX(0);
-                        entity->getComponent<PhysicsComponent>()->setVelocityY(0);
+                        if (physics) {
+						    entity->getComponent<PhysicsComponent>()->setVelocityX(0);
+                            entity->getComponent<PhysicsComponent>()->setVelocityY(0);
+                        }else if (projectile) {
+                            entity->destroy(); // Destroy projectiles so that they don't go through walls
+                        }
 
                         // TODO: collision resolution
                         // Needs to be some kind of event which can be then sent to Lua

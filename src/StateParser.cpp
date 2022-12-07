@@ -119,7 +119,7 @@ namespace Vigilant {
         }
     }
 
-    
+
     void StateParser::parseScripts(TiXmlElement* pScriptRoot, std::vector<Entity*> *entities) {
         Logger::Instance()->info("Initialising scripts.");
         for (TiXmlElement *e = pScriptRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {

@@ -25,13 +25,7 @@ namespace Vigilant {
 
 			float getVelocityX() { return velocity.getX(); }
 			float getVelocityY() { return velocity.getY(); }
-            //float getAccelerationX() const { return accelerationX; }
-            //float getAccelerationY() const { return accelerationY; }
-            //float getGravityX() const { return gravityX; }
-            //float getGravityY() const { return gravityY; }
-
-			//float getForceX() const { return forceX; }
-            //float getForceY() const { return forceY; }
+			Vector2D getVelocity() { return velocity; }
 
             void setVelocityX(float X) { velocity.setX(X); }
             void setVelocityY(float Y) { velocity.setY(Y); }
