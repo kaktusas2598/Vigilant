@@ -35,10 +35,16 @@ namespace Vigilant {
                     std::end(entities));
             }
 
+            // Add new entity
             Entity* addEntity() {
                 Entity* entity = new Entity();
                 entities.emplace_back(entity);
                 return entity;
+            }
+
+            // Add existing entity: for lua
+            void addEntity(Entity* entity) {
+                entities.emplace_back(entity);
             }
 
             std::vector<Entity*> getEntities() { return entities; }

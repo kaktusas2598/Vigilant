@@ -4,6 +4,8 @@
 #include "TextureManager.hpp"
 #include "SoundManager.hpp"
 #include "EntityFactory.hpp"
+#include "EntityManager.hpp"
+#include "ScriptComponent.hpp"
 
 #include "Logger.hpp"
 
@@ -130,12 +132,10 @@ namespace Vigilant {
             type = e->Attribute("type");
 
             if (type == "entity") {
-                // TODO: this is temporary way to parse scripts for initialising entities
-                Entity* entity = new Entity();
-                entity->loadScript(name, fileName);
+                Entity* entity = EntityManager::Instance()->addEntity();
+                entity->addComponent<ScriptComponent>()->init(name, fileName);
+                entity->getComponent<ScriptComponent>()->load();
 
-                // Entity* entity = TheEntityFactory::Instance()->create(e->Attribute("type"));
-                // entity->load(new LoaderParams(x, y, width, height, textureID, numFrames, callbackID, animSpeed));
                 entities->push_back(entity);
             }
         }

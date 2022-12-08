@@ -54,10 +54,6 @@ player = {
 -- you can also have comments
 }
 
--- TODO: call C++ functions/callbacks
--- Write Lua Wrappers for animation/render, physics, collision
---
-
 function testFunc(a, b)
     print ("Lua says hello!"..a..b)
     return a + b
@@ -69,15 +65,19 @@ end
 -- while (true)
 -- do
 -- playSound("jump")
--- playSound("jump")
--- playSound("jump")
--- playMusic("mainTheme")
+playMusic("mainTheme")
 -- end
 
 
--- testEntity = createEntity()
+testEntity = createEntity()
+teleportEntity(testEntity, 400, 400)
+addSprite(testEntity, "slime", "assets/sprite/slime.png", 48, 48)
+
+
+testEntity2 = createEntity()
+teleportEntity(testEntity2, 100, 220)
+addSprite(testEntity2, "slime", "assets/sprite/slime.png", 48, 48)
 -- TODO: Write these wrappers:
--- createEntity()
 -- addAnimation()
 -- playAnimation()
 -- drawTile()?

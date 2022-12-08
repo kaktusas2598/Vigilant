@@ -79,7 +79,7 @@ namespace Vigilant {
 
 		//TODO: this seems out of place, gl vertex arrays should probably go to rendering
 		// bind a VAO
-        GLuint vertexArrayID;
+        // GLuint vertexArrayID;
 		//Segfault here somewhere
         //glGenVertexArrays(1, &vertexArrayID);
         //glBindVertexArray(vertexArrayID);
