@@ -55,3 +55,14 @@ sudo apt-get install -y libsdl2-image-dev
 sudo apt-get install -y libsdl2-mixer-dev
 sudo apt install lua5.4
 ```
+
+### Building Lua
+
+Visit [lua](://www.lua.org/download.html) homepage for up to date info on how to compile and build Lua
+```
+curl -R -O http://www.lua.org/ftp/lua-5.4.4.tar.gz
+tar zxf lua-5.4.4.tar.gz
+cd lua-5.4.4
+make all test
+```
+After compiling take compiled libs and move them to src/lib directory in Vigilant
