@@ -35,9 +35,6 @@ namespace Vigilant {
              * Load Script?
              * Call specific function? (listener??)
              * Register listeners????
-             * Load entity using tables??
-             * 
-             * 
              * 
             */
 
@@ -58,9 +55,7 @@ namespace Vigilant {
 				return 0;
 			}
 
-			// All of these lua binders below are work in progress
-			// while I learn how to properly use metatables and bind engine to lua
-			static int lua_createEntity(lua_State *L) {
+			static int lua_createEntity(lua_State *L);/* {
 				Entity* entity = (Entity*)lua_newuserdata(L, sizeof(Entity));
 				// Placement new operator takes already allocated memory and calls constructor
 				new (entity) Entity();
@@ -71,7 +66,7 @@ namespace Vigilant {
 				lua_setmetatable(L, -2);
 
 				return 1;
-			}
+			}*/
 
             // Will be called once lua state is closed
 			static int lua_destroyEntity(lua_State *L) {
@@ -90,6 +85,16 @@ namespace Vigilant {
 				return 0;
 			}
 
+            static int lua_scaleEntity(lua_State *L) {
+				Entity* entity = (Entity*)lua_touserdata(L, -3);
+				float scaleX = (float)lua_tonumber(L, -2);
+				float scaleY = (float)lua_tonumber(L, -1);
+
+				entity->transform->setScaleX(scaleX);
+				entity->transform->setScaleY(scaleY);
+				return 0;
+			}
+
 			static int lua_addSprite(lua_State *L) {
 				Entity* entity = (Entity*)lua_touserdata(L, 1);
 				std::string id = (std::string)lua_tostring(L, 2);
@@ -98,7 +103,8 @@ namespace Vigilant {
 				float height = (int)lua_tonumber(L, 5);
 
 				TheTextureManager::Instance()->load(fileName, id);
-				entity->addComponent<SpriteComponent>()->load(id, width, height);
+				entity->addComponent<SpriteComponent>();
+                entity->getComponent<SpriteComponent>()->load(id, width, height);
 
 				return 0;
 			}

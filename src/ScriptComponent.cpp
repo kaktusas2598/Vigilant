@@ -6,15 +6,47 @@
 #include "ColliderComponent.hpp"
 #include "InputComponent.hpp"
 
+#include "Logger.hpp"
+#include "EntityManager.hpp"
+
 namespace Vigilant {
+
+    int ScriptComponent::lua_createEntity(lua_State *L) {
+        Entity* entity = (Entity*)lua_newuserdata(L, sizeof(Entity));
+        // Placement new operator takes already allocated memory and calls constructor
+        new (entity) Entity();
+        // FIXME: If I don't add entity created in Lua to EntityManager, Lua seems to call destructor almost instantly and Im not sure why
+        EntityManager::Instance()->addEntity(entity);
+
+        luaL_getmetatable(L, "EntityMetaTable");
+        lua_setmetatable(L, -2);
+
+        return 1;
+    }
 
     ScriptComponent::ScriptComponent(Entity* owner) : Component(owner) {}
 
     void ScriptComponent::init(std::string tag, std::string filename) {
-        id = tag;
+        id = tag;   
         fileName = filename;
         script = new LuaScript(fileName);
         state = script->getLuaState();
+
+        // Setup table to be usef for __index meta method
+        lua_newtable(state);
+        int entityTableIndex = lua_gettop(state);
+        // Push entity table twice because lua_setglobal will pop it off the stack, but we will need table to assign methods
+        lua_pushvalue(state, entityTableIndex);
+        lua_setglobal(state, "Entity");
+
+        lua_pushcfunction(state, lua_createEntity);
+        lua_setfield(state, -2 , "create");
+        lua_pushcfunction(state, lua_teleportEntity);
+        lua_setfield(state, -2 , "move");
+        lua_pushcfunction(state, lua_scaleEntity);
+        lua_setfield(state, -2 , "scale");
+        lua_pushcfunction(state, lua_addSprite);
+        lua_setfield(state, -2 , "addSprite");
 
         luaL_newmetatable(state, "EntityMetaTable");
 
@@ -22,13 +54,18 @@ namespace Vigilant {
         lua_pushcfunction(state, lua_destroyEntity);
         lua_settable(state, -3);
 
+        // Will let use Entity OOP way in lua
+        lua_pushstring(state, "__index");
+        lua_pushvalue(state, entityTableIndex);
+        lua_settable(state, -3);
+
         // Register C++ -> Lua wrappers
         // Must be done before running lua script
         lua_register(state, "playSound", lua_playSound);
         lua_register(state, "playMusic", lua_playMusic);
-        lua_register(state, "createEntity", lua_createEntity);
-        lua_register(state, "teleportEntity", lua_teleportEntity);
-        lua_register(state, "addSprite", lua_addSprite);
+        // lua_register(state, "createEntity", lua_createEntity);
+        // lua_register(state, "teleportEntity", lua_teleportEntity);
+        // lua_register(state, "addSprite", lua_addSprite);
     }
 
     void ScriptComponent::load() {
@@ -129,6 +166,26 @@ namespace Vigilant {
                 int height = script->get<int>(id + ".collider.height");
                 owner->addComponent<ColliderComponent>();
                 owner->getComponent<ColliderComponent>()->load(tag, width, height);
+
+                // Find listener if it exists for onCollide
+                lua_getglobal(state, id.c_str());
+                Logger::Instance()->dumpStack(state);
+                lua_pushnil(state);
+                // while (lua_next(state, -2) != 0) {
+                //     Logger::Instance()->dumpStack(state);
+                //     std::string component = lua_tostring(state, -2);
+                //     if (component == "collider") {
+                //         lua_pushnil(state);
+                //         while (lua_next(state, -2) != 0) {
+                //             lua_getfield(state, -1, "collide");
+                //             if (lua_isfunction(state, -1)) {
+                                    // collideListenerActive = true;
+                //                 std::cout << "onCollide() Listener found!" << std::endl;
+                //             }
+                //         }
+                         
+                //     }
+                // }
             }
         }
 
@@ -139,7 +196,9 @@ namespace Vigilant {
         owner->transform->setScaleY(script->get<float>(id + ".transform.scaleY"));
     }
 
-    void ScriptComponent::update(float deltaTime) {}
+    void ScriptComponent::update(float deltaTime) {
+        // luaL_dofile(state, fileName.c_str());
+    }
 
     void ScriptComponent::onInput(unsigned int keyID) {
         // Find appropriate lua function and call

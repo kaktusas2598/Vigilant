@@ -65,18 +65,28 @@ end
 -- while (true)
 -- do
 -- playSound("jump")
-playMusic("mainTheme")
+-- playMusic("mainTheme")
 -- end
 
 
-testEntity = createEntity()
-teleportEntity(testEntity, 400, 400)
-addSprite(testEntity, "slime", "assets/sprite/slime.png", 48, 48)
+testEntity = Entity.create()
+testEntity:move(400, 400)
+testEntity:scale(2, 2)
+testEntity:addSprite("slime", "assets/sprite/slime.png", 32, 32)
 
 
-testEntity2 = createEntity()
-teleportEntity(testEntity2, 100, 220)
-addSprite(testEntity2, "slime", "assets/sprite/slime.png", 48, 48)
+testEntity2 = Entity.create()
+testEntity2:move(100, 220) -- testEntity:move() same as Entity.move(testEntity)
+testEntity2:scale(2, 2)
+testEntity:addSprite("slime", "assets/sprite/slime.png", 32, 32)
+
+entityTable = {}
+for i = 1, 100 do
+    entityTable[i] = Entity.create()
+    entityTable[i]:move(100 + i * 100, 220 + i * 200)
+	entityTable[i]:scale(2, 2)
+    entityTable[i]:addSprite("player", "assets/sprite/player.png", 48, 48)
+end
 -- TODO: Write these wrappers:
 -- addAnimation()
 -- playAnimation()
