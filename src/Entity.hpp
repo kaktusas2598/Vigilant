@@ -120,7 +120,7 @@ namespace Vigilant {
 				// Must be done before running lua script
 				lua_register(script.getLuaState(), "playSound", lua_playSound);
 				lua_register(script.getLuaState(), "playMusic", lua_playMusic);
-				// lua_register(script.getLuaState(), "createEntity", lua_createEntity);
+				lua_register(script.getLuaState(), "createEntity", lua_createEntity);
 
 				script.open();
 
@@ -225,12 +225,7 @@ namespace Vigilant {
 				transform->setScaleX(script.get<float>(id + ".transform.scaleX"));
 				transform->setScaleY(script.get<float>(id + ".transform.scaleY"));
 
-
-				// lua_istable(script.getLuaState(), -1)
-
-
 				/*if(luaOk(L, luaL_dofile(L, fileName.c_str()))) {
-
 					// Test function example
 					lua_getglobal(L, "testFunc");
 					if (lua_isfunction(L, -1)) {

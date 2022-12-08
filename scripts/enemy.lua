@@ -2,10 +2,10 @@
 enemy = {
     -- Entity components
     transform = {
-         X = 100,
-         Y = 100,
+         X = 1200,
+         Y = 1400,
          scaleX = 3.0,
-         scaleY = 1.0
+         scaleY = 3.0
 
     },
     physics = {
@@ -19,35 +19,20 @@ enemy = {
         friction = 3.0
     },
     sprite = {
-        filename = "assets/player.png",
-        id = "player",
+        filename = "assets/slime.png",
+        id = "slime",
         animation = {
             default = {
                 name = "default",
                 row = 0,
-                numFrames = 6
-            },
-            run = {
-                name = "run",
-                row = 1,
-                numFrames = 6
-            },
-            fight = {
-                name = "fight",
-                row = 2,
                 numFrames = 4
             },
-            fall = {
-                name = "fall",
-                row = 4,
-                numFrames = 3
-            }
         },
-        width = 48,
-        height = 48
+        width = 32,
+        height = 32
     },
     collider = {
-    	width = 15,
+    	width = 32,
     	height = 35,
         type = "npc"
     },

@@ -18,7 +18,7 @@ namespace Vigilant {
     void LuaScript::open() {
 		 if (luaL_loadfile(L, fileName.c_str()) || lua_pcall(L, 0, 0, 0)) {
             std::string errorMessage = lua_tostring(L, -1);
-            exitWithError("Could not load script " + fileName);
+            exitWithError("Could not load script: " + fileName + ". " + errorMessage);
             L = 0;
         }
     }

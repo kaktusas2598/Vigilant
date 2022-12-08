@@ -43,9 +43,11 @@ player = {
     },
     collider = {
         type = "player",
-        width = 15;
-        height = 35;
-	collide = function(this, second) end
+        width = 15,
+        height = 35,
+	    collide = function(this, second)
+            print(this)
+        end
     },
     input = {},
     HP = 20

@@ -129,6 +129,7 @@ namespace Vigilant {
 
                         // TODO: collision resolution
                         // Needs to be some kind of event which can be then sent to Lua
+                        // C++ notify, Lua listener subscribe to notification and 
                         // entity->collision();
                     }
                 }
