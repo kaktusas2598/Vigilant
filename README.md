@@ -66,3 +66,10 @@ cd lua-5.4.4
 make all test
 ```
 After compiling take compiled libs and move them to src/lib directory in Vigilant
+
+### MSYS2 64bit Windows dependencies
+```
+pacman -S mingw-w64-x86_64-SDL2
+pacman -S mingw64/mingw-w64-x86_64-SDL2_mixer
+pacman -S mingw64/mingw-w64-x86_64-SDL2_image
+```
