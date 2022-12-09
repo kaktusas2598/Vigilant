@@ -6,7 +6,7 @@
 #include <algorithm>
 
 namespace Vigilant {
-    
+
     class EntityManager {
         public:
             static EntityManager* Instance() {
@@ -53,6 +53,10 @@ namespace Vigilant {
             EntityManager() {}
 
             static EntityManager* s_pInstance;
+            // Probably should use std::unique_ptr<Entity> instead
+            // I tried this on Ubuntu and it does seem to solve memory problem and entities get deleted
+            // but also getting segfault on Linux and I'm not sure if it's because of this class or
+            // my use of unique pointers
             std::vector<Entity*> entities;
     };
 }

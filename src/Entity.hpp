@@ -13,6 +13,7 @@
 #include "InputComponent.hpp"
 #include "PhysicsComponent.hpp"
 #include "ColliderComponent.hpp"
+//#include "ScriptComponent.hpp"
 
 #include "Logger.hpp"
 #include "LuaScript.hpp"
@@ -49,6 +50,9 @@ namespace Vigilant {
             virtual void clean() {} //= 0;
 
 			virtual void load(const LoaderParams *params) {} //= 0;
+
+			void collide(Entity* entity) {
+			}
 
 			void destroy() {
 				alive = false;
