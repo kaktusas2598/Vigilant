@@ -85,7 +85,7 @@ namespace Vigilant {
         //glBindVertexArray(vertexArrayID);
 
         //check the OpenGL version
-        printf("*** OpenGL Version: %s ***", glGetString(GL_VERSION));
+        printf("*** OpenGL Version: %s ***\n", glGetString(GL_VERSION));
 
 		if (GLContextEnabled) {
 			// set background color
