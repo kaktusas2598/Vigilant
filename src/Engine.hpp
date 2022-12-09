@@ -4,6 +4,7 @@
 #include "Window.hpp"
 #include "InputManager.hpp"
 #include "StateMachine.hpp"
+#include "Level.hpp"
 
 #include <stdio.h>
 #include <memory>
@@ -11,14 +12,8 @@
 
 namespace Vigilant {
 
-	class StateMachine;
 	class IGameState;
 	class Entity;
-
-	class RenderSystem;
-	class PhysicsSystem;
-	class CollisionSystem;
-	class InputSystem;
 
 	/*! \brief Engine
 	 *         Main Engine Class.
@@ -63,6 +58,12 @@ namespace Vigilant {
 			int getScreenWidth() const { return screenWidth; }
 			int getScreenHeight() const { return screenHeight; }
 
+			// Mainly used for Lua to get current level dimensions
+			int getMapWidth() const { return level != nullptr ? level->getWidth() : 0; }
+			int getMapHeight() const { return level != nullptr ? level->getHeight() : 0; }
+			void setLevel(Level* lvl) { level = lvl; }
+
+
 			SDL_Rect camera;
 		private:
 			Engine();
@@ -83,6 +84,7 @@ namespace Vigilant {
 			IGameState* m_currentState = nullptr; ///< current state's instance
 
 			std::vector<Entity*> entities;
+			Level* level;
 
 			bool SDLRenderingEnabled = false;
 	};
