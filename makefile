@@ -20,12 +20,13 @@ debug: CXXF += -DDEBUG -g
 debug: executable
 
 UNAME := $(shell uname -s)
+# For Mac
 ifeq ($(UNAME),Darwin)
 LDF+= -lSDL2main -lSDL2 -lGL -lGLU -lglut -lGLEW -lm -lSDL2_image -lSDL2_mixer -llua54 -ld# -lglu32
 else ifeq ($(UNAME),Linux)
 LDF+= -lSDL2main -lSDL2 -lGL -lGLU -lglut -lGLEW -lm -lSDL2_image -lSDL2_mixer -llua54 -ld# -lglu32
 else
-#For Windows using MSYS2/MING
+# For Windows using MSYS2/MING or Cygwin
 LDF+= -lmingw32 -lSDL2main -lSDL2 -mwindows -lglew32  -lopengl32 -lm -lSDL2_image -lSDL2_mixer -llua54# -lglu32
 endif
 

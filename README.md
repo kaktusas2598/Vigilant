@@ -65,7 +65,9 @@ tar zxf lua-5.4.4.tar.gz
 cd lua-5.4.4
 make all test
 ```
-After compiling take compiled libs and move them to src/lib directory in Vigilant
+Or visit [LuaBinaries](https://luabinaries.sourceforge.net/) page and download precompiled libraries
+Make sure to remove everything in src/lib before the next step
+After compiling find liblua54.a and move it to src/lib directory in Vigilant
 
 ### MSYS2 64bit Windows dependencies
 ```
