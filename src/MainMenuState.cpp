@@ -41,6 +41,11 @@ namespace Vigilant {
         for(size_t i = 0; i < gameEntities.size(); i++) {
             gameEntities[i]->draw(deltaTime);
         }
+
+        // Testing text rendering
+		// First apparent problem with this method from TextureManager:
+		// No info about width and hight of rendered texture so no way to perfectly center this for example on any resolution
+		TheTextureManager::Instance()->drawText("VIGILANT ENGINE", "arcade", 200, 0 , {255, 255, 255, 122}, 2);
     }
 
     void MainMenuState::setCallbacks(const std::vector<Callback>& callbacks) {

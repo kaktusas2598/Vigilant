@@ -6,9 +6,7 @@
 
 namespace Vigilant {
 
-    ColliderComponent::ColliderComponent(Entity* owner) : Component(owner) {
-        listenerName = "";
-    }
+    ColliderComponent::ColliderComponent(Entity* owner) : Component(owner), LuaListener() { }
 
     void ColliderComponent::update(float deltaTime) {
         collider.x = owner->transform->getX();

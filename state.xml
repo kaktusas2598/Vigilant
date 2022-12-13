@@ -11,8 +11,14 @@
 		<SOUNDS>
 			<sound filename="assets/sounds/button.wav" ID="button" type = "1"/>
 		</SOUNDS>
+		<!--This is problematic because some resources like fonts should really be global across multiple states-->
+		<!--Also I would like to be able to add states dynamically using Lua -->
+		<FONTS>
+			<font filename="assets/fonts/arcade_classic.TTF" ID="arcade"/>
+		</FONTS>
+
 		<SCRIPTS>
-            <!--<script name="state" filename="scripts/main.lua" type="entity"/>-->
+			<script name="state" filename="scripts/main.lua" type="entity"/>
         </SCRIPTS>
 
         <OBJECTS>

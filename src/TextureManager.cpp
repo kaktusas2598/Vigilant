@@ -1,6 +1,5 @@
 #include "TextureManager.hpp"
 #include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
 
 #include "Engine.hpp"
 #include "Logger.hpp"
@@ -29,6 +28,44 @@ namespace Vigilant {
 
         return false;
     }
+
+
+    bool TextureManager::loadFont(std::string fileName, std::string id) {
+		TTF_Font* font = TTF_OpenFont(fileName.c_str(), 28 );
+		if ( font == NULL ) {
+            Logger::Instance()->error(TTF_GetError());
+			return false;
+		}
+		m_fontMap[id] = font;
+		return true;
+	}
+
+    void TextureManager::drawText(std::string text, std::string fontId, int x, int y, SDL_Color color, int scale) {
+    	//Render text surface
+		SDL_Surface* textSurface = TTF_RenderText_Solid( m_fontMap[fontId], text.c_str(), color );
+		if( textSurface == NULL ) {
+            Logger::Instance()->error(TTF_GetError());
+		}
+		//Create texture from surface pixels
+		SDL_Texture *texture = SDL_CreateTextureFromSurface( renderer, textSurface );
+		if( texture == NULL ) {
+            Logger::Instance()->error(SDL_GetError());
+		}
+		else {
+			//Get image dimensions
+			int width = textSurface->w;
+			int height = textSurface->h;
+
+			// Temporarily register created texture surface and after rendering clear it
+			// This is not a good design at all, problem with this is described in header file
+			m_textureMap[fontId] = texture;
+			draw(fontId, x, y, textSurface->w, textSurface->h, SDL_FLIP_NONE);
+			clearFromTextureMap(fontId);
+		}
+
+		// Get rid of old surface
+		SDL_FreeSurface( textSurface );
+	}
 
     void TextureManager::draw(std::string id, int x, int y, int width, int height, SDL_RendererFlip flip) {
         SDL_Rect srcRect;
@@ -101,4 +138,13 @@ namespace Vigilant {
     void TextureManager::clearFromTextureMap(std::string id) {
         m_textureMap.erase(id);
     }
+
+    void TextureManager::clearFontMap() {
+        m_fontMap.clear();
+    }
+
+    void TextureManager::clearFromFontMap(std::string id) {
+        m_fontMap.erase(id);
+    }
+
 }

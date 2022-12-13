@@ -4,23 +4,29 @@
 #include <string>
 #include <map>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 namespace Vigilant {
 
     /**
      * Alternative to GLTextures for now, texture loading and drawing is subject to change
      *
+     * 2022-12-12: Adding TTF Font support, but by now this class already breaks SOLID principle and does 3 things:
+     * 1. Loads and manages textures using SDL_Texture*
+     * 2. Loads and manages TTF Fonts using SDL2_ttf
+     * 3. Does rendering which really needs to have it's own separate system
      *
      */
-    class TextureManager
-    {
+    class TextureManager {
     public:
 
         bool load(std::string fileName, std::string id);
+        bool loadFont(std::string fileName, std::string id);
         void draw(std::string id, int x, int y, int width, int height, SDL_RendererFlip flip = SDL_FLIP_NONE);
         void draw(std::string id, int x, int y, int width, int height, double angle, SDL_RendererFlip flip = SDL_FLIP_NONE);
         void drawFrame(std::string id, int x, int y, int width, int height, int currentRow, int currentFrame, SDL_RendererFlip flip = SDL_FLIP_NONE);
         void drawTile(std::string id, int margin, int spacing, int x, int y, int width, int height, int currentRow, int currentFrame, double scale = 1.0f);
+        void drawText(std::string text, std::string fontId, int x, int y, SDL_Color color, int scale = 1);
         void setRenderer(SDL_Renderer *rnd) { renderer = rnd; }
 
         SDL_Texture* getTexture(std::string id) { return m_textureMap[id]; }
@@ -37,11 +43,16 @@ namespace Vigilant {
         std::map<std::string, SDL_Texture*> getTextureMap() { return m_textureMap; }
         void clearTextureMap();
         void clearFromTextureMap(std::string id);
+
+        void clearFontMap();
+        void clearFromFontMap(std::string id);
+
     private:
 
         TextureManager() {}
 
         std::map<std::string, SDL_Texture*> m_textureMap;
+        std::map<std::string, TTF_Font*> m_fontMap;
         static TextureManager* s_pInstance;
         // Optional for SDL Rendering
         SDL_Renderer *renderer;

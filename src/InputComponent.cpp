@@ -12,7 +12,7 @@
 
 namespace Vigilant {
 
-    InputComponent::InputComponent(Entity* owner) : Component(owner) {}
+    InputComponent::InputComponent(Entity* owner) : Component(owner), LuaListener() {}
 
     void InputComponent::update(float deltaTime) {
                 owner->getComponent<SpriteComponent>()->setAnimated(false);

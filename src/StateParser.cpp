@@ -35,6 +35,16 @@ namespace Vigilant {
         }
         parseTextures(textureRoot, pTextureIDs);
 
+        TiXmlElement *fontRoot = 0;
+        for (TiXmlElement *e = stateRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
+            if (e->Value() == std::string("FONTS")) {
+                fontRoot = e;
+            }
+        }
+        if (fontRoot != 0)
+            parseFonts(fontRoot);
+
+
         TiXmlElement *soundRoot = 0;
         for (TiXmlElement *e = stateRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
             if (e->Value() == std::string("SOUNDS")) {
@@ -77,6 +87,17 @@ namespace Vigilant {
             TheTextureManager::Instance()->load(filename, id);
         }
     }
+
+    // TODO: for not state will only parse fonts and won't clean them up, I know this is bad, don't judge me
+    void StateParser::parseFonts(TiXmlElement* pStateRoot) {
+        Logger::Instance()->info("Loading fonts.");
+        for (TiXmlElement *e = pStateRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
+            std::string filename = e->Attribute("filename");
+            std::string id = e->Attribute("ID");
+            TheTextureManager::Instance()->loadFont(filename, id);
+        }
+
+	}
 
     void StateParser::parseSounds(TiXmlElement* pStateRoot, std::vector<std::string> *pSoundIDs) {
         Logger::Instance()->info("Loading sounds.");

@@ -57,7 +57,7 @@ namespace Vigilant {
             	// Or another event?
 				// This is tempporary because lua wont know if player collided with entity or players projectile
 				// Also npcs will not be able to create projectiles themselves
-				Entity* owner = projectile->getComponent<ProjectileComponent>()->getShooter();
+				//Entity* owner = projectile->getComponent<ProjectileComponent>()->getShooter();
 				//if (checkEntityOnEntityCollision(projectile, entities)) {
 					//owner->getComponent<ScriptComponent>();
 				//}

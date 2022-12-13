@@ -94,14 +94,14 @@ playerTable = {
 
     },
     physics = {
-        mass = 1.0,
+        mass = 2.0,
         velocityX = 0.0,
         velocityY = 0.0,
         aceclerationX = 0.0,
         accelerationY = 0.0,
         gravityX = 0.0,
         gravityY = 0.0,
-        friction = 0.2,
+        friction = 0.4,
     },
     sprite = {
         filename = "assets/sprite/player.png",

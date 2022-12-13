@@ -35,19 +35,12 @@ namespace Vigilant {
     // Will be called once lua state is closed
 	int ScriptEngine::lua_destroyEntity(lua_State *L) {
 		Entity* entity = (Entity*)lua_touserdata(L, -1);
-		std::cout << "Lua __gc for Entity called" << std::endl;
-        
+		//std::cout << "Lua __gc for Entity called" << std::endl;
+		// Lua takes care of gc and entity gets removed from entity manager using its id
+		// to avoid double freeing of same memory, so we don't need to call destructor explicitly
+		// Tried maping entities with ids using map in entity manager but could not get that to work
 		EntityManager::Instance()->remove(entity->id->get());
 
-		// Ths is not good way to delete entity after __gc is called
-		// I probably want to remove entity from EntityManager using id here
-		// Entity destroy will only be used in C++ components if used at all
-		//entity->destroy();
-		//TODO: really need that unordered_map
-		// No need to explicitely call delete or destructor because Lua will clear the memory
-		// Seg fault???
-		//if (entity != nullptr)
-			//entity->~Entity();
 		return 0;
 	}
 
@@ -133,7 +126,7 @@ namespace Vigilant {
 
     void ScriptEngine::onInput(std::string listener, int thisId, unsigned int keyID) {
         // Find appropriate lua function and call
-        if (listener != "") {
+        if (!listener.empty()){
             lua_getglobal(state, listener.c_str());
             lua_pushnumber(state, thisId);
             lua_pushnumber(state, keyID);
@@ -145,7 +138,7 @@ namespace Vigilant {
     }
 
     void ScriptEngine::onCollide(std::string listener, int thisId, int secondId) {
-        if (listener != "") {
+        if (!listener.empty()){
             lua_getglobal(state, listener.c_str());
             lua_pushnumber(state, thisId);
             lua_pushnumber(state, secondId);

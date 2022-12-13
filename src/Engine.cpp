@@ -21,6 +21,9 @@
 #include "imgui/imgui_impl_sdl.h"
 #include "imgui/imgui_impl_sdlrenderer.h"
 
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
+
 namespace Vigilant {
 
 	Engine* Engine::s_pInstance = nullptr;
@@ -56,6 +59,16 @@ namespace Vigilant {
 		if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 		{
 			exitWithError("Could Not Initialize SDL.");
+		}
+
+		//Initialize PNG loading
+		int imgFlags = IMG_INIT_PNG;
+		//if ( !( IMG_Init( imgFlags ) & imgFlags ) ) {
+			//exitWithError(IMG_GetError());
+		//}
+
+		if( TTF_Init() == -1 ) {
+			exitWithError(TTF_GetError());
 		}
 
 		// set up a double buffered window (minimizes flickering)
@@ -144,10 +157,8 @@ namespace Vigilant {
 				deltaTime = deltaTime / DESIRED_FPS;
 
 				update(deltaTime);
-				ParticleSystem::Instance()->update(deltaTime);
 
 				render(deltaTime);
-				ParticleSystem::Instance()->render(deltaTime);
 				//std::cout << deltaTime << std::endl;
 				//std::cout <<  " T: " << totalDeltaTime << std::endl;
 				totalDeltaTime -= deltaTime;
@@ -195,15 +206,19 @@ namespace Vigilant {
 			}
 			// TEMPORARY, just testing EntityManager, entities will get rendered twice
 			EntityManager::Instance()->render(deltaTime);
+
+			ParticleSystem::Instance()->update(deltaTime); // Update actually does rendering too
+			ParticleSystem::Instance()->render(deltaTime);
+
 			ImGui::Render();
 			ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
 			SDL_RenderPresent(m_window.getSDLRenderer()); // draw to the screen
 			ImGui::EndFrame();
 		} else {
-			//TODO: below is temporary code to test OpenGL drawing
 			glClearDepth(1.0);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+			//TODO: below is temporary code to test OpenGL drawing
 			//Following is deprecated GL stuff
 			glEnableClientState(GL_COLOR_ARRAY); //enable colouring
 			glBegin(GL_TRIANGLES);
@@ -222,6 +237,8 @@ namespace Vigilant {
 	* @sa StateMachine
 	*/
 	void Engine::update(float deltaTime){
+		//ParticleSystem::Instance()->update(deltaTime);
+
 		EntityManager::Instance()->refresh();
 		EntityManager::Instance()->update(deltaTime);
 
@@ -357,6 +374,9 @@ namespace Vigilant {
 		ImGui_ImplSDLRenderer_Shutdown();
 		ImGui_ImplSDL2_Shutdown();
 		ImGui::DestroyContext();
+
+		TTF_Quit();
+		//IMG_Quit();
 
 		if (SDLRenderingEnabled) {
 			SDL_DestroyWindow(m_window.getSDLWindow());

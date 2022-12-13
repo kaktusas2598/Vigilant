@@ -85,6 +85,8 @@ namespace Vigilant {
             ImGui::Begin("Debug Log");
 			ImGui::Checkbox("Show solids", &layerVisibility[i]);
             ImGui::End();
+			// FIXME: Weird bug: collision layer visibility toggles, but turning on colission layer seems to mess up actual Collision logic
+			// This is super strange because Collision class does not care about isVisible member?
 			(*it)->setVisible(layerVisibility[i]);
             i++;
         }
