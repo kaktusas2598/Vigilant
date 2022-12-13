@@ -5,10 +5,12 @@
 
 #include "Entity.hpp"
 #include "ProjectileComponent.hpp"
+#include "ButtonComponent.hpp"
 
 #include "SoundManager.hpp"
 #include "TextureManager.hpp"
 #include "Engine.hpp"
+#include "IGameState.hpp"
 
 #include <string>
 
@@ -80,6 +82,26 @@ namespace Vigilant {
                 lua_pushnumber(L, mapHeight);
 				return 1;
 			}
+
+			static int lua_getScreenWidth(lua_State *L) {
+				int screenWidth = TheEngine::Instance()->getScreenWidth();
+                lua_pushnumber(L, screenWidth);
+				return 1;
+			}
+
+            static int lua_getScreenHeight(lua_State *L) {
+				int screenHeight = TheEngine::Instance()->getScreenHeight();
+                lua_pushnumber(L, screenHeight);
+				return 1;
+			}
+
+			// TODO: this is temporary, it will need to accept state id as param
+			static int lua_changeState(lua_State *L) {
+				TheEngine::Instance()->getStateMachine()->getCurrentState()->setScreenState(ScreenState::CHANGE_NEXT);
+				return 1;
+			}
+
+
 
 			static int lua_createEntity(lua_State *L);
 
@@ -173,6 +195,23 @@ namespace Vigilant {
 
 				return 0;
 			}
+
+			static int lua_addButton(lua_State *L) {
+				Entity* entity = (Entity*)lua_touserdata(L, 1);
+				entity->addComponent<ButtonComponent>();
+
+				return 0;
+			}
+
+			static int lua_setButtonListener(lua_State *L) {
+				Entity* entity = (Entity*)lua_touserdata(L, 1);
+				std::string listener = (std::string)lua_tostring(L, 2);
+
+				entity->getComponent<ButtonComponent>()->setListener(listener);
+
+				return 0;
+			}
+
 
 			static int lua_addCollider(lua_State *L) {
 				Entity* entity = (Entity*)lua_touserdata(L, 1);

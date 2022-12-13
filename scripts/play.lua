@@ -1,4 +1,6 @@
--- Available functions
+-- Available functions from Engine
+
+-- Entity functions:
 -- Entity.create(), use create() wrapper which adds entity to entities global table which Lua will use
 -- Entity.move(x, y)
 -- Entity.scale(x, y)
@@ -8,12 +10,18 @@
 -- Entity.setColliderListener(funcName)
 -- Entity.addInput()
 -- Entity.setInputListener(funcName)
+-- Entity.addButton()
+-- Entity.setButtonListener(funcName)
 -- Entity.id()
 
+-- General Functions:
 -- playSound(id)
 -- playMusic(id)
 -- getMapWidth()
 -- getMapHeight()
+-- getScreenWidth()
+-- getScreenHeight()
+-- changeState() - currently sets the next state in state machine
 
 -- Globals
 entities = {} -- All Lua Managed entities will be here sorted by id
@@ -55,16 +63,12 @@ function define(data, tag)
 end
 
 
--- Impossible to pass existing C++ objects when passing to Lua
--- Unless you do lua_newuserdata from scratch or copy object
--- But I will need to modify objects inside these listeners
--- So I proprose this: some kind of ID system
+-- Player event listeners
 function onCollide(thisId, secondId)
 	print("Lua: onCollide() called")
 	--print("Player X: "..player:getX())
 	--print("Player Y: "..player:getY())
-	entities[thisId]:scale(4, 4)
-	entities[secondId]:scale(4, 4)
+	entities[secondId]:scale(0.5, 0.5)
 	print(entities)
 	-- if object:type() == "enemy" then
 		-- player:damage(10)
@@ -83,6 +87,20 @@ function onInput(thisId, key)
 		testEntity:addProjectile(entities[thisId], 150, 1000)
 	end
 end
+
+-- back to Main Menu callback and definition
+function onMainMenuClick(thisId)
+	-- TODO: make this binding better, accept state id or ScreenState enum
+	changeState()
+end
+mainMenu = create()
+-- TODO: Static sprite positioning
+mainMenu:move((getScreenWidth() - 200)/2, 0)
+mainMenu:addSprite("mainmenubutton", "", 200, 80)
+mainMenu:addButton()
+mainMenu:setButtonListener("onMainMenuClick")
+
+
 -- Entity
 playerTable = {
     -- Entity components
@@ -94,7 +112,7 @@ playerTable = {
 
     },
     physics = {
-        mass = 2.0,
+        mass = 1.0,
         velocityX = 0.0,
         velocityY = 0.0,
         aceclerationX = 0.0,
@@ -142,7 +160,11 @@ player = define(playerTable)
 
 mapWidth = getMapWidth()
 mapHeight = getMapHeight()
+screenWidth = getScreenWidth()
+screenHeight = getScreenHeight()
+
 print("Map Width: "..mapWidth.."\nMap Height: "..mapHeight)
+print("Screen Width: "..screenWidth.."\nScreen Height: "..screenHeight)
 
 print("Player ID: "..player:id())
 print("Player X: "..player:getX())

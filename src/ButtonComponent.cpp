@@ -2,6 +2,7 @@
 
 #include "InputManager.hpp"
 #include "SoundManager.hpp"
+#include "ScriptEngine.hpp"
 #include "Entity.hpp"
 #include "Vector2D.hpp"
 
@@ -9,7 +10,7 @@
 
 namespace Vigilant {
 
-    ButtonComponent::ButtonComponent(Entity* owner) : Component(owner) {
+    ButtonComponent::ButtonComponent(Entity* owner) : Component(owner), LuaListener() {
 		// From MenuButton class
 		// Starting frame is 1st one
         //m_currentFrame = MOUSE_OUT;
@@ -25,7 +26,9 @@ namespace Vigilant {
             if (TheInputManager::Instance()->isKeyPressed(SDL_BUTTON_LEFT)/* && isReleased*/) {
                 //m_currentFrame = CLICKED;
                 TheSoundManager::Instance()->playSound("button", 0);
-                callback();
+                //callback();
+                // TODO: third argument is SDL Key Code, do something about this, overload onInput or something
+                ScriptEngine::Instance()->onInput(getListener(), owner->id->get(), 0);
                 isReleased = false;
             } /*else if (TheInputManager::Instance()->isKeyDown(SDL_BUTTON_LEFT)) {
                 isReleased = true;

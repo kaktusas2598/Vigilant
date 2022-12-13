@@ -73,24 +73,34 @@ namespace Vigilant {
         lua_setfield(state, -2 , "move");
         lua_pushcfunction(state, lua_scaleEntity);
         lua_setfield(state, -2 , "scale");
+
         lua_pushcfunction(state, lua_addSprite);
         lua_setfield(state, -2 , "addSprite");
         lua_pushcfunction(state, lua_addAnimation);
         lua_setfield(state, -2 , "addAnimation");
         lua_pushcfunction(state, lua_setAnimation);
         lua_setfield(state, -2 , "setAnimation");
+
         lua_pushcfunction(state, lua_addCollider);
         lua_setfield(state, -2 , "addCollider");
         lua_pushcfunction(state, lua_setCollideListener);
         lua_setfield(state, -2 , "setCollideListener");
+
         lua_pushcfunction(state, lua_addInput);
         lua_setfield(state, -2 , "addInput");
         lua_pushcfunction(state, lua_setInputListener);
         lua_setfield(state, -2 , "setInputListener");
+
+        lua_pushcfunction(state, lua_addButton);
+        lua_setfield(state, -2 , "addButton");
+        lua_pushcfunction(state, lua_setButtonListener);
+        lua_setfield(state, -2 , "setButtonListener");
+
         lua_pushcfunction(state, lua_addPhysics);
         lua_setfield(state, -2 , "addPhysics");
         lua_pushcfunction(state, lua_addProjectile);
         lua_setfield(state, -2 , "addProjectile");
+        // TODO: replace this with __newindex?
         lua_pushcfunction(state, lua_getX);
         lua_setfield(state, -2 , "getX");
         lua_pushcfunction(state, lua_getY);
@@ -116,6 +126,9 @@ namespace Vigilant {
         lua_register(state, "playMusic", lua_playMusic);
         lua_register(state, "getMapWidth", lua_getMapWidth);
         lua_register(state, "getMapHeight", lua_getMapHeight);
+        lua_register(state, "getScreenWidth", lua_getScreenWidth);
+        lua_register(state, "getScreenHeight", lua_getScreenHeight);
+        lua_register(state, "changeState", lua_changeState);
 
         script->open();
     }

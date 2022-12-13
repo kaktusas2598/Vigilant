@@ -239,10 +239,7 @@ namespace Vigilant {
 	void Engine::update(float deltaTime){
 		//ParticleSystem::Instance()->update(deltaTime);
 
-		EntityManager::Instance()->refresh();
-		EntityManager::Instance()->update(deltaTime);
-
-        for (auto& e: EntityManager::Instance()->getEntities()) {
+		for (auto& e: EntityManager::Instance()->getEntities()) {
             // Chek each entity for collision against map tiles
             // Collision::checkMapCollision(e.get(), level->getCollidableLayers());
 
@@ -301,6 +298,11 @@ namespace Vigilant {
 			}
 		}
 		else { exit(); }
+
+		EntityManager::Instance()->refresh();
+		EntityManager::Instance()->update(deltaTime);
+
+
 	}
 
 	/**
@@ -327,6 +329,7 @@ namespace Vigilant {
 						ScriptEngine::Instance()->onInput(isPlayer->getListener(), e->id->get(), event.key.keysym.sym);
 					}
 				}
+				// TODO: if '`' pressed enable debug output
 				break;
 			case SDL_KEYUP:
 				TheInputManager::Instance()->releaseKey(event.key.keysym.sym);

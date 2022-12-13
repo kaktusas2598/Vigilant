@@ -25,11 +25,6 @@ namespace Vigilant {
 
         std::string getStateID() const { return playID; }
 
-        static void s_exitToMenu() {
-            TheEngine::Instance()->getStateMachine()->getCurrentState()->setScreenState(ScreenState::CHANGE_NEXT);
-        }
-
-
     private:
         Level* level;
 

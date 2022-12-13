@@ -32,9 +32,6 @@ namespace Vigilant {
             TheEngine::Instance()->getStateMachine()->getCurrentState()->setScreenState(ScreenState::CHANGE_NEXT);
         }
 
-        EntityManager::Instance()->refresh();
-        EntityManager::Instance()->update(deltaTime);
-
         for (auto& e: EntityManager::Instance()->getEntities()) {
             // Chek each entity for collision against map tiles
             Collision::checkMapCollision(e, level->getCollidableLayers());
@@ -77,7 +74,6 @@ namespace Vigilant {
 
     void PlayState::draw(float deltaTime) {
         level->render();
-        EntityManager::Instance()->render(deltaTime);
 
         int i = 0;
         for (auto it = level->getCollisionLayers()->begin(); it != level->getCollisionLayers()->end(); ++it) {
@@ -100,17 +96,8 @@ namespace Vigilant {
 
         StateParser stateParser;
         // TEMP var, will probably want to remove it and only use EntityManager??
-		std::vector<Entity*> gameEntities;
+        std::vector<Entity*> gameEntities;
         stateParser.parseState("state.xml", playID, &gameEntities, &textureIDs, &soundIDs);
-
-        // Test button
-        Entity* button = new Entity();
-        // Keep button centered, need to be affecyed by camera
-		button->transform->setX((TheEngine::Instance()->getScreenWidth() - 200)/2);
-        button->addComponent<SpriteComponent>()->load("mainmenubutton", 200, 80);
-		button->addComponent<ButtonComponent>()->load(1, s_exitToMenu);
-        EntityManager::Instance()->addEntity(button);
-
     }
 
     void PlayState::onExit() {
