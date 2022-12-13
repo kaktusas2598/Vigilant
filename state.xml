@@ -6,7 +6,8 @@
             <texture filename="assets/ui/button.png" ID="playbutton"/>
             <texture filename="assets/ui/quit.png" ID="exitbutton"/>
 			<texture filename="assets/ui/clouds2.png" ID="clouds2"/>
-			<texture filename="assets/particles/Color/fire/fire_1.png" ID="particle"/>
+            <texture filename="assets/particles/bullet2.png" ID="particle"/>
+			<!--<texture filename="assets/particles/Color/fire/fire_1.png" ID="particle"/>-->
         </TEXTURES>
 		<SOUNDS>
 			<sound filename="assets/sounds/button.wav" ID="button" type = "1"/>
@@ -36,7 +37,8 @@
 			<texture filename="assets/sprites/player.png" ID="player"/>
             <texture filename="assets/sprites/slime.png" ID="slime"/>
             <texture filename="assets/particles/bullet1.png" ID="bullet"/>
-			<texture filename="assets/particles/Color/fire/fire_1.png" ID="particle"/>
+			<!--<texture filename="assets/particles/Color/fire/fire_1.png" ID="particle"/>-->
+            <texture filename="assets/particles/bullet2.png" ID="particle"/>
 			<!-- For ButtonComponent test -->
             <texture filename="assets/ui/main.png" ID="mainmenubutton"/>
 		</TEXTURES>

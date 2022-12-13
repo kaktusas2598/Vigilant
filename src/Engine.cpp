@@ -88,8 +88,6 @@ namespace Vigilant {
 		TheEntityFactory::Instance()->registerType("MenuButton", new MenuButtonCreator());
 		TheEntityFactory::Instance()->registerType("ScrollingBackground", new ScrollingBackgroundCreator());
 
-		ParticleSystem::Instance()->addEmitter(Vector2D{200, 200}, "fire");
-
 		//initialize the current game
 		// onInit();
 
@@ -320,6 +318,9 @@ namespace Vigilant {
 				break;
 			case SDL_MOUSEMOTION:
 				TheInputManager::Instance()->setMouseCoords((float)event.motion.x, (float)event.motion.y);
+
+				// Probably horrible idea to spawn new emitter on every mouse move
+				ParticleSystem::Instance()->addEmitter(Vector2D{(float)event.motion.x, (float)event.motion.y}, "fire");
 				break;
 			case SDL_KEYDOWN:
 				TheInputManager::Instance()->pressKey(event.key.keysym.sym);

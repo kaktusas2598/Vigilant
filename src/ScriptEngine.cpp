@@ -148,7 +148,7 @@ namespace Vigilant {
             lua_pushnumber(state, keyID);
 
             if (luaOk(state, lua_pcall(state, 2, 0, 0))) {
-                std::cout << "onInput() Called sucessfully!!!" << std::endl;
+                //std::cout << "onInput() Called sucessfully!!!" << std::endl;
             }
         }
     }
@@ -160,7 +160,7 @@ namespace Vigilant {
             lua_pushnumber(state, secondId);
 
             if (luaOk(state, lua_pcall(state, 2, 0, 0))) {
-                std::cout << "onCollide() Called sucessfully!!!" << std::endl;
+                //std::cout << "onCollide() Called sucessfully!!!" << std::endl;
             }
         }
     }

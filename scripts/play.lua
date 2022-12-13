@@ -90,7 +90,6 @@ function onMainMenuClick(thisId)
 	changeState()
 end
 mainMenu = create()
--- TODO: Static sprite positioning
 mainMenu:move((getScreenWidth() - 200)/2, 0)
 mainMenu:addSprite("mainmenubutton", "", 200, 80)
 mainMenu:setAbsolutePosition(true)
