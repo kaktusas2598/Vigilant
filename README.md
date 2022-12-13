@@ -9,14 +9,18 @@
 
  * SDL2 2D rendering (OpenGL support will be coming later)
  * Finite State Machine and state loading from XML file
+ * Entities defined using Lua scripts including lua listener functions on events
  * Keyboard and Mouse input handling with SDL2
  * Window and GL context handling with SDL2
  * GLSL shader program loading
- * Texture loading (With stb_image.h and SDL2_image)
+ * Texture loading (Using stb_image.h and SDL2_image)
+ * TTF Font loading (Using SDL_ttf)
  * Menu buttons with callbacks
  * Basic Audio Support (one shot sfx and music)
  * Tiled map loading from tmx files including collision layers
+ * Basis Axis Aligned Collision Detection
  * Basic Rigid Body Dynamics
+ * Debug UI
 
 #### Planned feature list:
 
@@ -24,7 +28,6 @@
  * 3D Rendering with OpenGL
  * Entity Component System
  * Model Loading (simple .obj loader or assimp?)
- * TTF Font loading
  * Lua Support (For scripting states and entities)
  * Immediate mode GUI using Dear IMGUI (Altrough I am still looking at other options like Nuklear)
 
@@ -37,7 +40,6 @@
  * [IMGUI](https://github.com/ocornut/imgui) - Bloat-free Immediate Mode Graphical User interface for C++ with minimal dependencies;
  * [GLM](https://glm.g-truc.net/0.9.8/index.html) - C++ Mathematics library for graphics applications.
  * [TinyXML](https://www.grinninglizard.com/tinyxml/) - For XML file parsing
- * [inih](https://github.com/jtilly/inih) - header only C++ version of inih - ini file loader and parser
  + stb_image Public Domain Image Loading Library for C++
 
  #### Build Notes

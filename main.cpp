@@ -1,24 +1,20 @@
 #include <iostream>
 #include <string>
 
-#include "INIReader.h"
 #include "src/Engine.hpp"
+#include "src/LuaScript.hpp"
 
 int main(int argc, char *argv[]) {
 
-	// Load engine config
-	INIReader reader("config.ini");
-	if (reader.ParseError() != 0) {
-		std::cout << "Could not load configuration file!" << std::endl;
-	}
+	Vigilant::LuaScript configScript("scripts/config.lua");
+	configScript.open();
 
-	// Initialise and start the engine
 	Vigilant::TheEngine::Instance()->init(
-		"Vigilant Engine Test",
-		reader.GetInteger("rendering", "ScreenHeight", 600),
-		reader.GetInteger("rendering", "ScreenWidth", 800),
+		configScript.get<std::string>("window.title"),
+		configScript.get<int>("window.height"),
+		configScript.get<int>("window.width"),
 		0,
-		reader.GetBoolean("rendering", "SDLRenderingEnabled", true)
+		configScript.get<bool>("rendering.SDLRenderingEnabled")
 	);
 	Vigilant::TheEngine::Instance()->run();
 

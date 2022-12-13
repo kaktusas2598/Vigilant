@@ -144,6 +144,7 @@ namespace Vigilant {
     }
 
     void TextureManager::clearFromFontMap(std::string id) {
+        TTF_CloseFont( m_fontMap[id] );
         m_fontMap.erase(id);
     }
 
