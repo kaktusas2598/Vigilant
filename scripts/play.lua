@@ -5,6 +5,7 @@
 -- Entity.move(x, y)
 -- Entity.scale(x, y)
 -- Entity.addSprite(id, filename, w, h)
+-- Entity.setAbsolutePosition(isAbsolute): takes boolean argument
 -- Entity.addPhysics(mass, frictionCoefficient) : friction from 0.00 to 1.00
 -- Entity.addCollider(type, width, height)
 -- Entity.setColliderListener(funcName)
