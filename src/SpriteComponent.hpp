@@ -56,6 +56,8 @@ namespace Vigilant {
             void setAnimated(bool animate) { isAnimated = animate; }
             void setFlipped(bool flip) { isFlipped = flip; }
 
+            void setAbsolute(bool absol) { isAbsolute = absol; }
+
             int getWidth() const { return width; }
             int getHeight() const { return height; }
         private:
@@ -68,6 +70,9 @@ namespace Vigilant {
             int height;
             std::string textureID;
             std::map<std::string, Animation> animationList;
+
+            // Is sprite always rendered in the same place relative to the screen
+            bool isAbsolute;
     };
 }
 

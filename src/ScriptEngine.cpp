@@ -76,6 +76,9 @@ namespace Vigilant {
 
         lua_pushcfunction(state, lua_addSprite);
         lua_setfield(state, -2 , "addSprite");
+        lua_pushcfunction(state, lua_setAbsolutePosition);
+        lua_setfield(state, -2 , "setAbsolutePosition");
+
         lua_pushcfunction(state, lua_addAnimation);
         lua_setfield(state, -2 , "addAnimation");
         lua_pushcfunction(state, lua_setAnimation);

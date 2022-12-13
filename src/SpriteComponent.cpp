@@ -9,6 +9,7 @@ namespace Vigilant {
     SpriteComponent::SpriteComponent(Entity* owner) : Component(owner) {
         isAnimated = false;
         isFlipped = false;
+        isAbsolute = false;
     }
 
     void SpriteComponent::render() {
@@ -45,8 +46,13 @@ namespace Vigilant {
         srcRect.h = height;
         destRect.w = width * owner->transform->getScaleX();
         destRect.h = height * owner->transform->getScaleY();
-        destRect.x = owner->transform->getX() - TheEngine::Instance()->camera.x;
-        destRect.y = owner->transform->getY() - TheEngine::Instance()->camera.y;
+        if (isAbsolute) {
+            destRect.x = owner->transform->getX();
+            destRect.y = owner->transform->getY();
+        } else {
+            destRect.x = owner->transform->getX() - TheEngine::Instance()->camera.x;
+            destRect.y = owner->transform->getY() - TheEngine::Instance()->camera.y;
+        }
 
         SDL_RenderCopyEx(
             TheEngine::Instance()->getSDLRenderer(),
@@ -72,8 +78,13 @@ namespace Vigilant {
         srcRect.h = height;
         destRect.w = width * owner->transform->getScaleX();
         destRect.h = height * owner->transform->getScaleY();
-        destRect.x = owner->transform->getX() - TheEngine::Instance()->camera.x;
-        destRect.y = owner->transform->getY() - TheEngine::Instance()->camera.y;
+        if (isAbsolute) {
+            destRect.x = owner->transform->getX();
+            destRect.y = owner->transform->getY();
+        } else {
+            destRect.x = owner->transform->getX() - TheEngine::Instance()->camera.x;
+            destRect.y = owner->transform->getY() - TheEngine::Instance()->camera.y;
+        }
 
         SDL_RenderCopyEx(
             TheEngine::Instance()->getSDLRenderer(),

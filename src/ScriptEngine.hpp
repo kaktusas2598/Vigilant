@@ -159,6 +159,16 @@ namespace Vigilant {
 				return 0;
 			}
 
+			static int lua_setAbsolutePosition(lua_State *L) {
+				Entity* entity = (Entity*)lua_touserdata(L, 1);
+				bool absol = (bool)lua_toboolean(L, 2);
+
+                entity->getComponent<SpriteComponent>()->setAbsolute(absol);
+
+				return 0;
+			}
+
+
 			static int lua_addAnimation(lua_State *L) {
 				Entity* entity = (Entity*)lua_touserdata(L, 1);
 				std::string name = (std::string)lua_tostring(L, 2);
