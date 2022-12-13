@@ -1,10 +1,10 @@
 #ifndef __LuaScript__
 #define __LuaScript__
- 
+
 #include <string>
 #include <vector>
 #include <iostream>
- 
+
 // Lua is written in C, so compiler needs to know how to link its libraries
 extern "C" {
 # include "lua.h"
@@ -29,11 +29,13 @@ namespace Vigilant {
 
             // Loads and runs Lua script, make sure to register C++ functions before running this
             void open();
+            // Closes script
+            void close();
 
             void printError(const std::string& variableName, const std::string& reason);
             std::vector<int> getIntVector(const std::string& name);
             std::vector<std::string> getTableKeys(const std::string& name);
-        
+
             // Clean Lua stack
             void clean() {
                 int n = lua_gettop(L);
@@ -96,13 +98,13 @@ namespace Vigilant {
 
                 return true;
             }
-        
+
             // Generic getter
             template<typename T>
             T lua_get(const std::string& variableName) {
                 return 0;
             }
-        
+
             // Generic default value getter for a lua variable
             template<typename T>
             T lua_getdefault() {
@@ -204,5 +206,5 @@ namespace Vigilant {
         return v;
     }
 }
- 
+
 #endif // __LuaScript__

@@ -32,7 +32,7 @@
 ### Used Libraries
 
  * [OpenGL](https://www.opengl.org) - for 2D rendering and eventually 3D;
- * [SDL2](https://www.libsdl.org/) - for window creation and input handling, optional 2D rendering;
+ * [SDL2](https://www.libsdl.org/) - for window creation and input handling, sound, optional 2D rendering;
  * [GLEW](https://glew.sourceforge.net/) - extension library for loading OpenGL functions
  * [IMGUI](https://github.com/ocornut/imgui) - Bloat-free Immediate Mode Graphical User interface for C++ with minimal dependencies;
  * [GLM](https://glm.g-truc.net/0.9.8/index.html) - C++ Mathematics library for graphics applications.
@@ -53,6 +53,7 @@
 sudo apt-get install -y libsdl2-dev
 sudo apt-get install -y libsdl2-image-dev
 sudo apt-get install -y libsdl2-mixer-dev
+sudo apt-get install -y libsdl2-ttf-dev
 sudo apt install lua5.4
 ```
 
@@ -74,4 +75,5 @@ After compiling find liblua54.a and move it to src/lib directory in Vigilant
 pacman -S mingw-w64-x86_64-SDL2
 pacman -S mingw64/mingw-w64-x86_64-SDL2_mixer
 pacman -S mingw64/mingw-w64-x86_64-SDL2_image
+pacman -S mingw64/mingw-w64-x86_64-SDL2_ttf
 ```

@@ -22,12 +22,12 @@ debug: executable
 UNAME := $(shell uname -s)
 # For Mac
 ifeq ($(UNAME),Darwin)
-LDF+= -lSDL2main -lSDL2 -lGL -lGLU -lglut -lGLEW -lm -lSDL2_image -lSDL2_mixer -llua54 -ld# -lglu32
+LDF+= -lSDL2main -lSDL2 -lGL -lGLU -lglut -lGLEW -lm -lSDL2_image -lSDL2_mixer -lSDL2_ttf -llua54 -ld# -lglu32
 else ifeq ($(UNAME),Linux)
-LDF+= -lSDL2main -lSDL2 -lGL -lGLU -lglut -lGLEW -lm -lSDL2_image -lSDL2_mixer -llua54# -lglu32
+LDF+= -lSDL2main -lSDL2 -lGL -lGLU -lglut -lGLEW -lm -lSDL2_image -lSDL2_mixer -lSDL2_ttf -llua54# -lglu32
 else
 # For Windows using MSYS2/MING or Cygwin
-LDF+= -lmingw32 -lSDL2main -lSDL2 -mwindows -lglew32  -lopengl32 -lm -lSDL2_image -lSDL2_mixer -llua54# -lglu32
+LDF+= -lmingw32 -lSDL2main -lSDL2 -mwindows -lglew32  -lopengl32 -lm -lSDL2_image -lSDL2_mixer -lSDL2_ttf -llua54# -lglu32
 endif
 
 INCLUDE_PATHS = -I/usr/local/include -I/opt/X11/include -Isrc/include -Isrc/include/imgui

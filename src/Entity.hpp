@@ -8,12 +8,12 @@
 
 #include "Component.hpp"
 #include "TransformComponent.hpp"
+#include "IdComponent.hpp"
 
 #include "SpriteComponent.hpp"
 #include "InputComponent.hpp"
 #include "PhysicsComponent.hpp"
 #include "ColliderComponent.hpp"
-//#include "ScriptComponent.hpp"
 
 #include "Logger.hpp"
 #include "LuaScript.hpp"
@@ -30,29 +30,25 @@ namespace Vigilant {
 	class Entity {
 
 		public:
-			// TODO: once Entity isn't pure abstract anymore, move this to public
             Entity() {
+				id = addComponent<IdComponent>();
 				transform = addComponent<TransformComponent>();
 				alive = true;
-				livingCount++;
 			}
 
 			virtual void update(float deltaTime) {
 				for(int i = components.size() - 1; i >= 0; i--) {
 					components[i]->update(deltaTime);
 				}
-			} //= 0;
+			}
 			virtual void draw(float deltaTime) {
 				for(int i = components.size() - 1; i >= 0; i--) {
 					components[i]->render();
 				}
-			} //= 0;
-            virtual void clean() {} //= 0;
-
-			virtual void load(const LoaderParams *params) {} //= 0;
-
-			void collide(Entity* entity) {
 			}
+            virtual void clean() {}
+
+			virtual void load(const LoaderParams *params) {}
 
 			void destroy() {
 				alive = false;
@@ -90,14 +86,10 @@ namespace Vigilant {
 			bool isAlive() { return alive; }
 
 			std::shared_ptr<TransformComponent> transform;
-			static int livingCount;
+			std::shared_ptr<IdComponent> id;
 
-		// protected:
-		// Had to uncomment this to bind Entity class to lua, this probably ruins previously used
-		// inheritance and polymorphism principle for game objects, but scrolling background and menu buttons still appear to work
-			virtual ~Entity(){
-				std::cout << "Virtual private Entity destructor called." << std::endl;
-				livingCount--;
+			~Entity(){
+				std::cout << "Entity destructor called." << std::endl;
 			}
 		private:
 

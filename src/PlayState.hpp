@@ -7,6 +7,8 @@
 #include "SDLEntity.hpp"
 #include "Level.hpp"
 
+#include "Engine.hpp"
+
 namespace Vigilant {
     class PlayState : public IGameState {
     public:
@@ -23,13 +25,15 @@ namespace Vigilant {
 
         std::string getStateID() const { return playID; }
 
+        static void s_exitToMenu() {
+            TheEngine::Instance()->getStateMachine()->getCurrentState()->setScreenState(ScreenState::CHANGE_NEXT);
+        }
+
+
     private:
         Level* level;
 
         static const std::string playID;
-        std::vector<Entity*> gameEntities;
-
-        bool checkCollision(SDLEntity* p1, SDLEntity* p2);
     };
 }
 

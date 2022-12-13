@@ -5,7 +5,7 @@
 #include "SoundManager.hpp"
 #include "EntityFactory.hpp"
 #include "EntityManager.hpp"
-#include "ScriptComponent.hpp"
+#include "ScriptEngine.hpp"
 
 #include "Logger.hpp"
 
@@ -102,6 +102,7 @@ namespace Vigilant {
 
     // TODO: Deprecate once loading from sripts have been implemented
     void StateParser::parseObjects(TiXmlElement* pStateRoot, std::vector<Entity*> *entities) {
+        Logger::Instance()->info("Loading objects for factory.");
         for (TiXmlElement *e = pStateRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
             int x,y, width, height, numFrames, callbackID, animSpeed;
             std::string textureID;
@@ -130,13 +131,11 @@ namespace Vigilant {
             name = e->Attribute("name");
             fileName = e->Attribute("filename");
             type = e->Attribute("type");
+			//Logger::Instance()->info("Initialising scripts.");
 
+			// TODO: Change to ScriptEngine?
+			ScriptEngine::Instance()->init(fileName);
             if (type == "entity") {
-                Entity* entity = EntityManager::Instance()->addEntity();
-                entity->addComponent<ScriptComponent>()->init(name, fileName);
-                entity->getComponent<ScriptComponent>()->load();
-
-                entities->push_back(entity);
             }
         }
     }

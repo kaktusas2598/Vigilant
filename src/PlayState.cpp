@@ -13,7 +13,13 @@
 
 #include "imgui/imgui.h"
 
+// TEMP
+#include "SpriteComponent.hpp"
+#include "ButtonComponent.hpp"
+
 namespace Vigilant {
+
+	static bool layerVisibility[10] = {false};
 
     const std::string PlayState::playID = "PLAY";
 
@@ -29,24 +35,25 @@ namespace Vigilant {
         EntityManager::Instance()->refresh();
         EntityManager::Instance()->update(deltaTime);
 
-        for (auto& e: EntityManager::Instance()->getEntities())
+        for (auto& e: EntityManager::Instance()->getEntities()) {
+            // Chek each entity for collision against map tiles
             Collision::checkMapCollision(e, level->getCollidableLayers());
 
-        for (size_t i = 0; i < gameEntities.size(); i++) {
-            gameEntities[i]->update(deltaTime);
-
-            Collision::checkMapCollision(gameEntities[i], level->getCollidableLayers());
-        }
-
-        // Find player and update camera
-        for (size_t i = 0; i < gameEntities.size(); i++) {
-            auto isPlayer = gameEntities[i]->getComponent<InputComponent>();
+			// Find player and update camera
+			auto isPlayer = e->getComponent<InputComponent>();
             if (isPlayer) {
-                TheEngine::Instance()->camera.x = gameEntities[i]->transform->getX() - TheEngine::Instance()->camera.w/2;
-                TheEngine::Instance()->camera.y = gameEntities[i]->transform->getY() - TheEngine::Instance()->camera.h/2;
+				// Don't like this much looping.
+				// Also need to decide if EntityManager good enough to be used everywhere or not
+				//Collision::checkPlayerEntityCollision(e.get(), gameEntities);
+				// Causes big lag!! Tried reducing number of entities to around 50 but it still is a problem
+				Collision::checkPlayerEntityCollision(e, EntityManager::Instance()->getEntities());
+
+                TheEngine::Instance()->camera.x = e->transform->getX() - TheEngine::Instance()->camera.w/2;
+                TheEngine::Instance()->camera.y = e->transform->getY() - TheEngine::Instance()->camera.h/2;
             }
-        }
-        // Make sure camera doesn't go out of bounds of map
+		}
+
+		// Make sure camera doesn't go out of bounds of map
         if (TheEngine::Instance()->camera.x < 0) {
             TheEngine::Instance()->camera.x = 0;
         }
@@ -66,20 +73,12 @@ namespace Vigilant {
             //TheEngine::Instance()->camera.y = TheEngine::Instance()->camera.h;
             TheEngine::Instance()->camera.y = level->getHeight() - TheEngine::Instance()->camera.h;
         }
-
-        // if (checkCollision(dynamic_cast<SDLEntity*>(gameEntities[0]), dynamic_cast<SDLEntity*>(gameEntities[1]))) {
-            // TheEngine::Instance()->getStateMachine()->getCurrentState()->setScreenState(ScreenState::CHANGE_NEXT);
-        // }
     }
 
     void PlayState::draw(float deltaTime) {
         level->render();
         EntityManager::Instance()->render(deltaTime);
 
-        for (size_t i = 0; i < gameEntities.size(); i++) {
-            gameEntities[i]->draw(deltaTime);
-        }
-        static bool layerVisibility[10] = {false};
         int i = 0;
         for (auto it = level->getCollisionLayers()->begin(); it != level->getCollisionLayers()->end(); ++it) {
             // Seems like member needs to be static but that doesnt make sense for tile layer
@@ -98,49 +97,26 @@ namespace Vigilant {
         TheEngine::Instance()->setLevel(level);
 
         StateParser stateParser;
+        // TEMP var, will probably want to remove it and only use EntityManager??
+		std::vector<Entity*> gameEntities;
         stateParser.parseState("state.xml", playID, &gameEntities, &textureIDs, &soundIDs);
+
+        // Test button
+        Entity* button = new Entity();
+        // Keep button centered, need to be affecyed by camera
+		button->transform->setX((TheEngine::Instance()->getScreenWidth() - 200)/2);
+        button->addComponent<SpriteComponent>()->load("mainmenubutton", 200, 80);
+		button->addComponent<ButtonComponent>()->load(1, s_exitToMenu);
+        EntityManager::Instance()->addEntity(button);
+
     }
 
     void PlayState::onExit() {
-
-        for (size_t i = 0; i < gameEntities.size(); i++) {
-            gameEntities[i]->destroy(); // mark for destroy
-            gameEntities[i]->clean(); // clean literally does nothing now
-        }
-
-        gameEntities.clear();
-
-        EntityManager::Instance()->refresh(); // will destroy entities
-
         for(size_t i = 0; i < textureIDs.size(); i++) {
             TheTextureManager::Instance()->clearFromTextureMap(textureIDs[i]);
         }
 
+        ScriptEngine::Instance()->close();
         TheEngine::Instance()->setLevel(nullptr);
-    }
-
-    bool PlayState::checkCollision(SDLEntity *p1, SDLEntity* p2) {
-        int leftA, leftB;
-        int rightA, rightB;
-        int topA, topB;
-        int bottomA, bottomB;
-
-        leftA = p1->getPosition().getX();
-        rightA = p1->getPosition().getX() + p1->getWidth();
-        topA = p1->getPosition().getY();
-        bottomA = p1->getPosition().getY() + p1->getHeight();
-
-        leftB = p2->getPosition().getX();
-        rightB = p2->getPosition().getX() + p2->getWidth();
-        topB = p2->getPosition().getY();
-        bottomB = p2->getPosition().getY() + p2->getHeight();
-
-        // If any of the sides from A are outside of B
-        if (bottomA <= topB) { return false; }
-        if (topA >= bottomB) { return false; }
-        if (rightA <= leftB) { return false; }
-        if (leftA >= rightB) { return false; }
-
-        return true;
     }
 }

@@ -1,7 +1,9 @@
 #include "TextureManager.hpp"
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 
 #include "Engine.hpp"
+#include "Logger.hpp"
 
 namespace Vigilant {
 
@@ -39,8 +41,28 @@ namespace Vigilant {
         destRect.x = x;
         destRect.y = y;
 
-        SDL_RenderCopyEx(renderer, m_textureMap[id], &srcRect, &destRect, 0, 0, flip);
+        if (SDL_RenderCopyEx(renderer, m_textureMap[id], &srcRect, &destRect, 0, 0, flip) != 0) {
+            Logger::Instance()->error(SDL_GetError());
+        }
     }
+
+	void TextureManager::draw(std::string id, int x, int y, int width, int height, double angle, SDL_RendererFlip flip) {
+        SDL_Rect srcRect;
+        SDL_Rect destRect;
+
+        srcRect.x = 0;
+        srcRect.y = 0;
+        srcRect.w = destRect.w = width;
+        srcRect.h = destRect.h = height;
+        destRect.x = x;
+        destRect.y = y;
+
+        if (SDL_RenderCopyEx(renderer, m_textureMap[id], &srcRect, &destRect, angle, 0, flip) != 0) {
+            Logger::Instance()->error(SDL_GetError());
+        }
+
+    }
+
 
     void TextureManager::drawFrame(std::string id, int x, int y, int width, int height, int currentRow, int currentFrame, SDL_RendererFlip flip) {
         SDL_Rect srcRect;
@@ -52,7 +74,9 @@ namespace Vigilant {
         destRect.x = x;
         destRect.y = y;
 
-        SDL_RenderCopyEx(renderer, m_textureMap[id], &srcRect, &destRect, 0, 0, flip);
+        if (SDL_RenderCopyEx(renderer, m_textureMap[id], &srcRect, &destRect, 0, 0, flip) != 0) {
+            Logger::Instance()->error(SDL_GetError());
+        }
     }
 
     void TextureManager::drawTile(std::string id, int margin, int spacing, int x, int y, int width, int height, int currentRow, int currentFrame, double scale) {

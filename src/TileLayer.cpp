@@ -25,9 +25,9 @@ namespace Vigilant {
     }
 
     void TileLayer::render() {
-	if (!isVisible) {
-	    return;
-	}
+		if (!isVisible) {
+			return;
+		}
 
         int x, y, x2, y2 = 0;
 

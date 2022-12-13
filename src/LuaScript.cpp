@@ -10,6 +10,7 @@ namespace Vigilant {
     }
 
     LuaScript::~LuaScript() {
+        Logger::Instance()->info("Closing Lua state.");
         if (L) {
             lua_close(L);
         }
@@ -22,6 +23,14 @@ namespace Vigilant {
             L = 0;
         }
     }
+
+	void LuaScript::close() {
+        Logger::Instance()->info("Closing Lua state.");
+        if (L) {
+            lua_close(L);
+        }
+    }
+
 
     void LuaScript::printError(const std::string& variableName, const std::string& reason) {
         //TODO: handle this better

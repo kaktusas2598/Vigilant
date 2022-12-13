@@ -42,21 +42,23 @@ namespace Vigilant {
                     owner->getComponent<PhysicsComponent>()->setVelocityY( owner->getComponent<PhysicsComponent>()->getVelocityY() - 5.0f);
                 }
                 if (TheInputManager::Instance()->isKeyPressed(SDLK_f)) {
-                    //Entity* entity = new Entity();
-                    Entity* entity = EntityManager::Instance()->addEntity();
-                    entity->addComponent<SpriteComponent>();
-                    entity->addComponent<ColliderComponent>();
-                    entity->addComponent<ProjectileComponent>();
+                    // Problem, would be nice to create these in Lua, so input manager needs to send key event to lua with instance id
+					//Entity* projectile = new Entity();
+					//EntityManager::Instance()->addEntity(projectile);
 
-					entity->getComponent<SpriteComponent>()->load("bullet", 10, 10);
-                    entity->getComponent<ColliderComponent>()->load("projectile", 10, 10);
+                    //projectile->addComponent<SpriteComponent>();
+                    //projectile->addComponent<ColliderComponent>();
+                    //projectile->addComponent<ProjectileComponent>();
 
-					int speed = 150;
-					int range = 1000;
-					Vector2D velocity = owner->getComponent<PhysicsComponent>()->getVelocity();
-					velocity.normalize();
-					velocity *= speed;
-					entity->getComponent<ProjectileComponent>()->load(owner, range, speed, velocity);
+					//projectile->getComponent<SpriteComponent>()->load("bullet", 10, 10);
+                    //projectile->getComponent<ColliderComponent>()->load("projectile", 10, 10);
+
+					//int speed = 150;
+					//int range = 1000;
+					//Vector2D velocity = owner->getComponent<PhysicsComponent>()->getVelocity();
+					//velocity.normalize();
+					//velocity *= speed;
+					//projectile->getComponent<ProjectileComponent>()->load(owner, range, speed, velocity);
                 }
                 // Alternative movement - follow mouse
                 // Vector2D target = TheInputManager::Instance()->getMouseCoords();

@@ -6,10 +6,15 @@
             <texture filename="assets/ui/button.png" ID="playbutton"/>
             <texture filename="assets/ui/quit.png" ID="exitbutton"/>
 			<texture filename="assets/ui/clouds2.png" ID="clouds2"/>
+			<texture filename="assets/particles/Color/fire/fire_1.png" ID="particle"/>
         </TEXTURES>
 		<SOUNDS>
 			<sound filename="assets/sounds/button.wav" ID="button" type = "1"/>
 		</SOUNDS>
+		<SCRIPTS>
+            <!--<script name="state" filename="scripts/main.lua" type="entity"/>-->
+        </SCRIPTS>
+
         <OBJECTS>
             <!-- Buttons measure for 1024 x 768 resolution-->
             <!-- <object type="MenuButton" x="362" y="234" width="300" height="100" textureID="playbutton"  numFrames="0" callbackID="1"/>
@@ -25,6 +30,9 @@
 			<texture filename="assets/sprites/player.png" ID="player"/>
             <texture filename="assets/sprites/slime.png" ID="slime"/>
             <texture filename="assets/particles/bullet1.png" ID="bullet"/>
+			<texture filename="assets/particles/Color/fire/fire_1.png" ID="particle"/>
+			<!-- For ButtonComponent test -->
+            <texture filename="assets/ui/main.png" ID="mainmenubutton"/>
 		</TEXTURES>
 		<SOUNDS>
 			<sound filename="assets/sounds/jump.wav" ID="jump" type = "1"/>
@@ -33,14 +41,8 @@
 		<MAPS>
 			<map filename="assets/rpg.tmx" index="1"/>
 		</MAPS>
-		<!--<OBJECTS>
-			<object type="Player" x="150" y="150" width="48" height="48" textureID="player" numFrames="6"/>
-            <object type="Player" x="100" y="100" width="48" height="48" textureID="player" numFrames="6"/>
-            <object type="Enemy" x="500" y="100" width="48" height="48" textureID="player" numFrames="6"/>
-        </OBJECTS>-->
         <SCRIPTS>
-            <script name="player" filename="scripts/player.lua" type="entity"/>
-            <script name="enemy" filename="scripts/enemy.lua" type="entity"/>
+            <script name="state" filename="scripts/play.lua" type="entity"/>
         </SCRIPTS>
     </PLAY>
     <!-- The Game Over State -->

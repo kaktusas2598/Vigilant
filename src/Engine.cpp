@@ -2,6 +2,7 @@
 #include "FrameLimiter.hpp"
 #include "ErrorHandler.hpp"
 #include "TextureManager.hpp"
+#include "EntityManager.hpp"
 
 #include "IGameState.hpp"
 #include "MainMenuState.hpp"
@@ -12,6 +13,9 @@
 
 #include <string>
 #include "Logger.hpp"
+
+#include "ParticleSystem.hpp"
+#include "Collision.hpp"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_sdl.h"
@@ -70,6 +74,8 @@ namespace Vigilant {
 		// TODO: get rid of these and implement using ECS
 		TheEntityFactory::Instance()->registerType("MenuButton", new MenuButtonCreator());
 		TheEntityFactory::Instance()->registerType("ScrollingBackground", new ScrollingBackgroundCreator());
+
+		ParticleSystem::Instance()->addEmitter(Vector2D{200, 200}, "fire");
 
 		//initialize the current game
 		// onInit();
@@ -138,8 +144,10 @@ namespace Vigilant {
 				deltaTime = deltaTime / DESIRED_FPS;
 
 				update(deltaTime);
+				ParticleSystem::Instance()->update(deltaTime);
 
 				render(deltaTime);
+				ParticleSystem::Instance()->render(deltaTime);
 				//std::cout << deltaTime << std::endl;
 				//std::cout <<  " T: " << totalDeltaTime << std::endl;
 				totalDeltaTime -= deltaTime;
@@ -173,7 +181,7 @@ namespace Vigilant {
 		//ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
 		//ImGui::SameLine();
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-		ImGui::Text("Active entities: %d", Entity::livingCount);
+		ImGui::Text("Active entities: %d", EntityManager::livingCount);
 		ImGui::End();
 
 		if (SDLRenderingEnabled) {
@@ -185,6 +193,8 @@ namespace Vigilant {
 			if (m_currentState && m_currentState->getScreenState() == ScreenState::RUNNING) {
 				m_currentState->draw(deltaTime);
 			}
+			// TEMPORARY, just testing EntityManager, entities will get rendered twice
+			EntityManager::Instance()->render(deltaTime);
 			ImGui::Render();
 			ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
 			SDL_RenderPresent(m_window.getSDLRenderer()); // draw to the screen
@@ -212,6 +222,27 @@ namespace Vigilant {
 	* @sa StateMachine
 	*/
 	void Engine::update(float deltaTime){
+		EntityManager::Instance()->refresh();
+		EntityManager::Instance()->update(deltaTime);
+
+        for (auto& e: EntityManager::Instance()->getEntities()) {
+            // Chek each entity for collision against map tiles
+            // Collision::checkMapCollision(e.get(), level->getCollidableLayers());
+
+			// Find player and update camera
+			auto isPlayer = e->getComponent<InputComponent>();
+            if (isPlayer) {
+				// Don't like this much looping.
+				// Also need to decide if EntityManager good enough to be used everywhere or not
+				//Collision::checkPlayerEntityCollision(e.get(), gameEntities);
+				// Causes big lag!! Tried reducing number of entities to around 50 but it still is a problem
+				Collision::checkPlayerEntityCollision(e, EntityManager::Instance()->getEntities());
+
+                TheEngine::Instance()->camera.x = e->transform->getX() - TheEngine::Instance()->camera.w/2;
+                TheEngine::Instance()->camera.y = e->transform->getY() - TheEngine::Instance()->camera.h/2;
+            }
+		}
+
 
 		if (m_currentState) {
 			switch (m_currentState->getScreenState()) {
@@ -273,6 +304,12 @@ namespace Vigilant {
 				break;
 			case SDL_KEYDOWN:
 				TheInputManager::Instance()->pressKey(event.key.keysym.sym);
+				for (auto& e: EntityManager::Instance()->getEntities()) {
+					auto isPlayer = e->getComponent<InputComponent>();
+					if (isPlayer) {
+						ScriptEngine::Instance()->onInput(isPlayer->getListener(), e->id->get(), event.key.keysym.sym);
+					}
+				}
 				break;
 			case SDL_KEYUP:
 				TheInputManager::Instance()->releaseKey(event.key.keysym.sym);
@@ -310,6 +347,10 @@ namespace Vigilant {
 			m_stateMachine->destroy();
 			m_stateMachine.reset();
 		}
+
+		ParticleSystem::Instance()->destroy();
+		ParticleSystem::Instance()->clean();
+
 
 		m_isRunning = false;
 

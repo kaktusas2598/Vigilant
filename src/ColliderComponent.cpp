@@ -6,7 +6,9 @@
 
 namespace Vigilant {
 
-    ColliderComponent::ColliderComponent(Entity* owner) : Component(owner) {}
+    ColliderComponent::ColliderComponent(Entity* owner) : Component(owner) {
+        listenerName = "";
+    }
 
     void ColliderComponent::update(float deltaTime) {
         collider.x = owner->transform->getX();

@@ -18,6 +18,8 @@ namespace Vigilant {
             float getVelocityX() { return velocity.getX(); }
 			float getVelocityY() { return velocity.getY(); }
 			Vector2D getVelocity() { return velocity; }
+
+			Entity* getShooter() { return shooter; }
         private:
             int range;
             int speed;

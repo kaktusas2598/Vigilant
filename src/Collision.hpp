@@ -12,6 +12,10 @@
 #include "SpriteComponent.hpp"
 #include "ColliderComponent.hpp"
 #include "ProjectileComponent.hpp"
+#include "InputComponent.hpp"
+#include "ScriptEngine.hpp"
+
+#include <iostream>
 
 namespace Vigilant {
 
@@ -43,8 +47,95 @@ namespace Vigilant {
                 return true;
             }
 
-            static void checkPlayerEntityCollision(Entity* player, const std::vector<Entity*> entities) {
-                // TODO: implement
+			//static bool checkEntityOnEntityCollision(Entity* actor, const std::vector<std::shared_ptr<Entity>>& entities) {
+				//return false;
+			//}
+
+            static void checkProjectileEntityCollision(Entity* projectile, const std::vector<Entity*> entities) {
+            	// TODO: implement
+            	// Sane as playerEntityCollision but need to call event not for entity, but ENtity* shooter
+            	// Or another event?
+				// This is tempporary because lua wont know if player collided with entity or players projectile
+				// Also npcs will not be able to create projectiles themselves
+				Entity* owner = projectile->getComponent<ProjectileComponent>()->getShooter();
+				//if (checkEntityOnEntityCollision(projectile, entities)) {
+					//owner->getComponent<ScriptComponent>();
+				//}
+			}
+            //static void checkPlayerEntityCollision(Entity* player, const std::vector<Entity*> entities) {
+				//if (checkEntityOnEntityCollision(player, entities)) {
+				//}
+			//}
+
+            static void checkPlayerEntityCollision(Entity* player, const std::vector<Entity*>& entities) {
+				auto playerCollider = player->getComponent<ColliderComponent>();
+				auto playerSprite = player->getComponent<SpriteComponent>();
+				float playerX = player->transform->getX();
+				float playerY = player->transform->getY();
+				// Calculate real entity position based on collider box
+				// This will only work fine if sprites are perfectly centered in each frame
+				float colliderOffsetX = (playerSprite->getWidth() - playerCollider->getCollider().w)/2 * player->transform->getScaleX();
+				float colliderOffsetY = (playerSprite->getHeight() - playerCollider->getCollider().h)/2 * player->transform->getScaleY();
+				//TODO: improve
+				playerX += colliderOffsetX;
+				playerX += colliderOffsetY;
+
+				int width = playerCollider->getCollider().w * player->transform->getScaleX();
+				int height = playerCollider->getCollider().h * player->transform->getScaleY();
+
+                // FIXME: SDL_Rect holds ints so this is going to be not good..
+                SDL_Rect playerColliderRect{(int)playerX, (int)playerY, width, height};
+
+                for (auto &entity : entities) {
+					auto collider = entity->getComponent<ColliderComponent>();
+					auto sprite = entity->getComponent<SpriteComponent>();
+					auto isPlayer = entity->getComponent<InputComponent>();
+					auto projectile = entity->getComponent<ProjectileComponent>();
+					// For now player will not colide wiht projectiles
+					if (isPlayer || projectile) {
+						continue;
+					}
+					if (collider && sprite) {
+						// Try to dismiss some entities earlier for performance?
+						// This dumb check I made surprisingly fixes performance lag caused by calling this method with entities
+						// created from Lua and held by EntityManager
+						if (entity->transform->getX() > player->transform->getX() + playerSprite->getWidth() * player->transform->getScaleX() ||
+							entity->transform->getX() + sprite->getWidth() * entity->transform->getScaleX() < player->transform->getX()) {
+							continue;
+						}
+
+						// Calculate real entity position based on collider box
+						// This will only work fine if sprites are perfectly centered in each frame
+						//std::cout << "Valid entity found for player collision check" << std::endl;
+						colliderOffsetX = (sprite->getWidth() - collider->getCollider().w)/2 * entity->transform->getScaleX();
+						colliderOffsetY = (sprite->getHeight() - collider->getCollider().h)/2 * entity->transform->getScaleY();
+						//TODO: improve
+						float entityX = entity->transform->getX() + colliderOffsetX;
+						float entityY = entity->transform->getY() + colliderOffsetY;
+
+						SDL_Rect entityColliderRect{
+							(int)entityX,
+							(int)entityY,
+							(int)(collider->getCollider().w * entity->transform->getScaleX()),
+							(int)(collider->getCollider().h * entity->transform->getScaleY())
+						};
+
+						if(AABB(playerColliderRect, entityColliderRect)) {
+                            // Resolve rigid bodies
+                            auto playerBody = player->getComponent<PhysicsComponent>();
+                            auto entityBody = entity->getComponent<PhysicsComponent>();
+                            if (entityBody) {
+                                entityBody->applyForceX(playerBody->getAccelerationX() * playerBody->getMass());
+                                entityBody->applyForceY(playerBody->getAccelerationY() * playerBody->getMass());
+                            }
+
+							// std::cout << "Player and entity collision detected" << std::endl;
+							std::string listener = playerCollider->getListener();
+							ScriptEngine::Instance()->onCollide(listener, player->id->get(), entity->id->get());
+						}
+					}
+
+                }
             }
 
             static void checkMapCollision(Entity* entity, const std::vector<TileLayer*>& collisionLayers) {
@@ -126,11 +217,6 @@ namespace Vigilant {
                         }else if (projectile) {
                             entity->destroy(); // Destroy projectiles so that they don't go through walls
                         }
-
-                        // TODO: collision resolution
-                        // Needs to be some kind of event which can be then sent to Lua
-                        // C++ notify, Lua listener subscribe to notification and 
-                        // entity->collision();
                     }
                 }
             }
