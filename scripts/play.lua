@@ -66,11 +66,7 @@ end
 
 -- Player event listeners
 function onCollide(thisId, secondId)
-	print("Lua: onCollide() called")
-	--print("Player X: "..player:getX())
-	--print("Player Y: "..player:getY())
 	entities[secondId]:scale(0.5, 0.5)
-	print(entities)
 	-- if object:type() == "enemy" then
 		-- player:damage(10)
 	-- end
@@ -78,7 +74,6 @@ end
 
 -- TODO: SDL key codes??
 function onInput(thisId, key)
-	print("Lua: Key pressed: "..key)
 	-- 102 - 'F'
 	if key == 102 then
 		playSound("jump")
@@ -184,15 +179,10 @@ testEntity:addPhysics(4.0, 0.3)
 print("Slime ID: "..testEntity:id())
 
 -- Testing deleting entity, needs to be deleted from global table as well
--- but this does seem to work fine
-testEntity = nil
-entities[1] = nil
+-- All this seem to do is remove from lua but __gc is not triggered in c++ and enity is not removed from EntityManager
+--entities[testEntity:id()] = nil
+--testEntity = nil
 
-
---testEntity2 = Entity.create()
---testEntity2:move(100, 220) -- testEntity:move() same as Entity.move(testEntity)
---testEntity2:scale(2, 2)
---testEntity:addSprite("slime", "assets/sprite/slime.png", 32, 32)
 
 entityTable = {}
 for i = 1, 100 do
