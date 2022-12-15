@@ -38,6 +38,7 @@ namespace Vigilant {
 
 			virtual void update(float deltaTime) {
 				for(int i = components.size() - 1; i >= 0; i--) {
+					components[i]->preUpdate(deltaTime);
 					components[i]->update(deltaTime);
 				}
 			}

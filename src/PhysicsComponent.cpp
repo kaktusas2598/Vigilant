@@ -8,6 +8,11 @@ namespace Vigilant {
 		mass = 1.0;
     }
 
+    void PhysicsComponent::preUpdate(float deltaTime) {
+    	previousPosition.setX(owner->transform->getX());
+    	previousPosition.setY(owner->transform->getY());
+	}
+
     void PhysicsComponent::update(float deltaTime) {
         Vector2D position(owner->transform->getX(), owner->transform->getY());
 

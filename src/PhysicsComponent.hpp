@@ -9,6 +9,7 @@ namespace Vigilant {
     class PhysicsComponent : public Component {
         public:
             PhysicsComponent(Entity* owner);
+            void preUpdate(float deltaTime);
             void update(float deltaTime);
 
             void load(float velX, float velY, float accX, float accY, float gX, float gY) {
@@ -30,6 +31,8 @@ namespace Vigilant {
             float getAccelerationX() { return acceleration.getX(); }
 			float getAccelerationY() { return acceleration.getY(); }
 			Vector2D getAcceleration() { return acceleration; }
+
+			Vector2D getPreviousPosition() { return previousPosition; }
 
             void setVelocityX(float X) { velocity.setX(X); }
             void setVelocityY(float Y) { velocity.setY(Y); }
@@ -63,6 +66,8 @@ namespace Vigilant {
 			Vector2D gravity;
 			Vector2D force;
 			Vector2D friction;
+			// Set before calculations, used for collision resolution
+			Vector2D previousPosition;
     };
 }
 
