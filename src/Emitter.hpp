@@ -36,7 +36,7 @@ namespace Vigilant {
 				if (!active) {
 					active = true;
 					emissionTime = timer;
-					//emissionTimer.Start();
+					emissionTimer.start();
 				}
 			}
 
@@ -46,7 +46,7 @@ namespace Vigilant {
 				{
 					active = false;
 					stopTime = timer;
-					//stopTimer.Start();
+					stopTimer.start();
 				}
 			}
 
@@ -92,6 +92,7 @@ namespace Vigilant {
 			float timeStep = 0.0f;
 
 			// Random control parameters
+			// TODO: Implement these for some sweet randomisation
 			Vector2D rotSpeedRand = { 0.0f, 0.0f };
 			Vector2D startSpeedRand = { 0.0f, 0.0f };
 			Vector2D endSpeedRand = { 0.0f, 0.0f };

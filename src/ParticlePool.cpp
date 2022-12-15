@@ -60,16 +60,13 @@ namespace Vigilant {
 	bool ParticlePool::update(float deltaTime) {
 		bool ret = false;
 
-		//std::cout << "Looping and updating particle pool" << std::endl;
 		for (int i = 0; i < poolSize; i++) {
 			if (particleArray[i].isAlive()) {
-				//std::cout << "Updating and rendering particle" << std::endl;
 				particleArray[i].update(deltaTime);
 				particleArray[i].render();
 				ret = true;
 			// if a particle dies it becomes the first available in the pool
 			} else {
-				//std::cout << "Particle dead" << std::endl;
 				// Add this particle to the front of the vector
 				particleArray[i].setNext(firstAvailable);
 				firstAvailable = &particleArray[i];

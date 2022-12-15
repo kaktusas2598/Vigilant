@@ -2,8 +2,6 @@
 
 #include <time.h>
 
-#include <iostream>
-
 namespace Vigilant {
 
 	Emitter::Emitter(Vector2D pos, EmitterData data) {
@@ -68,10 +66,8 @@ namespace Vigilant {
 			// Particle generation from pool
 			// TODO: load rand tanges from xml
 			emissionRate = (int)(emitNumber + emitVariance ); //* rangeRandomNum(emitVarianceRand.getX(), emitVarianceRand.getY()));
-			//std::cout << "Emission rate: " << emissionRate << std::endl;
 
 			for (int i = 1; i <= emissionRate; i++) {
-				//std::cout << "Generating particle" << std::endl;
 				float tmpStartSpeed = startSpeed * rangeRandomNum(startSpeedRand.getX(), startSpeedRand.getY());
 				float tmpEndSpeed = endSpeed * rangeRandomNum(endSpeedRand.getX(), endSpeedRand.getY());
 				float randAngle = rangeRandomNum(angleRange.getX(), angleRange.getY());
@@ -112,10 +108,9 @@ namespace Vigilant {
 	}
 
 	void Emitter::render(float deltaTime) {
-		// TODO :: check if all particles are dead and remov eemitter
+		// Check if all particles are dead and remove emitter
 		if (!emitterPool->update(deltaTime) && lifetime == 0.0f)
 			ParticleSystem::Instance()->destroyEmitter(this);
-		//emitterPool->update(deltaTime);
 	}
 
 }
