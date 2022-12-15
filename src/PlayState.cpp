@@ -11,21 +11,13 @@
 
 #include "Collision.hpp"
 
-#include "imgui/imgui.h"
-
-// TEMP
-#include "SpriteComponent.hpp"
-#include "ButtonComponent.hpp"
-
 namespace Vigilant {
-
-	static bool layerVisibility[10] = {false};
 
     const std::string PlayState::playID = "PLAY";
 
     void PlayState::update(float deltaTime) {
         level->update();
-        //TODO: Keep lua thread running? coroutine?
+
         // Level checks collisions against map and only after we update physics
         // TheEngine::Instance()->getCollisionSystem()->checkMapCollision(level->getCollisionLayer());
         if (TheInputManager::Instance()->isKeyPressed(SDLK_ESCAPE)) {
@@ -74,18 +66,6 @@ namespace Vigilant {
 
     void PlayState::draw(float deltaTime) {
         level->render();
-
-        int i = 0;
-        for (auto it = level->getCollisionLayers()->begin(); it != level->getCollisionLayers()->end(); ++it) {
-            // Seems like member needs to be static but that doesnt make sense for tile layer
-            ImGui::Begin("Debug Log");
-			ImGui::Checkbox("Show solids", &layerVisibility[i]);
-            ImGui::End();
-			// FIXME: Weird bug: collision layer visibility toggles, but turning on colission layer seems to mess up actual Collision logic
-			// This is super strange because Collision class does not care about isVisible member?
-			(*it)->setVisible(layerVisibility[i]);
-            i++;
-        }
     }
 
     void PlayState::onEntry() {

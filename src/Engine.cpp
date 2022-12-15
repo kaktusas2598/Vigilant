@@ -26,6 +26,8 @@
 
 namespace Vigilant {
 
+	static bool layerVisibility[10] = {false};
+
 	Engine* Engine::s_pInstance = nullptr;
 
 	Engine::Engine()
@@ -191,6 +193,19 @@ namespace Vigilant {
 		//ImGui::SameLine();
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::Text("Active entities: %d", EntityManager::livingCount);
+
+		if (level != nullptr) {
+			int i = 0;
+			for (auto it = level->getCollisionLayers()->begin(); it != level->getCollisionLayers()->end(); ++it) {
+				// Seems like member needs to be static but that doesnt make sense for tile layer
+				ImGui::Checkbox("Show solids", &layerVisibility[i]);
+				// FIXME: Weird bug: collision layer visibility toggles, but turning on colission layer seems to mess up actual Collision logic
+				// This is super strange because Collision class does not care about isVisible member?
+				(*it)->setVisible(layerVisibility[i]);
+				i++;
+			}
+		}
+
 		ImGui::End();
 
 		if (SDLRenderingEnabled) {
@@ -319,7 +334,7 @@ namespace Vigilant {
 			case SDL_MOUSEMOTION:
 				TheInputManager::Instance()->setMouseCoords((float)event.motion.x, (float)event.motion.y);
 
-				// Probably horrible idea to spawn new emitter on every mouse move
+				// Just a testing code for particle emitters
 				ParticleSystem::Instance()->addEmitter(Vector2D{(float)event.motion.x, (float)event.motion.y}, "fire");
 				break;
 			case SDL_KEYDOWN:
@@ -351,9 +366,8 @@ namespace Vigilant {
 					TheInputManager::Instance()->setMouseWheel(-1);
 				break;
 			case (SDLK_ESCAPE):
-				{
-					//empty
-				}
+				m_isRunning = false;
+				break;
 			default:
 				break;
 		}
