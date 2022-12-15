@@ -103,9 +103,8 @@ namespace Vigilant {
 		//TheTextureManager::draw(std::string id, int x, int y, int width, int height, double angle);
 		TheTextureManager::Instance()->draw("particle", (int)centerX, (int)centerY, state.live.rect.w, state.live.rect.h, state.live.currentRotSpeed);
 		// Blitting particle on screen
-		//BlitParticle(App->psystem->GetParticleAtlas(), (int)centerX, (int)centerY, &state.live.pRect,
-		//&state.live.rectSize, resColor, state.live.blendMode, 1.0f, state.live.currentRotSpeed);
-//BlitParticle(SDL_Texture* texture, int x, int y, const SDL_Rect* section, const SDL_Rect* rectSize, SDL_Color color, SDL_BlendMode blendMode, float speed, double angle, int pivot_x, int pivot_y) const
+		//BlitParticle(App->psystem->GetParticleAtlas(), (int)centerX, (int)centerY, &state.live.pRect, &state.live.rectSize, resColor, state.live.blendMode, 1.0f, state.live.currentRotSpeed);
+		//BlitParticle(SDL_Texture* texture, int x, int y, const SDL_Rect* section, const SDL_Rect* rectSize, SDL_Color color, SDL_BlendMode blendMode, float speed, double angle)
 //{
 	//SDL_Rect rect;
 	//rect.x = (int)(camera.x * speed) + x * scale;

@@ -168,6 +168,17 @@ namespace Vigilant {
 			if (*it != nullptr)
 				(*it)->update(deltaTime);
 		}
+
+		// Post update remove any dead eitters
+		if (!emittersToDestroy.empty()) {
+			std::list<Emitter*>::const_iterator it;
+
+			for (it = emittersToDestroy.begin(); it != emittersToDestroy.end(); ++it) {
+				emittersList.remove(*it);
+				delete (*it);
+			}
+			emittersToDestroy.clear();
+		}
 	}
 
 	void ParticleSystem::render(float deltaTime) {

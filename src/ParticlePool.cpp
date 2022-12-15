@@ -65,8 +65,6 @@ namespace Vigilant {
 			if (particleArray[i].isAlive()) {
 				//std::cout << "Updating and rendering particle" << std::endl;
 				particleArray[i].update(deltaTime);
-				// This is probably why system does not work, it does update and render of particles in the same step,
-				// so should I move particle system update calls to rendering? Does not seem right at all
 				particleArray[i].render();
 				ret = true;
 			// if a particle dies it becomes the first available in the pool

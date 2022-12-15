@@ -1,6 +1,6 @@
 <emitters>
 	<emitter type ="fire">
-		<angleRange min ="0" max ="110"/>
+		<angleRange min ="80" max ="110"/>
 		<rotSpeed value ="0" randMin = "-1" randMax ="1"/>
 		<startSpeed value ="200" randMin = "0" randMax ="1"/>
 		<endSpeed value ="200" randMin = "0" randMax ="1"/>

@@ -2,6 +2,7 @@
 #define __Emitter__
 
 #include "Vector2D.hpp"
+#include "Timer.hpp"
 #include "ParticleSystem.hpp"
 #include "ParticlePool.hpp"
 #include <SDL2/SDL.h>
@@ -75,9 +76,9 @@ namespace Vigilant {
 			int poolSize = 0;
 
 			// Emission time
-			//j1PerfTimer stopTimer;
-			//j1PerfTimer emissionTimer;
-			//j1PerfTimer lifeTimer;
+			Timer stopTimer;
+			Timer emissionTimer;
+			Timer lifeTimer;
 			double stopTime = 0.0f;
 			double emissionTime = 0.0f;
 			double lifetime = -1.0f;

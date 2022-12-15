@@ -51,8 +51,8 @@ namespace Vigilant {
 		// Vortex control parameters
 		//vortexSensitive = data.vortexSensitive;
 
-		//if (this->lifetime != -1.0f && this->lifetime > 0.0f)
-			//lifeTimer.Start();
+		if (this->lifetime != -1.0f && this->lifetime > 0.0f)
+			lifeTimer.start();
 	}
 
 	Emitter::~Emitter()
@@ -88,35 +88,34 @@ namespace Vigilant {
 		// Emission timing calculations
 		if (stopTime > 0.0f && !active) {
 			emissionTime = 0.0f;
-			//if (stopTimer.ReadMs() >= stopTime)
-			//{
-				//active = true;
-				//stopTime = 0.0f;
-			//}
+			if (stopTimer.read() >= stopTime) {
+				active = true;
+				stopTime = 0.0f;
+			}
 		}
 
 		if (emissionTime > 0.0f) {
 			stopTime = 0.0f;
-			//if (emissionTimer.ReadMs() >= emissionTime)
-			//{
-				//active = false;
-				//emissionTime = 0.0f;
-			//}
+			if (emissionTimer.read() >= emissionTime) {
+				active = false;
+				emissionTime = 0.0f;
+			}
 		}
 
 		if (lifetime > 0.0f) {
-			//if (lifeTimer.ReadMs() >= lifetime)
-			//{
-				//active = false; and remov eemitter
-				//lifetime = 0.0f;
-			//}
+			if (lifeTimer.read() >= lifetime) {
+				active = false; // and remove emitter
+				lifetime = 0.0f;
+			}
 		}
 
 	}
 
 	void Emitter::render(float deltaTime) {
 		// TODO :: check if all particles are dead and remov eemitter
-		emitterPool->update(deltaTime);
+		if (!emitterPool->update(deltaTime) && lifetime == 0.0f)
+			ParticleSystem::Instance()->destroyEmitter(this);
+		//emitterPool->update(deltaTime);
 	}
 
 }
