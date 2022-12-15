@@ -157,7 +157,12 @@ namespace Vigilant {
                     TileLayer* tileLayer = (*it);
                     std::vector<std::vector<int>> tiles = tileLayer->getTileIDs();
 
-                    Vector2D layerPos = tileLayer->getPosition();
+                    // This is the reason why enabling Solids using IMGui broke collision algorithm:
+                    // tile layer position is used for rendering and once we enabled rendering for collision layers
+                    // it started affecting the actual position and this is why collision broke, fixed!
+                    // TODO: now we can simplify this a lot, position is probably not needed here at all
+                    //Vector2D layerPos = tileLayer->getPosition();
+                    Vector2D layerPos{0, 0};
                     int x, y, tileColumn, tileRow, tileid = 0;
                     float velocityX, velocityY;
 

@@ -35,6 +35,8 @@ namespace Vigilant {
 		// Initialize State Machine
 		Logger::Instance()->info("Initialising the engine.");
 		m_stateMachine = std::make_unique<StateMachine>(this);
+		// Set default level
+		level = nullptr;
 	}
 
 	Engine::~Engine()
@@ -64,7 +66,7 @@ namespace Vigilant {
 		}
 
 		//Initialize PNG loading
-		int imgFlags = IMG_INIT_PNG;
+		// int imgFlags = IMG_INIT_PNG;
 		//if ( !( IMG_Init( imgFlags ) & imgFlags ) ) {
 			//exitWithError(IMG_GetError());
 		//}
@@ -199,8 +201,6 @@ namespace Vigilant {
 			for (auto it = level->getCollisionLayers()->begin(); it != level->getCollisionLayers()->end(); ++it) {
 				// Seems like member needs to be static but that doesnt make sense for tile layer
 				ImGui::Checkbox("Show solids", &layerVisibility[i]);
-				// FIXME: Weird bug: collision layer visibility toggles, but turning on colission layer seems to mess up actual Collision logic
-				// This is super strange because Collision class does not care about isVisible member?
 				(*it)->setVisible(layerVisibility[i]);
 				i++;
 			}
