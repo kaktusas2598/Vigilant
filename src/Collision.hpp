@@ -122,6 +122,9 @@ namespace Vigilant {
 
 						if(AABB(playerColliderRect, entityColliderRect)) {
                             // Resolve rigid bodies
+                            // TODO: need better algorithm here, also player affects entity, but entity also should affect
+                            // player because currently player will just fly through entity,
+                            // so maybe add a static method in Physics(RigidBody) component to resolve 2 bodies?
                             auto playerBody = player->getComponent<PhysicsComponent>();
                             auto entityBody = entity->getComponent<PhysicsComponent>();
                             if (entityBody) {
@@ -157,17 +160,8 @@ namespace Vigilant {
                     TileLayer* tileLayer = (*it);
                     std::vector<std::vector<int>> tiles = tileLayer->getTileIDs();
 
-                    // This is the reason why enabling Solids using IMGui broke collision algorithm:
-                    // tile layer position is used for rendering and once we enabled rendering for collision layers
-                    // it started affecting the actual position and this is why collision broke, fixed!
-                    // TODO: now we can simplify this a lot, position is probably not needed here at all
-                    //Vector2D layerPos = tileLayer->getPosition();
-                    Vector2D layerPos{0, 0};
-                    int x, y, tileColumn, tileRow, tileid = 0;
+                    int tileColumn, tileRow, tileid = 0;
                     float velocityX, velocityY;
-
-                    x = layerPos.getX() / (tileLayer->getTileSize() * tileLayer->getScale());
-                    y = layerPos.getY() / (tileLayer->getTileSize() * tileLayer->getScale());
 
                     if (physics) {
                         velocityX = physics->getVelocityX();
@@ -181,33 +175,34 @@ namespace Vigilant {
                     float entityX = entity->transform->getX();
                     float entityY = entity->transform->getY();
 
-                    // Calculate real entity position based on collider box
+                    // Calculate entity position for colliding based on entities direction
                     // This will only work fine if sprites are perfectly centered in each frame
                     float colliderOffsetX = (sprite->getWidth() - collider->getCollider().w)/2 * entity->transform->getScaleX();
                     float colliderOffsetY = (sprite->getHeight() - collider->getCollider().h)/2 * entity->transform->getScaleY();
                     if (velocityX > 0)
-                    	entityX += colliderOffsetX;
-					else
-						entityX -= colliderOffsetX;
-					if (velocityY > 0)
-                    	entityY += colliderOffsetY;
-					else
-						entityY -= colliderOffsetY;
+                        entityX += colliderOffsetX;
+                    else
+                        entityX -= colliderOffsetX;
+                    if (velocityY > 0)
+                        entityY += colliderOffsetY;
+                    else
+                        entityY -= colliderOffsetY;
 
                     int width = collider->getCollider().w * entity->transform->getScaleX();
                     int height = collider->getCollider().h * entity->transform->getScaleY();
 
                     if (entityX > 0 && entityY > 0) {
+						// FIXME: collision only works if going down or to the left so if velocity is positive
                         if (velocityX >= 0 || velocityY >= 0) {
                             tileColumn = ((entityX + width) / (tileLayer->getTileSize() * tileLayer->getScale()));
                             tileRow = ((entityY + height) / (tileLayer->getTileSize() * tileLayer->getScale()));
-                            if (tileRow + y < tileLayer->getMapHeight() && tileColumn + x < tileLayer->getMapWidth())
-                                tileid = tiles[tileRow + y][tileColumn + x];
+							if (tileRow < tileLayer->getMapHeight() && tileColumn < tileLayer->getMapWidth())
+                                tileid = tiles[tileRow][tileColumn];
                         } else if(velocityX < 0 || velocityY < 0) {
                             tileColumn = entityX / (tileLayer->getTileSize() * tileLayer->getScale());
                             tileRow = entityY / (tileLayer->getTileSize() * tileLayer->getScale());
-                            if (tileRow + x < tileLayer->getMapHeight() && tileColumn + y < tileLayer->getMapWidth())
-                                tileid = tiles[tileRow + y][tileColumn + x];
+							if (tileRow < tileLayer->getMapHeight() && tileColumn < tileLayer->getMapWidth())
+                                tileid = tiles[tileRow][tileColumn];
                         }
                     }
 
@@ -228,7 +223,7 @@ namespace Vigilant {
 
             // TODO: colliders will most likely break once we have a camera in engine
             static void checkMapCollision(CollisionLayer* layer) {
-                std::vector<SDL_Rect> colliders = layer->getColliders();
+                //std::vector<SDL_Rect> colliders = layer->getColliders();
 
                 // for (auto const& entity : entities) {
                 //     for (auto collider : colliders) {
