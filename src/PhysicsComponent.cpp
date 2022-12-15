@@ -9,8 +9,8 @@ namespace Vigilant {
     }
 
     void PhysicsComponent::preUpdate(float deltaTime) {
-    	previousPosition.setX(owner->transform->getX());
-    	previousPosition.setY(owner->transform->getY());
+        previousPosition.setX(owner->transform->getX());
+        previousPosition.setY(owner->transform->getY());
 	}
 
     void PhysicsComponent::update(float deltaTime) {

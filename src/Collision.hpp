@@ -70,21 +70,6 @@ namespace Vigilant {
             static void checkPlayerEntityCollision(Entity* player, const std::vector<Entity*>& entities) {
 				auto playerCollider = player->getComponent<ColliderComponent>();
 				auto playerSprite = player->getComponent<SpriteComponent>();
-				float playerX = player->transform->getX();
-				float playerY = player->transform->getY();
-				// Calculate real entity position based on collider box
-				// This will only work fine if sprites are perfectly centered in each frame
-				float colliderOffsetX = (playerSprite->getWidth() - playerCollider->getCollider().w)/2 * player->transform->getScaleX();
-				float colliderOffsetY = (playerSprite->getHeight() - playerCollider->getCollider().h)/2 * player->transform->getScaleY();
-				//TODO: improve
-				playerX += colliderOffsetX;
-				playerX += colliderOffsetY;
-
-				int width = playerCollider->getCollider().w * player->transform->getScaleX();
-				int height = playerCollider->getCollider().h * player->transform->getScaleY();
-
-                // FIXME: SDL_Rect holds ints so this is going to be not good..
-                SDL_Rect playerColliderRect{(int)playerX, (int)playerY, width, height};
 
                 for (auto &entity : entities) {
 					auto collider = entity->getComponent<ColliderComponent>();
@@ -96,6 +81,7 @@ namespace Vigilant {
 						continue;
 					}
 					if (collider && sprite) {
+						// BROAD PHASE
 						// Try to dismiss some entities earlier for performance?
 						// This dumb check I made surprisingly fixes performance lag caused by calling this method with entities
 						// created from Lua and held by EntityManager
@@ -104,23 +90,8 @@ namespace Vigilant {
 							continue;
 						}
 
-						// Calculate real entity position based on collider box
-						// This will only work fine if sprites are perfectly centered in each frame
-						//std::cout << "Valid entity found for player collision check" << std::endl;
-						colliderOffsetX = (sprite->getWidth() - collider->getCollider().w)/2 * entity->transform->getScaleX();
-						colliderOffsetY = (sprite->getHeight() - collider->getCollider().h)/2 * entity->transform->getScaleY();
-						//TODO: improve
-						float entityX = entity->transform->getX() + colliderOffsetX;
-						float entityY = entity->transform->getY() + colliderOffsetY;
-
-						SDL_Rect entityColliderRect{
-							(int)entityX,
-							(int)entityY,
-							(int)(collider->getCollider().w * entity->transform->getScaleX()),
-							(int)(collider->getCollider().h * entity->transform->getScaleY())
-						};
-
-						if(AABB(playerColliderRect, entityColliderRect)) {
+						// NARROW PHASE
+						if(AABB(playerCollider->getCollider(), collider->getCollider())) {
                             // Resolve rigid bodies
                             // TODO: need better algorithm here, also player affects entity, but entity also should affect
                             // player because currently player will just fly through entity,
@@ -156,6 +127,11 @@ namespace Vigilant {
                     return;
                 }
 
+                int entityX = collider->getCollider().x;
+                int entityY = collider->getCollider().y;
+                int width = collider->getCollider().w;
+                int height = collider->getCollider().h;
+
                 for(std::vector<TileLayer*>::const_iterator it = collisionLayers.begin(); it != collisionLayers.end(); ++it) {
                     TileLayer* tileLayer = (*it);
                     std::vector<std::vector<int>> tiles = tileLayer->getTileIDs();
@@ -172,24 +148,6 @@ namespace Vigilant {
                     } else {
                         return; // If not rigid body nor a projectile
                     }
-                    float entityX = entity->transform->getX();
-                    float entityY = entity->transform->getY();
-
-                    // Calculate entity position for colliding based on entities direction
-                    // This will only work fine if sprites are perfectly centered in each frame
-                    float colliderOffsetX = (sprite->getWidth() - collider->getCollider().w)/2 * entity->transform->getScaleX();
-                    float colliderOffsetY = (sprite->getHeight() - collider->getCollider().h)/2 * entity->transform->getScaleY();
-                    if (velocityX > 0)
-                        entityX += colliderOffsetX;
-                    else
-                        entityX -= colliderOffsetX;
-                    if (velocityY > 0)
-                        entityY += colliderOffsetY;
-                    else
-                        entityY -= colliderOffsetY;
-
-                    int width = collider->getCollider().w * entity->transform->getScaleX();
-                    int height = collider->getCollider().h * entity->transform->getScaleY();
 
                     if (entityX > 0 && entityY > 0) {
 						// FIXME: collision only works if going down or to the left so if velocity is positive
@@ -214,7 +172,7 @@ namespace Vigilant {
                         if (physics) {
 						    entity->getComponent<PhysicsComponent>()->setVelocityX(0);
                             entity->getComponent<PhysicsComponent>()->setVelocityY(0);
-                        }else if (projectile) {
+                        } else if (projectile) {
                             entity->destroy(); // Destroy projectiles so that they don't go through walls
                         }
                     }
