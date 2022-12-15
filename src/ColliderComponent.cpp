@@ -18,8 +18,7 @@ namespace Vigilant {
             colliderOffsetY = (sprite->getHeight() - collider.h)/2 * owner->transform->getScaleY();
             collider.w = sprite->getWidth() * owner->transform->getScaleX();
             collider.h = sprite->getHeight() * owner->transform->getScaleY();
-        } else {
-		}
+        }
         collider.x = owner->transform->getX() + colliderOffsetX;
         collider.y = owner->transform->getY() + colliderOffsetY;
     }
