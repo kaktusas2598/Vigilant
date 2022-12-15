@@ -18,6 +18,8 @@ namespace Vigilant {
                 type = tag;
                 collider.w = width;
                 collider.h = height;
+                collider.x = 0;
+                collider.y = 0;
             }
 
             void update(float deltaTime);
