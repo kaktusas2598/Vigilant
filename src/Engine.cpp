@@ -265,23 +265,14 @@ namespace Vigilant {
 		//ParticleSystem::Instance()->update(deltaTime);
 
 		for (auto& e: EntityManager::Instance()->getEntities()) {
-            // Chek each entity for collision against map tiles
-            // Collision::checkMapCollision(e.get(), level->getCollidableLayers());
-
 			// Find player and update camera
 			auto isPlayer = e->getComponent<InputComponent>();
             if (isPlayer) {
-				// Don't like this much looping.
-				// Also need to decide if EntityManager good enough to be used everywhere or not
-				//Collision::checkPlayerEntityCollision(e.get(), gameEntities);
-				// Causes big lag!! Tried reducing number of entities to around 50 but it still is a problem
-				Collision::checkPlayerEntityCollision(e, EntityManager::Instance()->getEntities());
-
                 TheEngine::Instance()->camera.x = e->transform->getX() - TheEngine::Instance()->camera.w/2;
                 TheEngine::Instance()->camera.y = e->transform->getY() - TheEngine::Instance()->camera.h/2;
+                break;
             }
 		}
-
 
 		if (m_currentState) {
 			switch (m_currentState->getScreenState()) {
@@ -327,7 +318,19 @@ namespace Vigilant {
 		EntityManager::Instance()->refresh();
 		EntityManager::Instance()->update(deltaTime);
 
+		for (auto& e: EntityManager::Instance()->getEntities()) {
+            // Chek each entity for collision against map tiles
+			 Collision::checkMapCollision(e, level->getCollidableLayers());
 
+			// Find player and update camera
+			auto isPlayer = e->getComponent<InputComponent>();
+			if (isPlayer) {
+				// Don't like this much looping.
+				//Collision::checkPlayerEntityCollision(e.get(), gameEntities);
+				// Causes big lag!! Tried reducing number of entities to around 50 but it still is a problem
+				Collision::checkPlayerEntityCollision(e, EntityManager::Instance()->getEntities());
+			}
+		}
 	}
 
 	/**
@@ -362,7 +365,6 @@ namespace Vigilant {
 				}
 				if (event.key.keysym.sym == SDLK_BACKQUOTE)
 					debugMode = !debugMode;
-				// TODO: if '`' pressed enable debug output
 				break;
 			case SDL_KEYUP:
 				TheInputManager::Instance()->releaseKey(event.key.keysym.sym);

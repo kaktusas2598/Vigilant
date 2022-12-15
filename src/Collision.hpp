@@ -119,8 +119,16 @@ namespace Vigilant {
                 auto sprite = entity->getComponent<SpriteComponent>();
                 auto collider = entity->getComponent<ColliderComponent>();
                 auto projectile = entity->getComponent<ProjectileComponent>();
-                int origX = entity->transform->getX();
-                int origY = entity->transform->getY();
+                int origX, origY;
+                if (physics) {
+					origX = physics->getPreviousPosition().getX();
+					origY = physics->getPreviousPosition().getY();
+				} else if (projectile) {
+					origX = entity->transform->getX();
+					origY = entity->transform->getY();
+				} else {
+					return;
+				}
                 // Projectiles: Sprite, Collider, Projectile
                 // Actors: Sprite, Collider, Physics
                 if ( sprite == 0 || collider == 0) {

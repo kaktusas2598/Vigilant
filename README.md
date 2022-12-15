@@ -20,6 +20,7 @@
  * Tiled map loading from tmx files including collision layers
  * Basis Axis Aligned Collision Detection
  * Basic Rigid Body Dynamics
+ * Particle System
  * Debug UI
 
 #### Planned feature list:
@@ -28,8 +29,8 @@
  * 3D Rendering with OpenGL
  * Entity Component System
  * Model Loading (simple .obj loader or assimp?)
- * Lua Support (For scripting states and entities)
- * Immediate mode GUI using Dear IMGUI (Altrough I am still looking at other options like Nuklear)
+ * Using Lua for dynamic state creation
+ * Skeletal animation support
 
 
 ### Used Libraries
@@ -40,7 +41,7 @@
  * [IMGUI](https://github.com/ocornut/imgui) - Bloat-free Immediate Mode Graphical User interface for C++ with minimal dependencies;
  * [GLM](https://glm.g-truc.net/0.9.8/index.html) - C++ Mathematics library for graphics applications.
  * [TinyXML](https://www.grinninglizard.com/tinyxml/) - For XML file parsing
- + stb_image Public Domain Image Loading Library for C++
+ + [stb_image](https://github.com/nothings/stb) Public Domain Image Loading Library for C++
 
  #### Build Notes
 

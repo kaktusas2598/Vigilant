@@ -18,29 +18,9 @@ namespace Vigilant {
     void PlayState::update(float deltaTime) {
         level->update();
 
-        // Level checks collisions against map and only after we update physics
-        // TheEngine::Instance()->getCollisionSystem()->checkMapCollision(level->getCollisionLayer());
         if (TheInputManager::Instance()->isKeyPressed(SDLK_ESCAPE)) {
             TheEngine::Instance()->getStateMachine()->getCurrentState()->setScreenState(ScreenState::CHANGE_NEXT);
         }
-
-        for (auto& e: EntityManager::Instance()->getEntities()) {
-            // Chek each entity for collision against map tiles
-            Collision::checkMapCollision(e, level->getCollidableLayers());
-
-			// Find player and update camera
-			auto isPlayer = e->getComponent<InputComponent>();
-            if (isPlayer) {
-				// Don't like this much looping.
-				// Also need to decide if EntityManager good enough to be used everywhere or not
-				//Collision::checkPlayerEntityCollision(e.get(), gameEntities);
-				// Causes big lag!! Tried reducing number of entities to around 50 but it still is a problem
-				Collision::checkPlayerEntityCollision(e, EntityManager::Instance()->getEntities());
-
-                TheEngine::Instance()->camera.x = e->transform->getX() - TheEngine::Instance()->camera.w/2;
-                TheEngine::Instance()->camera.y = e->transform->getY() - TheEngine::Instance()->camera.h/2;
-            }
-		}
 
 		// Make sure camera doesn't go out of bounds of map
         if (TheEngine::Instance()->camera.x < 0) {
