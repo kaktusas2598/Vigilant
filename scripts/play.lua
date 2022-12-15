@@ -66,7 +66,8 @@ end
 
 -- Player event listeners
 function onCollide(thisId, secondId)
-	entities[secondId]:scale(0.5, 0.5)
+	--entities[secondId]:scale(0.5, 0.5)
+	addParticleEmitter(entities[secondId]:getX(), entities[secondId]:getY(), "fire")
 	-- if object:type() == "enemy" then
 		-- player:damage(10)
 	-- end
@@ -115,7 +116,7 @@ playerTable = {
         accelerationY = 0.0,
         gravityX = 0.0,
         gravityY = 0.0,
-        friction = 0.4,
+        friction = 0.6,
     },
     sprite = {
         filename = "assets/sprite/player.png",

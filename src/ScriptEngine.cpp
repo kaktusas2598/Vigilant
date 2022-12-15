@@ -127,6 +127,7 @@ namespace Vigilant {
         // Must be done before running lua script
         lua_register(state, "playSound", lua_playSound);
         lua_register(state, "playMusic", lua_playMusic);
+        lua_register(state, "addParticleEmitter", lua_addParticleEmitter);
         lua_register(state, "getMapWidth", lua_getMapWidth);
         lua_register(state, "getMapHeight", lua_getMapHeight);
         lua_register(state, "getScreenWidth", lua_getScreenWidth);

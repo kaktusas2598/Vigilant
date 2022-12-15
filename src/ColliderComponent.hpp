@@ -29,6 +29,8 @@ namespace Vigilant {
         private:
             SDL_Rect collider;
             std::string type;
+            // Collider box offsets from sprite texture
+            int xOffset, yOffset;
     };
 }
 

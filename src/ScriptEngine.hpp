@@ -11,6 +11,7 @@
 #include "TextureManager.hpp"
 #include "Engine.hpp"
 #include "IGameState.hpp"
+#include "ParticleSystem.hpp"
 
 #include <string>
 
@@ -70,6 +71,15 @@ namespace Vigilant {
 				TheSoundManager::Instance()->playMusic(soundID, 0);
 				return 0;
 			}
+
+			static int lua_addParticleEmitter(lua_State *L) {
+				float originX = (float)lua_tonumber(L, 1);
+				float originY = (float)lua_tonumber(L, 2);
+				std::string type = (std::string)lua_tostring(L, 3);
+				ParticleSystem::Instance()->addEmitter(Vector2D{originX, originY}, type);
+				return 0;
+			}
+
 
 			static int lua_getMapWidth(lua_State *L) {
 				int mapWidth = TheEngine::Instance()->getMapWidth();
