@@ -74,7 +74,10 @@ namespace Vigilant {
 			void render(float deltaTime); ///< Main render method, renders current state
 			void update(float deltaTime); ///< Main update method, sets different state or updates current one
 
+			void renderDebug(float deltaTime); ///< Optional debug tools rendering
+
 			bool m_isRunning = false; ///< appliction running flag
+			bool debugMode = false; ///< enables IMGui Debug Window
 			Window m_window; ///< main window instance
 			int screenWidth, screenHeight;
 

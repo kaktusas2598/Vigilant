@@ -187,26 +187,10 @@ namespace Vigilant {
 		ImGui_ImplSDLRenderer_NewFrame();
 		ImGui_ImplSDL2_NewFrame();
 		ImGui::NewFrame();
-		// Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-		//ImGui::ShowDemoWindow(&show_demo_window);
 
-		ImGui::Begin("Debug Log");                          // Create a window called "Hello, world!" and append into it.
-		//ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-		//ImGui::SameLine();
-		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-		ImGui::Text("Active entities: %d", EntityManager::livingCount);
-
-		if (level != nullptr) {
-			int i = 0;
-			for (auto it = level->getCollisionLayers()->begin(); it != level->getCollisionLayers()->end(); ++it) {
-				// Seems like member needs to be static but that doesnt make sense for tile layer
-				ImGui::Checkbox("Show solids", &layerVisibility[i]);
-				(*it)->setVisible(layerVisibility[i]);
-				i++;
-			}
+		if (debugMode) {
+			renderDebug(deltaTime);
 		}
-
-		ImGui::End();
 
 		if (SDLRenderingEnabled) {
 			// ImGui::Render(); in imgui example Render() was placed here before SDL_RenderClear
@@ -242,6 +226,34 @@ namespace Vigilant {
 			glEnd();
 			///////////////////////
 		}
+	}
+
+
+	/**
+	 * Defines Debug tool using IMGui
+	 * @param deltaTime
+	 */
+	void Engine::renderDebug(float deltaTime) {
+		// Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+		//ImGui::ShowDemoWindow(&show_demo_window);
+
+		ImGui::Begin("Debug Log");                          // Create a window called "Hello, world!" and append into it.
+		//ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+		//ImGui::SameLine();
+		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		ImGui::Text("Active entities: %d", EntityManager::livingCount);
+
+		if (level != nullptr) {
+			int i = 0;
+			for (auto it = level->getCollisionLayers()->begin(); it != level->getCollisionLayers()->end(); ++it) {
+				// Seems like member needs to be static but that doesnt make sense for tile layer
+				ImGui::Checkbox("Show solids", &layerVisibility[i]);
+				(*it)->setVisible(layerVisibility[i]);
+				i++;
+			}
+		}
+
+		ImGui::End();
 	}
 
 	/**
@@ -339,12 +351,17 @@ namespace Vigilant {
 				break;
 			case SDL_KEYDOWN:
 				TheInputManager::Instance()->pressKey(event.key.keysym.sym);
+				// Find player and send key code to Lua listener
+				// Really don't like how you have to loop through all entities to find player, on the other hand player will
+				// be one of the first entities defined in lua
 				for (auto& e: EntityManager::Instance()->getEntities()) {
 					auto isPlayer = e->getComponent<InputComponent>();
 					if (isPlayer) {
 						ScriptEngine::Instance()->onInput(isPlayer->getListener(), e->id->get(), event.key.keysym.sym);
 					}
 				}
+				if (event.key.keysym.sym == SDLK_BACKQUOTE)
+					debugMode = !debugMode;
 				// TODO: if '`' pressed enable debug output
 				break;
 			case SDL_KEYUP:
