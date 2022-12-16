@@ -68,6 +68,8 @@ end
 
 
 -- Player event listeners
+-- FIXME: how to prevent this firing 100 times every time there is a collision?
+--  Probably a better Rigid Body resolution would help, as entities would bounce away from each other
 function onCollide(thisId, secondId)
 	--entities[secondId]:scale(0.5, 0.5)
 	playSound("boom")

@@ -99,9 +99,27 @@ namespace Vigilant {
                             auto playerBody = player->getComponent<PhysicsComponent>();
                             auto entityBody = entity->getComponent<PhysicsComponent>();
                             if (entityBody) {
-                                entityBody->applyForceX(playerBody->getAccelerationX() * playerBody->getMass());
-                                entityBody->applyForceY(playerBody->getAccelerationY() * playerBody->getMass());
-                            }
+								// 1st try, horrible, player is not affected at all here
+								entityBody->applyForceX(playerBody->getAccelerationX() * playerBody->getMass());
+								entityBody->applyForceY(playerBody->getAccelerationY() * playerBody->getMass());
+
+								// 2nd try using 1D Newtonian Elastic Collision
+                                // m1v11 * m2v21 = m1v12 * m2v22
+                                // v12 = (m1 - m2)(m1 + m2)*v11 + 2m2/(m1+m2)*v2
+                                // v22 = 2m1/(m1 + m2)*v11 + (m2 - m1)/(m1+m2)*v2
+								// Velocity after collision
+                                //Vector2D nPVelocity = (pMass - eMass) / (pMass + eMass) * pVelocity + (2 * eMass) / (pMass + eMass) * eVelocity;
+                                //Vector2D nEVelocity = (2 * pMass) / (pMass + eMass) * pVelocity + (pMass - eMass) / (pMass + eMass) * eVelocity;
+								//playerBody->setVelocity(pNewVelocity);
+								//entityBody->setVelocity(eNewVelocity);
+
+                                // 3rd try
+								//Vector2D finalVelocity = playerBody->getVelocity() * playerBody->getMass();
+								//finalVelocity /= (playerBody->getMass() + entityBody->getMass());
+								// Does not do anything at all it seems
+								//playerBody->setVelocity(finalVelocity);
+								//entityBody->setVelocity(finalVelocity);
+							}
 
 							// std::cout << "Player and entity collision detected" << std::endl;
 							std::string listener = playerCollider->getListener();

@@ -34,8 +34,13 @@ namespace Vigilant {
 
 			Vector2D getPreviousPosition() { return previousPosition; }
 
+            void setVelocity(Vector2D vel) {
+				velocity.setX(vel.getX());
+				velocity.setY(vel.getY());
+			}
             void setVelocityX(float X) { velocity.setX(X); }
             void setVelocityY(float Y) { velocity.setY(Y); }
+
             void setAccelerationX(float X) { acceleration.setX(X); }
             void setAccelerationY(float Y) { acceleration.setY(Y); }
             void setGravityX(float X) { gravity.setX(X); }
