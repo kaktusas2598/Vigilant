@@ -36,7 +36,6 @@ namespace Vigilant {
 
 			bool isAlive() { return life > 0; }
 
-			// TODO: colour interpolation, position interpolation
 			SDL_Color rgbInterpolation(SDL_Color startColor, float timeStep, SDL_Color endColor);
 			float interpolateRange(float min, float timeStep, float max);
 

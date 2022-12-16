@@ -99,7 +99,6 @@ namespace Vigilant {
 		if (SDL_SetTextureBlendMode(texture, state.live.blendMode) != 0)
 			Logger::Instance()->error(SDL_GetError());
 
-		// TODO: do actual rendering here
 		//TheTextureManager::draw(std::string id, int x, int y, int width, int height, double angle);
 		TheTextureManager::Instance()->draw("particle", (int)centerX, (int)centerY, state.live.rectSize.w, state.live.rectSize.h, state.live.currentRotSpeed);
 		// Blitting particle on screen

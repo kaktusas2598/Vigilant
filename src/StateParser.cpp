@@ -152,10 +152,8 @@ namespace Vigilant {
             name = e->Attribute("name");
             fileName = e->Attribute("filename");
             type = e->Attribute("type");
-			//Logger::Instance()->info("Initialising scripts.");
 
-			// TODO: Change to ScriptEngine?
-			ScriptEngine::Instance()->init(fileName);
+            ScriptEngine::Instance()->init(fileName);
             if (type == "entity") {
             }
         }
