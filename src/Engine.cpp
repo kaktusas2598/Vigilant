@@ -350,7 +350,7 @@ namespace Vigilant {
 				TheInputManager::Instance()->setMouseCoords((float)event.motion.x, (float)event.motion.y);
 
 				// Just a testing code for particle emitters
-				ParticleSystem::Instance()->addEmitter(Vector2D{(float)event.motion.x, (float)event.motion.y}, "fire");
+				//ParticleSystem::Instance()->addEmitter(Vector2D{(float)event.motion.x, (float)event.motion.y}, "fire");
 				break;
 			case SDL_KEYDOWN:
 				TheInputManager::Instance()->pressKey(event.key.keysym.sym);

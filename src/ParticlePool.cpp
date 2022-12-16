@@ -1,7 +1,6 @@
 #include "ParticlePool.hpp"
 
 #include <cassert>
-#include <iostream>
 
 namespace Vigilant {
 
@@ -9,7 +8,6 @@ namespace Vigilant {
 	ParticlePool::ParticlePool(Emitter* emitter) {
 		// Fill the pool according to poolSize needed for the emitter
 		poolSize = emitter->getPoolSize();
-		std::cout << "Pool size: " << poolSize << std::endl;
 		particleArray = new Particle[poolSize];
 
 		// The first particle is available

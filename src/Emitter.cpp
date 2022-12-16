@@ -1,6 +1,7 @@
 #include "Emitter.hpp"
 
 #include <time.h>
+#include "Logger.hpp"
 
 namespace Vigilant {
 
@@ -109,8 +110,10 @@ namespace Vigilant {
 
 	void Emitter::render(float deltaTime) {
 		// Check if all particles are dead and remove emitter
-		if (!emitterPool->update(deltaTime) && lifetime == 0.0f)
+		if (!emitterPool->update(deltaTime) && lifetime == 0.0f) {
+			Logger::Instance()->info("Desotrying emitter");
 			ParticleSystem::Instance()->destroyEmitter(this);
+		}
 	}
 
 }
