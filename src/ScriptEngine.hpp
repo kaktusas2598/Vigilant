@@ -195,7 +195,6 @@ namespace Vigilant {
 				// I don't know if this is good practise but if I dont provide third paradm, this casts
 				// to false seemingly always, so I can use optional 3rd param to set oneShot animation
 				bool oneShot = (bool)lua_toboolean(L, 3);
-				std::cout << (int)oneShot << std::endl;
 
                 entity->getComponent<SpriteComponent>()->playAnimation(name, oneShot);
                 if (oneShot) {
@@ -241,7 +240,6 @@ namespace Vigilant {
 				int g = (int)lua_tonumber(L, 7);
 				int b = (int)lua_tonumber(L, 8);
 				int a = (int)lua_tonumber(L, 9);
-				std::cout << r << ", " << g << ", " << b << std::endl;
 				SDL_Color color{(Uint8)r, (Uint8)g, (Uint8)b, (Uint8)a};
 				entity->getComponent<UILabelComponent>()->load(x, y, text, fontId, color);
 				return 0;
