@@ -83,19 +83,19 @@ function onInput(thisId, key)
 	if key == 119 then
 		-- Does nit work for some reason, sprite stays in the same place
 		-- Probably need to bind input manager for this
-		entities[thisId]:applyForceY(-10)
+		--entities[thisId]:applyForceY(-10)
 	end
 	-- A
 	if key == 97 then
-		entities[thisId]:applyForceX(-10)
+		--entities[thisId]:applyForceX(-10)
 	end
 	-- S
 	if key == 115 then
-		entities[thisId]:applyForceY(10)
+		--entities[thisId]:applyForceY(10)
 	end
 	-- D
 	if key == 100 then
-		entities[thisId]:applyForceX(10)
+		--entities[thisId]:applyForceX(10)
 	end
 	-- F
 	if key == 102 then
@@ -109,11 +109,13 @@ function onInput(thisId, key)
 	-- Space
 	if key == 32 then
 		playSound("jump")
+		entities[thisId]:setAnimation("dash", true) -- ? why doesnt work?
 	end
 end
 
 -- back to Main Menu callback and definition
 function onMainMenuClick(thisId)
+	playSound("button")
 	-- TODO: make this binding better, accept state id or ScreenState enum
 	changeState()
 end
@@ -172,6 +174,11 @@ playerTable = {
 				name = "hitRight",
 				row = 7,
 				numFrames = 4
+			},
+			{
+				name = "dash",
+				row = 3,
+				numFrames = 6
 			}
 		},
         width = 48,

@@ -39,10 +39,10 @@
             <texture filename="assets/particles/bullet1.png" ID="bullet"/>
 			<!--<texture filename="assets/particles/Color/fire/fire_1.png" ID="particle"/>-->
             <texture filename="assets/particles/bullet2.png" ID="particle"/>
-			<!-- For ButtonComponent test -->
             <texture filename="assets/ui/main.png" ID="mainmenubutton"/>
 		</TEXTURES>
 		<SOUNDS>
+			<sound filename="assets/sounds/button.wav" ID="button" type = "1"/>
 			<sound filename="assets/sounds/jump.wav" ID="jump" type = "1"/>
 			<sound filename="assets/sounds/boom.wav" ID="boom" type = "1"/>
 			<sound filename="assets/sounds/phaser.wav" ID="phaser" type = "1"/>
