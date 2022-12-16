@@ -5,6 +5,8 @@
 -- Entity.move(x, y)
 -- Entity.scale(x, y)
 -- Entity.addSprite(id, filename, w, h)
+-- Entity.addAnimation(name, row, numFrames)
+-- Entity.setAnimation(name, once = false)
 -- Entity.setAbsolutePosition(isAbsolute): takes boolean argument
 -- Entity.addPhysics(mass, frictionCoefficient) : friction from 0.00 to 1.00
 -- Entity.addCollider(type, width, height)
@@ -18,6 +20,7 @@
 -- General Functions:
 -- playSound(id)
 -- playMusic(id)
+-- addParticleEmitter(originX, originY, type)
 -- getMapWidth()
 -- getMapHeight()
 -- getScreenWidth()
@@ -67,6 +70,7 @@ end
 -- Player event listeners
 function onCollide(thisId, secondId)
 	--entities[secondId]:scale(0.5, 0.5)
+	playSound("boom")
 	addParticleEmitter(entities[secondId]:getX(), entities[secondId]:getY(), "fire")
 	-- if object:type() == "enemy" then
 		-- player:damage(10)
@@ -75,13 +79,36 @@ end
 
 -- TODO: SDL key codes??
 function onInput(thisId, key)
-	-- 102 - 'F'
+	-- W
+	if key == 119 then
+		-- Does nit work for some reason, sprite stays in the same place
+		-- Probably need to bind input manager for this
+		entities[thisId]:applyForceY(-10)
+	end
+	-- A
+	if key == 97 then
+		entities[thisId]:applyForceX(-10)
+	end
+	-- S
+	if key == 115 then
+		entities[thisId]:applyForceY(10)
+	end
+	-- D
+	if key == 100 then
+		entities[thisId]:applyForceX(10)
+	end
+	-- F
 	if key == 102 then
-		playSound("jump")
+		entities[thisId]:setAnimation("hitRight", true)
 		testEntity = create()
 		testEntity:move(entities[thisId]:getX(), entities[thisId]:getY())
 		testEntity:addSprite("bullet", "assets/projectiles/bullet1.png", 10, 10)
 		testEntity:addProjectile(entities[thisId], 150, 1000)
+		playSound("phaser")
+	end
+	-- Space
+	if key == 32 then
+		playSound("jump")
 	end
 end
 
@@ -96,6 +123,10 @@ mainMenu:addSprite("mainmenubutton", "", 200, 80)
 mainMenu:setAbsolutePosition(true)
 mainMenu:addButton()
 mainMenu:setButtonListener("onMainMenuClick")
+
+-- Projectile template
+projectileTable = {
+}
 
 
 -- Entity
@@ -136,7 +167,12 @@ playerTable = {
                 name = "up",
                 row = 2,
                 numFrames = 6
-            }
+            },
+			{
+				name = "hitRight",
+				row = 7,
+				numFrames = 4
+			}
 		},
         width = 48,
         height = 48

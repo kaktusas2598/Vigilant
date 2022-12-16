@@ -103,6 +103,11 @@ namespace Vigilant {
         lua_setfield(state, -2 , "addPhysics");
         lua_pushcfunction(state, lua_addProjectile);
         lua_setfield(state, -2 , "addProjectile");
+        lua_pushcfunction(state, lua_applyForceX);
+        lua_setfield(state, -2 , "applyForceX");
+        lua_pushcfunction(state, lua_applyForceY);
+        lua_setfield(state, -2 , "applyForceY");
+
         // TODO: replace this with __newindex?
         lua_pushcfunction(state, lua_getX);
         lua_setfield(state, -2 , "getX");

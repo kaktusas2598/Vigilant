@@ -10,9 +10,16 @@
 
 namespace Vigilant {
 
+    enum AnimationState {
+		STILL = 0,
+		ONE_SHOT,
+		LOOP
+	};
+
     struct Animation {
         int row; // Row in spritesheet for concrete animation
         int numFrames; // Number of Frames
+        bool loop = false;
         // TODO:
         // int column; // Column in tilesheet where animation starts
         // bool loop; // Will denote if animation plays once or loops
@@ -39,8 +46,13 @@ namespace Vigilant {
             void addAnimation(std::string name, Animation animation) {
                 animationList.emplace(name, animation);
             }
-            void setAnimation(std::string name) {
+            // If one shot is true, animaion onlu plays once
+            void playAnimation(std::string name, bool oneShot = false) {
                 isAnimated = true;
+                if (oneShot)
+                	animationState = ONE_SHOT;
+				else
+					animationState = LOOP;
                 if (animationList.find(name) != animationList.end())
                     currentAnimation = name;
                 else
@@ -48,7 +60,10 @@ namespace Vigilant {
             }
             void stopAnimation(std::string) {
                 isAnimated = false;
+                animationState = STILL;
             }
+
+            AnimationState getAnimationState() const { return animationState; }
 
             void setWidth(int w) { width = w; }
             void setHeight(int h) { height = h; }
@@ -62,6 +77,7 @@ namespace Vigilant {
             int getHeight() const { return height; }
         private:
             bool isAnimated;
+            AnimationState animationState;
             std::string currentAnimation;
             bool isFlipped;
             int currentFrame;

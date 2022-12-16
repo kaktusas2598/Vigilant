@@ -10,6 +10,7 @@ namespace Vigilant {
         isAnimated = false;
         isFlipped = false;
         isAbsolute = false;
+		animationState = STILL;
     }
 
     void SpriteComponent::render() {
@@ -71,6 +72,10 @@ namespace Vigilant {
 
         // FIXME: for some reason SpriteComponent::update() is called after render(), therefore had to calculate frame here
         currentFrame = int(((SDL_GetTicks() / 100) % animationList[currentAnimation].numFrames));
+
+        // Check if once shot animation has finished
+        if (animationState == ONE_SHOT && currentFrame == animationList[currentAnimation].numFrames)
+        	animationState = STILL;
 
         srcRect.x = width * currentFrame;
         srcRect.y = height * animationList[currentAnimation].row;

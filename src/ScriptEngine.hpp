@@ -191,11 +191,19 @@ namespace Vigilant {
 				return 0;
 			}
 
+			// TODO: rename here and in Lua to playAnimation()
 			static int lua_setAnimation(lua_State *L) {
 				Entity* entity = (Entity*)lua_touserdata(L, 1);
 				std::string name = (std::string)lua_tostring(L, 2);
+				// Testing optional param
+				// I don't know if this is good practise but if I dont provide third paradm, this casts
+				// to false seemingly always, so I can use optional 3rd param to set oneShot animation
+				bool oneShot = (bool)lua_toboolean(L, 3);
+				std::cout << (int)oneShot << std::endl;
 
-                entity->getComponent<SpriteComponent>()->setAnimation(name);
+                entity->getComponent<SpriteComponent>()->playAnimation(name, oneShot);
+                if (oneShot) {
+				}
 
 				return 0;
 			}
@@ -263,6 +271,22 @@ namespace Vigilant {
 				entity->getComponent<PhysicsComponent>()->setMass(mass);
 				entity->getComponent<PhysicsComponent>()->setFrictionCoefficient(frictionCoef);
 				// entity->getComponent<PhysicsComponent>()->load(float velX, float velY, float accX, float accY, float gX, float gY)
+				return 0;
+			}
+
+			static int lua_applyForceX(lua_State *L) {
+				Entity* entity = (Entity*)lua_touserdata(L, 1);
+				float force = (float)lua_tonumber(L, 2);
+
+				entity->getComponent<PhysicsComponent>()->applyForceX(force);
+				return 0;
+			}
+
+			static int lua_applyForceY(lua_State *L) {
+				Entity* entity = (Entity*)lua_touserdata(L, 1);
+				float force = (float)lua_tonumber(L, 2);
+
+				entity->getComponent<PhysicsComponent>()->applyForceY(force);
 				return 0;
 			}
 
