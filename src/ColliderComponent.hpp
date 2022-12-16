@@ -16,7 +16,7 @@ namespace Vigilant {
 
             void load(std::string tag, int width, int height);
             void update(float deltaTime);
-            void render() {}
+            void render();
 
             SDL_Rect& getCollider() { return collider; }
             void setCollider(SDL_Rect col) { collider = col; }

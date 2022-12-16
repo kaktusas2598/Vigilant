@@ -26,7 +26,8 @@
 
 namespace Vigilant {
 
-	static bool layerVisibility[10] = {false};
+	bool Engine::layerVisibility = false;
+	bool Engine::colliderVisibility = false;
 
 	Engine* Engine::s_pInstance = nullptr;
 
@@ -242,13 +243,13 @@ namespace Vigilant {
 		//ImGui::SameLine();
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::Text("Active entities: %d", EntityManager::livingCount);
+		ImGui::Checkbox("Show collision layers", &layerVisibility);
+		ImGui::Checkbox("Show colliders", &colliderVisibility);
 
 		if (level != nullptr) {
 			int i = 0;
 			for (auto it = level->getCollisionLayers()->begin(); it != level->getCollisionLayers()->end(); ++it) {
-				// Seems like member needs to be static but that doesnt make sense for tile layer
-				ImGui::Checkbox("Show solids", &layerVisibility[i]);
-				(*it)->setVisible(layerVisibility[i]);
+				(*it)->setVisible(layerVisibility);
 				i++;
 			}
 		}

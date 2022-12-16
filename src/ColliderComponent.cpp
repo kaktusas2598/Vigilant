@@ -4,6 +4,8 @@
 #include "SpriteComponent.hpp"
 #include "Entity.hpp"
 
+#include "Engine.hpp"
+
 #include <iostream>
 
 namespace Vigilant {
@@ -35,6 +37,18 @@ namespace Vigilant {
 	void ColliderComponent::update(float deltaTime) {
 		collider.x = owner->transform->getX() + xOffset;
 		collider.y = owner->transform->getY() + yOffset;
+	}
+
+    void ColliderComponent::render() {
+		if (Engine::colliderVisibility) {
+			SDL_Rect renderCollider = collider;
+			renderCollider.x -= Engine::Instance()->camera.x;
+			renderCollider.y -= Engine::Instance()->camera.y;
+			// Will render red, half transparent collider box, outline
+			// To draw full rectangle use: SDL_RenderFillRect()
+			SDL_SetRenderDrawColor(Engine::Instance()->getSDLRenderer(), 255, 0, 0, 125);
+			SDL_RenderDrawRect(Engine::Instance()->getSDLRenderer(), &renderCollider);
+		}
 	}
 
 }

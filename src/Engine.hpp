@@ -65,6 +65,10 @@ namespace Vigilant {
 
 
 			SDL_Rect camera;
+
+			// Debug variables
+			static bool layerVisibility; ///< Toggle collision layer render
+			static bool colliderVisibility; ///< Toggle collider component render
 		private:
 			Engine();
 			~Engine();
