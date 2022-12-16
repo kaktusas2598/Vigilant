@@ -323,13 +323,16 @@ namespace Vigilant {
             // Chek each entity for collision against map tiles
 			 Collision::checkMapCollision(e, level->getCollidableLayers());
 
-			// Find player and update camera
+			// FIXME: very inefficient because both player and projectile collision methods will
+			// traverse through entities and get similar components
 			auto isPlayer = e->getComponent<InputComponent>();
+			auto isProjectile = e->getComponent<ProjectileComponent>();
 			if (isPlayer) {
 				// Don't like this much looping.
-				//Collision::checkPlayerEntityCollision(e.get(), gameEntities);
 				// Causes big lag!! Tried reducing number of entities to around 50 but it still is a problem
 				Collision::checkPlayerEntityCollision(e, EntityManager::Instance()->getEntities());
+			} else if (isProjectile) {
+				Collision::checkProjectileEntityCollision(e, EntityManager::Instance()->getEntities());
 			}
 		}
 	}

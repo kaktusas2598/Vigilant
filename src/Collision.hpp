@@ -57,12 +57,41 @@ namespace Vigilant {
             	// Or another event?
 				// This is tempporary because lua wont know if player collided with entity or players projectile
 				// Also npcs will not be able to create projectiles themselves
-				//Entity* owner = projectile->getComponent<ProjectileComponent>()->getShooter();
-				//if (checkEntityOnEntityCollision(projectile, entities)) {
-					//owner->getComponent<ScriptComponent>();
-				//}
+				Entity* owner = projectile->getComponent<ProjectileComponent>()->getShooter();
+				auto sprite = projectile->getComponent<SpriteComponent>();
+				SDL_Rect collider{
+					int(projectile->transform->getX()),
+					int(projectile->transform->getY()),
+					int(sprite->getWidth() * owner->transform->getScaleX()),
+					int(sprite->getHeight() * owner->transform->getScaleY())
+				};
+
+                for (auto &entity : entities) {
+                	auto isProjectile = entity->getComponent<ProjectileComponent>();
+                	auto isPlayer = entity->getComponent<InputComponent>();
+                	if (isProjectile || isPlayer)
+                		continue;
+
+                	auto entityCollider = entity->getComponent<ColliderComponent>();
+                	auto entitySprite = entity->getComponent<SpriteComponent>();
+                	if (entityCollider == 0 || entitySprite == 0)
+                		continue;
+
+					// BROAD PHASE on X axis only
+					if (entity->transform->getX() > projectile->transform->getX() + sprite->getWidth() * projectile->transform->getScaleX() ||
+							entity->transform->getX() + entitySprite->getWidth() * entity->transform->getScaleX() < projectile->transform->getX()) {
+						continue;
+					}
+
+					// NARROW PHASE
+					if(AABB(collider, entityCollider->getCollider())) {
+						std::cout << "Projectile and entity collision detected" << std::endl;
+						std::string listener = owner->getComponent<ColliderComponent>()->getListener();
+						ScriptEngine::Instance()->onCollide(listener, owner->id->get(), entity->id->get());
+					}
+				}
 			}
-            //static void checkPlayerEntityCollision(Entity* player, const std::vector<Entity*> entities) {
+			//static void checkPlayerEntityCollision(Entity* player, const std::vector<Entity*> entities) {
 				//if (checkEntityOnEntityCollision(player, entities)) {
 				//}
 			//}
