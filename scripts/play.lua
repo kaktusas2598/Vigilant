@@ -41,18 +41,26 @@ end
 
 function define(data, tag)
 	entity = create()
+	-- Components must be setup and initialised in this order:
+	-- Tranform
+	-- Sprite
+	-- Everything else in any order??
+	if data["transform"] ~= nil then
+		entity:move(data["transform"]['X'], data["transform"]['Y'])
+		entity:scale(data["transform"]['scaleX'], data["transform"]['scaleY'])
+	end
+	if data["sprite"] ~= nil then
+		-- Assume required properties are set for now
+		entity:addSprite(data['sprite']['id'], data['sprite']['filename'], data['sprite']['width'], data['sprite']['height'])
+		for k2,v2 in pairs(data['sprite']['animation']) do
+			entity:addAnimation(v2['name'], v2['row'], v2['numFrames'])
+		end
+	end
+
+	-- Careful when using pairs(), it returns elements in unspecified order and that's why
+	-- I had to move out transform and sprite stuff above because it needs to be initialised first
+	-- before components like collider
 	for k, v in pairs(data) do
-		if k == "transform" then
-			entity:move(v['X'], v['Y'])
-			entity:scale(v['scaleX'], v['scaleY'])
-		end
-		if k == "sprite" then
-			-- Assume required properties are set for now
-			entity:addSprite(v['id'], v['filename'], v['width'], v['height'])
-			for k2,v2 in pairs(v['animation']) do
-				entity:addAnimation(v2['name'], v2['row'], v2['numFrames'])
-			end
-		end
 		if k == "input" then
 			entity:addInput()
 			entity:setInputListener("onInput")
@@ -84,7 +92,7 @@ end
 
 function onInput(thisId, key)
 	-- Update player position label
-	playerPosLabel:setLabel("Player Position: "..math.floor(player:getX())..", "..math.floor(player:getY()))
+	playerPosLabel:setLabel("Player  Pos  "..math.floor(player:getX())..", "..math.floor(player:getY()))
 	-- W
 	if key == 119 then
 		-- Does nit work for some reason, sprite stays in the same place
@@ -193,7 +201,7 @@ playerTable = {
     collider = {
         type = "player",
         width = 15,
-        height = 35,
+        height = 30,
 	    listener = "onCollide"
     },
 	input = {
@@ -211,7 +219,7 @@ screenHeight = getScreenHeight()
 
 playerPosLabel = create()
 -- ':' and ',' are displayed as squares because of the font!
-playerPosLabel:addLabel(10, 10, "Player Position: "..player:getX()..", "..player:getY(), "arcade", 0, 102, 204, 255)
+playerPosLabel:addLabel(10, 10, "Player  Pos  "..math.floor(player:getX())..", "..math.floor(player:getY()), "arcade", 0, 102, 204, 255)
 playerPosLabel:setLabelAlignment(0, 2)
 
 print("Map Width: "..mapWidth.."\nMap Height: "..mapHeight)
@@ -242,6 +250,6 @@ for i = 1, 100 do
 	entityTable[i]:addSprite("player", "assets/sprite/player.png", 48, 48)
 	entityTable[i]:addAnimation("default", 1, 6)
 	entityTable[i]:setAnimation("default")
-	entityTable[i]:addCollider("enemy", 15, 35)
+	entityTable[i]:addCollider("enemy", 15, 30)
 	entityTable[i]:addPhysics(2.0, 0.3)
 end
