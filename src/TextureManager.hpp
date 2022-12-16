@@ -21,12 +21,17 @@ namespace Vigilant {
     public:
 
         bool load(std::string fileName, std::string id);
-        bool loadFont(std::string fileName, std::string id);
         void draw(std::string id, int x, int y, int width, int height, SDL_RendererFlip flip = SDL_FLIP_NONE);
         void draw(std::string id, int x, int y, int width, int height, double angle, SDL_RendererFlip flip = SDL_FLIP_NONE);
         void drawFrame(std::string id, int x, int y, int width, int height, int currentRow, int currentFrame, SDL_RendererFlip flip = SDL_FLIP_NONE);
         void drawTile(std::string id, int margin, int spacing, int x, int y, int width, int height, int currentRow, int currentFrame, double scale = 1.0f);
-        void drawText(std::string text, std::string fontId, int x, int y, SDL_Color color, int scale = 1);
+
+
+        // These 2 should go to FontManager class OR could refactor this class to AssetManager?
+        bool loadFont(std::string fileName, std::string id);
+        TTF_Font* getFont(std::string id) { return m_fontMap[id]; }
+
+        SDL_Renderer* getRenderer() { return renderer; }
         void setRenderer(SDL_Renderer *rnd) { renderer = rnd; }
 
         SDL_Texture* getTexture(std::string id) { return m_textureMap[id]; }

@@ -5,6 +5,8 @@
 #include "Engine.hpp"
 #include "StateMachine.hpp"
 
+#include "ScriptEngine.hpp"
+
 // TODO: would be better to clear textures in base class
 #include "TextureManager.hpp"
 
@@ -41,11 +43,6 @@ namespace Vigilant {
         for(size_t i = 0; i < gameEntities.size(); i++) {
             gameEntities[i]->draw(deltaTime);
         }
-
-        // Testing text rendering
-		// First apparent problem with this method from TextureManager:
-		// No info about width and hight of rendered texture so no way to perfectly center this for example on any resolution
-		TheTextureManager::Instance()->drawText("VIGILANT ENGINE", "arcade", 200, 0 , {255, 255, 255, 122}, 2);
     }
 
     void MainMenuState::setCallbacks(const std::vector<Callback>& callbacks) {
@@ -53,7 +50,6 @@ namespace Vigilant {
             // if they are of type MenuButton then assign a callback based on the id passed in from the file
             if (dynamic_cast<MenuButton*>(gameEntities[i])) {
                 MenuButton* pButton = dynamic_cast<MenuButton*>(gameEntities[i]);
-                // Had to add -1 to fix callback indexing
                 pButton->setCallback(callbacks[pButton->getCallbackID() - 1]);
             }
         }
@@ -61,9 +57,11 @@ namespace Vigilant {
 
     void MainMenuState::s_menuToPlay() {
         TheEngine::Instance()->getStateMachine()->getCurrentState()->setScreenState(ScreenState::CHANGE_NEXT);
+        ScriptEngine::Instance()->close();
     }
 
     void MainMenuState::s_exitFromMenu() {
         TheEngine::Instance()->setRunning(false);
+        ScriptEngine::Instance()->close();
     }
 }

@@ -45,11 +45,7 @@ namespace Vigilant {
 	}
 
 
-    ScriptEngine::ScriptEngine() {
-		// By default we will assume there are no listener functions defined in Lua
-		collideListenerDefined = false;
-		inputListenerDefined = false;
-    }
+    ScriptEngine::ScriptEngine() {}
 
     void ScriptEngine::init(std::string filename) {
         //id = tag;
@@ -98,6 +94,13 @@ namespace Vigilant {
         lua_setfield(state, -2 , "addButton");
         lua_pushcfunction(state, lua_setButtonListener);
         lua_setfield(state, -2 , "setButtonListener");
+
+        lua_pushcfunction(state, lua_addLabel);
+        lua_setfield(state, -2 , "addLabel");
+        lua_pushcfunction(state, lua_setLabel);
+        lua_setfield(state, -2 , "setLabel");
+        lua_pushcfunction(state, lua_setLabelAlignment);
+        lua_setfield(state, -2 , "setLabelAlignment");
 
         lua_pushcfunction(state, lua_addPhysics);
         lua_setfield(state, -2 , "addPhysics");

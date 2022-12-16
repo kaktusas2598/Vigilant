@@ -6,6 +6,7 @@
 #include "Entity.hpp"
 #include "ProjectileComponent.hpp"
 #include "ButtonComponent.hpp"
+#include "UILabelComponent.hpp"
 
 #include "SoundManager.hpp"
 #include "TextureManager.hpp"
@@ -165,16 +166,13 @@ namespace Vigilant {
 				TheTextureManager::Instance()->load(fileName, id);
 				entity->addComponent<SpriteComponent>();
                 entity->getComponent<SpriteComponent>()->load(id, width, height);
-
 				return 0;
 			}
 
 			static int lua_setAbsolutePosition(lua_State *L) {
 				Entity* entity = (Entity*)lua_touserdata(L, 1);
 				bool absol = (bool)lua_toboolean(L, 2);
-
                 entity->getComponent<SpriteComponent>()->setAbsolute(absol);
-
 				return 0;
 			}
 
@@ -184,10 +182,8 @@ namespace Vigilant {
 				std::string name = (std::string)lua_tostring(L, 2);
 				int row = (int)lua_tonumber(L, 3);
 				int numFrames = (int)lua_tonumber(L, 4);
-
 				Animation anim = {row, numFrames};
                 entity->getComponent<SpriteComponent>()->addAnimation(name, anim);
-
 				return 0;
 			}
 
@@ -211,54 +207,75 @@ namespace Vigilant {
 			static int lua_addInput(lua_State *L) {
 				Entity* entity = (Entity*)lua_touserdata(L, 1);
 				entity->addComponent<InputComponent>();
-
 				return 0;
 			}
 
 			static int lua_setInputListener(lua_State *L) {
 				Entity* entity = (Entity*)lua_touserdata(L, 1);
 				std::string listener = (std::string)lua_tostring(L, 2);
-
 				entity->getComponent<InputComponent>()->setListener(listener);
-
 				return 0;
 			}
 
 			static int lua_addButton(lua_State *L) {
 				Entity* entity = (Entity*)lua_touserdata(L, 1);
 				entity->addComponent<ButtonComponent>();
-
 				return 0;
 			}
 
 			static int lua_setButtonListener(lua_State *L) {
 				Entity* entity = (Entity*)lua_touserdata(L, 1);
 				std::string listener = (std::string)lua_tostring(L, 2);
-
 				entity->getComponent<ButtonComponent>()->setListener(listener);
-
 				return 0;
 			}
 
+			static int lua_addLabel(lua_State *L) {
+				Entity* entity = (Entity*)lua_touserdata(L, 1);
+				entity->addComponent<UILabelComponent>();
+				int x = (int)lua_tonumber(L, 2);
+				int y = (int)lua_tonumber(L, 3);
+				std::string text = (std::string)lua_tostring(L, 4);
+				std::string fontId = (std::string)lua_tostring(L, 5);
+				int r = (int)lua_tonumber(L, 6);
+				int g = (int)lua_tonumber(L, 7);
+				int b = (int)lua_tonumber(L, 8);
+				int a = (int)lua_tonumber(L, 9);
+				std::cout << r << ", " << g << ", " << b << std::endl;
+				SDL_Color color{(Uint8)r, (Uint8)g, (Uint8)b, (Uint8)a};
+				entity->getComponent<UILabelComponent>()->load(x, y, text, fontId, color);
+				return 0;
+			}
+
+			static int lua_setLabel(lua_State *L) {
+				Entity* entity = (Entity*)lua_touserdata(L, 1);
+				std::string text = (std::string)lua_tostring(L, 2);
+				entity->getComponent<UILabelComponent>()->setValue(text);
+				return 0;
+			}
+
+			static int lua_setLabelAlignment(lua_State *L) {
+				Entity* entity = (Entity*)lua_touserdata(L, 1);
+				int alignH = (int)lua_tonumber(L, 2);
+				int alignV = (int)lua_tonumber(L, 3);
+				entity->getComponent<UILabelComponent>()->setAlignment(static_cast<Align>(alignH), static_cast<VerticalAlign>(alignV));
+				return 0;
+			}
 
 			static int lua_addCollider(lua_State *L) {
 				Entity* entity = (Entity*)lua_touserdata(L, 1);
 				std::string tag = (std::string)lua_tostring(L, 2);
 				int width = (int)lua_tonumber(L, 3);
 				int height = (int)lua_tonumber(L, 4);
-
 				entity->addComponent<ColliderComponent>();
 				entity->getComponent<ColliderComponent>()->load(tag, width, height);
-
 				return 0;
 			}
 
 			static int lua_setCollideListener(lua_State *L) {
 				Entity* entity = (Entity*)lua_touserdata(L, 1);
 				std::string listener = (std::string)lua_tostring(L, 2);
-
 				entity->getComponent<ColliderComponent>()->setListener(listener);
-
 				return 0;
 			}
 
@@ -266,7 +283,6 @@ namespace Vigilant {
 				Entity* entity = (Entity*)lua_touserdata(L, 1);
 				float mass = (int)lua_tonumber(L, 2);
 				float frictionCoef = (int)lua_tonumber(L, 3);
-
 				entity->addComponent<PhysicsComponent>();
 				entity->getComponent<PhysicsComponent>()->setMass(mass);
 				entity->getComponent<PhysicsComponent>()->setFrictionCoefficient(frictionCoef);
@@ -277,7 +293,6 @@ namespace Vigilant {
 			static int lua_applyForceX(lua_State *L) {
 				Entity* entity = (Entity*)lua_touserdata(L, 1);
 				float force = (float)lua_tonumber(L, 2);
-
 				entity->getComponent<PhysicsComponent>()->applyForceX(force);
 				return 0;
 			}
@@ -285,7 +300,6 @@ namespace Vigilant {
 			static int lua_applyForceY(lua_State *L) {
 				Entity* entity = (Entity*)lua_touserdata(L, 1);
 				float force = (float)lua_tonumber(L, 2);
-
 				entity->getComponent<PhysicsComponent>()->applyForceY(force);
 				return 0;
 			}
@@ -323,9 +337,6 @@ namespace Vigilant {
             std::string fileName;
             // This identifies which table to get from lua ascript, dont like this for some reason
             std::string id;
-
-            bool collideListenerDefined;
-            bool inputListenerDefined;
     };
 }
 

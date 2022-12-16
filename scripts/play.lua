@@ -15,6 +15,9 @@
 -- Entity.setInputListener(funcName)
 -- Entity.addButton()
 -- Entity.setButtonListener(funcName)
+-- Entity.addLabel(x, y, text, fontId, r, g, b, a)
+-- Entity.setLabel(text)
+-- Entity.setLabelAlignment(enum horizontal, enum vertical)
 -- Entity.id()
 
 -- General Functions:
@@ -79,8 +82,9 @@ function onCollide(thisId, secondId)
 	-- end
 end
 
--- TODO: SDL key codes??
 function onInput(thisId, key)
+	-- Update player position label
+	playerPosLabel:setLabel("Player Position: "..math.floor(player:getX())..", "..math.floor(player:getY()))
 	-- W
 	if key == 119 then
 		-- Does nit work for some reason, sprite stays in the same place
@@ -121,12 +125,12 @@ function onMainMenuClick(thisId)
 	-- TODO: make this binding better, accept state id or ScreenState enum
 	changeState()
 end
-mainMenu = create()
-mainMenu:move((getScreenWidth() - 200)/2, 0)
-mainMenu:addSprite("mainmenubutton", "", 200, 80)
-mainMenu:setAbsolutePosition(true)
-mainMenu:addButton()
-mainMenu:setButtonListener("onMainMenuClick")
+mainMenuButton = create()
+mainMenuButton:move((getScreenWidth() - 200), 0)
+mainMenuButton:addSprite("mainmenubutton", "", 200, 80)
+mainMenuButton:setAbsolutePosition(true)
+mainMenuButton:addButton()
+mainMenuButton:setButtonListener("onMainMenuClick")
 
 -- Projectile template
 projectileTable = {
@@ -205,13 +209,14 @@ mapHeight = getMapHeight()
 screenWidth = getScreenWidth()
 screenHeight = getScreenHeight()
 
+playerPosLabel = create()
+-- ':' and ',' are displayed as squares because of the font!
+playerPosLabel:addLabel(10, 10, "Player Position: "..player:getX()..", "..player:getY(), "arcade", 0, 102, 204, 255)
+playerPosLabel:setLabelAlignment(0, 2)
+
 print("Map Width: "..mapWidth.."\nMap Height: "..mapHeight)
 print("Screen Width: "..screenWidth.."\nScreen Height: "..screenHeight)
-
 print("Player ID: "..player:id())
-print("Player X: "..player:getX())
-print("Player Y: "..player:getY())
-
 
 testEntity = create()
 testEntity:move(400, 400)
