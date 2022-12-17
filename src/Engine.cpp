@@ -12,6 +12,7 @@
 #include "ScrollingBackground.hpp"
 
 #include <string>
+#include <cstdio> // For sprintf
 #include "Logger.hpp"
 
 #include "ParticleSystem.hpp"
@@ -171,6 +172,11 @@ namespace Vigilant {
 			}
 
 			m_fps = frameLimiter.end();
+			// TODO: window title is currently isolated in init() method, we can drop that and load
+			// it from engine class instead using LuaScript?
+			char titleBuffer[32];
+			sprintf(titleBuffer, "Vigilant Engine Test. FPS: %f.2", m_fps);
+			m_window.setWindowTitle(titleBuffer);
 
 			//swap window buffer for less flickering
 			m_window.swapBuffer();
@@ -263,12 +269,12 @@ namespace Vigilant {
 	* @sa StateMachine
 	*/
 	void Engine::update(float deltaTime){
+		// update() method is used in engine render because it also renders particles
 		//ParticleSystem::Instance()->update(deltaTime);
 
 		for (auto& e: EntityManager::Instance()->getEntities()) {
 			// Find player and update camera
-			auto isPlayer = e->getComponent<InputComponent>();
-            if (isPlayer) {
+            if (e->hasComponent<InputComponent>()) {
                 TheEngine::Instance()->camera.x = e->transform->getX() - TheEngine::Instance()->camera.w/2;
                 TheEngine::Instance()->camera.y = e->transform->getY() - TheEngine::Instance()->camera.h/2;
                 break;
@@ -307,11 +313,8 @@ namespace Vigilant {
 				case ScreenState::EXIT_APPLICATION:
 					exit();
 					break;
-
-					// if NONE, do nothing
 				default:
 					break;
-
 			}
 		}
 		else { exit(); }
@@ -321,17 +324,13 @@ namespace Vigilant {
 
 		for (auto& e: EntityManager::Instance()->getEntities()) {
             // Chek each entity for collision against map tiles
-			 Collision::checkMapCollision(e, level->getCollidableLayers());
+			Collision::checkMapCollision(e, level->getCollidableLayers());
 
-			// FIXME: very inefficient because both player and projectile collision methods will
-			// traverse through entities and get similar components
-			auto isPlayer = e->getComponent<InputComponent>();
-			auto isProjectile = e->getComponent<ProjectileComponent>();
-			if (isPlayer) {
-				// Don't like this much looping.
-				// Causes big lag!! Tried reducing number of entities to around 50 but it still is a problem
+			if (e->hasComponent<InputComponent>()) {
+				// FPS DROP from 60 to 20 and below, caused by particle emitters in onCollide() listener in Lua
+				// Removing that and looks like this method does not cause massive lag anymore
 				Collision::checkPlayerEntityCollision(e, EntityManager::Instance()->getEntities());
-			} else if (isProjectile) {
+			} else if (e->hasComponent<ProjectileComponent>()) {
 				Collision::checkProjectileEntityCollision(e, EntityManager::Instance()->getEntities());
 			}
 		}
@@ -362,9 +361,9 @@ namespace Vigilant {
 				// Really don't like how you have to loop through all entities to find player, on the other hand player will
 				// be one of the first entities defined in lua
 				for (auto& e: EntityManager::Instance()->getEntities()) {
-					auto isPlayer = e->getComponent<InputComponent>();
-					if (isPlayer) {
-						ScriptEngine::Instance()->onInput(isPlayer->getListener(), e->id->get(), event.key.keysym.sym);
+					if (e->hasComponent<InputComponent>()) {
+						ScriptEngine::Instance()->onInput(e->getComponent<InputComponent>()->getListener(), e->id->get(), event.key.keysym.sym);
+						break;
 					}
 				}
 				if (event.key.keysym.sym == SDLK_BACKQUOTE)

@@ -4,7 +4,12 @@
 #include "LuaScript.hpp"
 
 #include "Entity.hpp"
+
+#include "SpriteComponent.hpp"
+#include "PhysicsComponent.hpp"
 #include "ProjectileComponent.hpp"
+#include "ColliderComponent.hpp"
+#include "InputComponent.hpp"
 #include "ButtonComponent.hpp"
 #include "UILabelComponent.hpp"
 

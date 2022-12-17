@@ -86,7 +86,8 @@ end
 function onCollide(thisId, secondId)
 	--entities[secondId]:scale(0.5, 0.5)
 	playSound("boom")
-	addParticleEmitter(entities[secondId]:getX(), entities[secondId]:getY(), "fire")
+	-- MASSIVE FPS DROPS HERE
+	--addParticleEmitter(entities[secondId]:getX(), entities[secondId]:getY(), "fire")
 	-- if object:type() == "enemy" then
 		-- player:damage(10)
 	-- end
