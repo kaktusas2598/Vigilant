@@ -66,6 +66,9 @@ namespace Vigilant {
         }
 
         ScriptEngine::Instance()->close();
+
+        EntityManager::Instance()->clean();
+
         TheEngine::Instance()->setLevel(nullptr);
     }
 }

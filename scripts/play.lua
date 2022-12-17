@@ -89,7 +89,7 @@ end
 function onCollide(thisId, secondId)
 	--entities[secondId]:scale(0.5, 0.5)
 	playSound("boom")
-	entities[secondId]:remove()
+	--entities[secondId]:remove()
 	-- MASSIVE FPS DROPS HERE
 	--addParticleEmitter(entities[secondId]:getX(), entities[secondId]:getY(), "fire")
 	-- if object:type() == "enemy" then

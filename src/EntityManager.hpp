@@ -41,6 +41,14 @@ namespace Vigilant {
                     e->draw(deltaTime);
             }
 
+            void clean() {
+				for (auto e : entities) {
+					delete e;
+				}
+				entities.clear();
+
+			}
+
             Entity* get(int id) const {
 				auto pos = entityMap.find(id);
 				if (pos == entityMap.end()) {

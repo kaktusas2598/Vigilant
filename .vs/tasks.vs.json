@@ -1,0 +1,62 @@
+{
+  "version": "0.2.1",
+  "tasks": [
+    {
+      "taskName": "task-makefile",
+      "appliesTo": "makefile",
+      "contextType": "build",
+      "command": "make",
+      "type": "launch",
+      "output": "${workspaceRoot}\\main.exe"
+    },
+    {
+      "type": "default",
+      "appliesTo": "*.cpp",
+      "taskName": "VigilantCompileTask",
+      "command": "C:\\msys64\\mingw64\\bin\\g++.exe",
+      "args": [
+        "*.cpp",
+        "src/*.cpp",
+        "src/include/imgui/*.cpp",
+        "-o",
+        "main",
+        "-IC:\\msys64\\mingw64\\include",
+        "-Isrc/include",
+        "-Lsrc/lib",
+        "-LC:\\msys64\\mingw64\\lib",
+        "-v",
+        //"-Wall",
+        "-g",
+        "-std=c++11",
+        "-std=c++14",
+        // "-fexceptions",
+        "-lmingw32",
+        "-lSDL2main",
+        "-lSDL2",
+        "-mwindows",
+        "-lglew32",
+        "-lopengl32",
+        "-lm",
+        "-lSDL2_image",
+        "-lSDL2_mixer",
+        "-lSDL2_ttf",
+        "-llua54"
+      ]
+      //"output": "${workspaceRoot}\\main.exe"
+    },
+    {
+      "type": "shell",
+      "taskName": "VigilantDebugTask",
+      "command": "${workspaceFolder}\\main.exe",
+      "output": "${workspaceRoot}\\main.exe",
+      "args": [],
+      "options": {
+        "cwd": "${workspaceRoot}"
+      },
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "group": "build"
+    }
+  ]
+}
