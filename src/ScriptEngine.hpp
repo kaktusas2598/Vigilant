@@ -18,6 +18,7 @@
 #include "Engine.hpp"
 #include "IGameState.hpp"
 #include "ParticleSystem.hpp"
+#include "EntityManager.hpp"
 
 #include <string>
 
@@ -48,6 +49,8 @@ namespace Vigilant {
             }
 
             // Scripts will probably not run every frame so this will be empty method
+			// Maybe this could be used to limit insane amount of times onCollide() event is triggered?
+			//
             void update(float deltaTime);
 
             // Setup metatables and bind c++ methods
@@ -118,10 +121,17 @@ namespace Vigilant {
 			}
 
 
-
+			// Allocates new user data and sends reference to EntityManager
 			static int lua_createEntity(lua_State *L);
-
+			// Lua __gc and removes reference from EntityManager
 			static int lua_destroyEntity(lua_State *L);
+
+			// Manual remove from entity manager array
+			static int lua_removeEntity(lua_State *L) {
+				Entity* entity = (Entity*)lua_touserdata(L, -1);
+				EntityManager::Instance()->remove(entity->id->get());
+				return 0;
+			}
 
 			static int lua_entityId(lua_State *L) {
 				Entity* entity = (Entity*)lua_touserdata(L, -1);

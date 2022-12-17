@@ -63,6 +63,9 @@ namespace Vigilant {
         // Set methods for Entity table
         lua_pushcfunction(state, lua_createEntity);
         lua_setfield(state, -2 , "create");
+        lua_pushcfunction(state, lua_removeEntity);
+        lua_setfield(state, -2 , "remove");
+
         lua_pushcfunction(state, lua_entityId);
         lua_setfield(state, -2 , "id");
         lua_pushcfunction(state, lua_teleportEntity);
