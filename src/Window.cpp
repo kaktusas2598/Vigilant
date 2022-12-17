@@ -23,13 +23,13 @@ namespace Vigilant {
 		}
 		if (currentFlags & FULLSCREEN) {
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
-		}
+                }
 		if (currentFlags & BORDERLESS) {
 			flags |= SDL_WINDOW_BORDERLESS;
 		}
-
-		flags |= SDL_WINDOW_RESIZABLE;
-
+		if (currentFlags & SDL_WINDOW_RESIZABLE) {
+                    flags |= SDL_WINDOW_RESIZABLE;
+                }
 
 		//Use OpenGL 3.1 core
 		SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 3 );

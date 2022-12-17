@@ -3,9 +3,9 @@ rendering = {
 }
 window = {
 	title = "Vigilant Engine Test",
-	width = 800,
-	height = 600,
+	width = 1024, --800,
+	height = 768, --600,
 	fullscreen = false,
 	borderless = false,
-	resizeable = true
+	resizable = true
 }
