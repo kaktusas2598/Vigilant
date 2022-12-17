@@ -72,6 +72,11 @@
             "cwd": "c:\\Users\\nerij\\Desktop\\Vigilant",
             "binaryPath": "c:\\Users\\nerij\\Desktop\\Vigilant\\main",
             "binaryArgs": []
+        },
+        {
+            "cwd": "c:\\code\\Vigilant",
+            "binaryPath": "c:\\code\\Vigilant\\main",
+            "binaryArgs": []
         }
     ]
 }

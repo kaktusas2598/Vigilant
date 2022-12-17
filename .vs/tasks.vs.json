@@ -11,9 +11,10 @@
     },
     {
       "type": "default",
-      "appliesTo": "*.cpp",
-      "taskName": "VigilantCompileTask",
+      "appliesTo": "/",
+      "taskName": "Build",
       "command": "C:\\msys64\\mingw64\\bin\\g++.exe",
+      //"output": "${workspaceRoot}\\main.exe"
       "args": [
         "*.cpp",
         "src/*.cpp",
@@ -26,7 +27,7 @@
         "-LC:\\msys64\\mingw64\\lib",
         "-v",
         //"-Wall",
-        "-g",
+        "-g", // Collect debug symbols
         "-std=c++11",
         "-std=c++14",
         // "-fexceptions",
@@ -42,7 +43,6 @@
         "-lSDL2_ttf",
         "-llua54"
       ]
-      //"output": "${workspaceRoot}\\main.exe"
     },
     {
       "type": "shell",
