@@ -52,9 +52,7 @@ namespace Vigilant {
 			//}
 
             static void checkProjectileEntityCollision(Entity* projectile, const std::vector<Entity*> entities) {
-            	// TODO: implement
-            	// Sane as playerEntityCollision but need to call event not for entity, but ENtity* shooter
-            	// Or another event?
+            	// Sane as playerEntityCollision but need to call event not for entity, but Entity* shooter
 				// This is tempporary because lua wont know if player collided with entity or players projectile
 				// Also npcs will not be able to create projectiles themselves
 				Entity* owner = projectile->getComponent<ProjectileComponent>()->getShooter();
@@ -67,10 +65,9 @@ namespace Vigilant {
 				};
 
                 for (auto &entity : entities) {
-                	auto isProjectile = entity->getComponent<ProjectileComponent>();
-                	auto isPlayer = entity->getComponent<InputComponent>();
-                	if (isProjectile || isPlayer)
-                		continue;
+                    // Projectile won't collide with other projectiles or player for now
+                    if (entity->hasComponent<ProjectileComponent>() || entity->hasComponent<InputComponent>())
+                        continue;
 
                 	auto entityCollider = entity->getComponent<ColliderComponent>();
                 	auto entitySprite = entity->getComponent<SpriteComponent>();
@@ -101,14 +98,13 @@ namespace Vigilant {
 				auto playerSprite = player->getComponent<SpriteComponent>();
 
                 for (auto &entity : entities) {
+                    // Player won't collide with himself or any projectiles for now
+                    if(entity->hasComponent<InputComponent>() || entity->hasComponent<ProjectileComponent>())
+                        continue;
+
 					auto collider = entity->getComponent<ColliderComponent>();
 					auto sprite = entity->getComponent<SpriteComponent>();
-					auto isPlayer = entity->getComponent<InputComponent>();
-					auto projectile = entity->getComponent<ProjectileComponent>();
-					// For now player will not colide wiht projectiles
-					if (isPlayer || projectile) {
-						continue;
-					}
+
 					if (collider && sprite) {
 						// BROAD PHASE
 						// Try to dismiss some entities earlier for performance?
