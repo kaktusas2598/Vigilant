@@ -13,6 +13,8 @@ namespace Vigilant {
         public:
             TileLayer(int tilesize, double scale, const std::vector<TileSet> &tilesets);
 
+            // Calculates number of tile rows and columns shown on screen, can be called on window resize event too
+            void init();
             virtual void update();
             virtual void render();
 

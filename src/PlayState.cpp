@@ -71,5 +71,6 @@ namespace Vigilant {
         EntityManager::Instance()->clean();
 
         TheEngine::Instance()->setLevel(nullptr);
+        delete level;
     }
 }

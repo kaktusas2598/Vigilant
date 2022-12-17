@@ -18,18 +18,18 @@ namespace Vigilant {
 			flags = SDL_WINDOW_OPENGL;
 		}
 
-		if (currentFlags & INVISIBLE)
-		{
+		if (currentFlags & INVISIBLE) {
 			flags |= SDL_WINDOW_HIDDEN;
 		}
-		if (currentFlags & FULLSCREEN)
-		{
+		if (currentFlags & FULLSCREEN) {
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 		}
-		if (currentFlags & BORDERLESS)
-		{
+		if (currentFlags & BORDERLESS) {
 			flags |= SDL_WINDOW_BORDERLESS;
 		}
+
+		flags |= SDL_WINDOW_RESIZABLE;
+
 
 		//Use OpenGL 3.1 core
 		SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 3 );

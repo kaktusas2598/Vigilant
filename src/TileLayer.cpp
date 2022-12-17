@@ -8,6 +8,10 @@
 
 namespace Vigilant {
     TileLayer::TileLayer (int tilesize, double scale, const std::vector<TileSet> &tilesets) : tileSize(tilesize), scale(scale), tileSets(tilesets), position(0,0), velocity(0,0), isVisible(true) {
+        init();
+    }
+
+    void TileLayer::init() {
         // Number of tile columns and rows needed to fill the screen
         // Adding 2 to each fixes gaps in rendering at the far sides of the screen, but TileLayer and collision system needs to check array bounds
         numColumns = TheEngine::Instance()->getScreenWidth() / (tileSize * scale) + 2;

@@ -393,6 +393,21 @@ namespace Vigilant {
 			default:
 				break;
 		}
+		switch (event.window.event) {
+			case SDL_WINDOWEVENT_SIZE_CHANGED:
+				screenWidth = camera.w = event.window.data1;
+				screenHeight = camera.h = event.window.data2;
+				// TODO: recalculate button positions
+				if (level != nullptr) {
+					for (auto it = level->getLayers()->begin(); it != level->getLayers()->end(); ++it) {
+						(*it)->init();
+					}
+				}
+				//SDL_RenderPresent( m_window.getSDLRenderer() );
+				break;
+			default:
+				break;
+		}
 	}
 
 	void Engine::exit(){

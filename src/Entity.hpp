@@ -41,10 +41,9 @@ namespace Vigilant {
 					c->render();
 				}
 			}
-			// Deprecated
+
             virtual void clean() {
-				// Ok this was silly of me, array has 32 elements  so deletion is a bad idea
-				//for (auto& c: componentArray) { delete c;}
+				for (auto& c: components) { c.reset(); }
 				components.clear();
             }
 			// Deprecated
@@ -138,7 +137,7 @@ namespace Vigilant {
 			// not a good idea
 			virtual ~Entity(){
 				std::cout << "Entity Destructor called\n";
-				for (auto& c: componentArray) { delete c;}
+				for (auto& c: components) { c.reset(); }
 				components.clear();
 			}
 		private:

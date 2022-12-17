@@ -5,9 +5,10 @@ namespace Vigilant {
 
     class Layer {
         public:
+            virtual void init() {};
             virtual void update() = 0;
             virtual void render() = 0;
-        protected:
+        //protected:
             virtual ~Layer() {}
     };
 }
