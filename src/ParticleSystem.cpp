@@ -34,28 +34,48 @@ namespace Vigilant {
 						data.angleRange.setY(max);
 					}
 					if(property->Value() == std::string("rotSpeed")) {
-						double rotSpeed;
+						double rotSpeed, min, max;
 						property->Attribute("value", &rotSpeed);
+						property->Attribute("randMin", &min);
+						property->Attribute("randMax", &max);
 						data.rotSpeed = rotSpeed;
+						data.rotSpeedRand.setX(min);
+						data.rotSpeedRand.setY(max);
 					}
 					if(property->Value() == std::string("startSpeed")) {
-						double startSpeed;
+						double startSpeed, min, max;
 						property->Attribute("value", &startSpeed);
+                                                property->Attribute("randMin", &min);
+						property->Attribute("randMax", &max);
 						data.startSpeed = startSpeed;
+                                                data.startSpeedRand.setX(min);
+						data.startSpeedRand.setY(max);
 					}
 					if(property->Value() == std::string("endSpeed")) {
-						double endSpeed;
+						double endSpeed, min, max;
 						property->Attribute("value", &endSpeed);
+                                                property->Attribute("randMin", &min);
+						property->Attribute("randMax", &max);
 						data.endSpeed = endSpeed;
+                                                data.endSpeedRand.setX(min);
+						data.endSpeedRand.setY(max);
 					}
 					if(property->Value() == std::string("startSize")) {
-						double startSize;
+						double startSize, min, max;
 						property->Attribute("value", &startSize);
+						property->Attribute("randMin", &min);
+						property->Attribute("randMax", &max);
 						data.startSize = startSize;
+                                                data.startSizeRand.setX(min);
+						data.startSizeRand.setY(max);
 					}
 					if(property->Value() == std::string("endSize")) {
-						double endSize;
+						double endSize, min, max;
 						property->Attribute("value", &endSize);
+						property->Attribute("randMin", &min);
+						property->Attribute("randMax", &max);
+                                                data.endSizeRand.setX(min);
+						data.endSizeRand.setY(max);
 						data.endSize = endSize;
 					}
 					if(property->Value() == std::string("emitNumber")) {
@@ -64,13 +84,21 @@ namespace Vigilant {
 						data.emitNumber = emitNumber;
 					}
 					if(property->Value() == std::string("emitVariance")) {
-						double emitVariance;
+						double emitVariance, min, max;
 						property->Attribute("value", &emitVariance);
+						property->Attribute("randMin", &min);
+						property->Attribute("randMax", &max);
+                                                data.emitVarianceRand.setX(min);
+						data.emitVarianceRand.setY(max);
 						data.emitVariance = emitVariance;
 					}
 					if(property->Value() == std::string("maxParticleLife")) {
-						double maxParticleLife;
+						double maxParticleLife, min, max;
 						property->Attribute("value", &maxParticleLife);
+						property->Attribute("randMin", &min);
+						property->Attribute("randMax", &max);
+                                                data.lifeRand.setX(min);
+						data.lifeRand.setY(max);
 						data.maxParticleLife = maxParticleLife;
 					}
 					if(property->Value() == std::string("textureRect")) {

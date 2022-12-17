@@ -89,9 +89,11 @@ end
 function onCollide(thisId, secondId)
 	--entities[secondId]:scale(0.5, 0.5)
 	playSound("boom")
-	--entities[secondId]:remove()
-	-- MASSIVE FPS DROPS HERE
-	--addParticleEmitter(entities[secondId]:getX(), entities[secondId]:getY(), "fire")
+        entities[secondId]:remove()
+	-- MASSIVE FPS DROPS HERE if calling this without removing second entity to stop collision dispatches
+        for i = 0, 20 do
+            addParticleEmitter(entities[secondId]:getX(), entities[secondId]:getY(), "fire")
+        end
 	-- if object:type() == "enemy" then
 		-- player:damage(10)
 	-- end

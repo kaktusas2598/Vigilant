@@ -63,10 +63,8 @@ namespace Vigilant {
 
 	void Emitter::update(float deltaTime) {
 		if (active) {
-
 			// Particle generation from pool
-			// TODO: load rand tanges from xml
-			emissionRate = (int)(emitNumber + emitVariance ); //* rangeRandomNum(emitVarianceRand.getX(), emitVarianceRand.getY()));
+			emissionRate = (int)(emitNumber + emitVariance * rangeRandomNum(emitVarianceRand.getX(), emitVarianceRand.getY()));
 
 			for (int i = 1; i <= emissionRate; i++) {
 				float tmpStartSpeed = startSpeed * rangeRandomNum(startSpeedRand.getX(), startSpeedRand.getY());
@@ -115,6 +113,4 @@ namespace Vigilant {
 			ParticleSystem::Instance()->destroyEmitter(this);
 		}
 	}
-
 }
-
