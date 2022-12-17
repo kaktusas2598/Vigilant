@@ -40,6 +40,7 @@ namespace Vigilant {
 		// to avoid double freeing of same memory, so we don't need to call destructor explicitly
 		// Tried maping entities with ids using map in entity manager but could not get that to work
 		EntityManager::Instance()->remove(entity->id->get());
+		entity->clean();
 
 		return 0;
 	}

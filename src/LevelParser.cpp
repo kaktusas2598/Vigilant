@@ -16,7 +16,7 @@
 
 namespace Vigilant {
 
-    Level* LevelParser::parseLevel(const char* levelFile) {
+    Level* LevelParser::parseLevel(const char* levelFile, std::vector<std::string> *pTextureIDs) {
         TiXmlDocument levelDoc;
         levelDoc.LoadFile(levelFile);
 
@@ -27,7 +27,7 @@ namespace Vigilant {
         root->Attribute("tilewidth", &tileSize);
         root->Attribute("width", &width);
         root->Attribute("height", &height);
-	    
+
         scale = 1.0f;
 
         // Parse properties for entity texture sources

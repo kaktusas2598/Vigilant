@@ -4,7 +4,7 @@
 namespace Vigilant {
 
     SoundManager* SoundManager::s_pInstance = 0;
-    
+
     SoundManager::SoundManager() {
         // (int frequency, Uint16 format, int channels, int chunksize)
         Mix_OpenAudio(22050, AUDIO_S16, 2, 4096);
@@ -42,5 +42,16 @@ namespace Vigilant {
 
     void SoundManager::playMusic(std::string id, int loop) {
         Mix_PlayMusic(musicMap[id], loop);
+    }
+
+    void SoundManager::cleanSoundMaps() {
+        for (const auto& soundPair: sFXMap) {
+            Mix_FreeChunk(sFXMap[soundPair.first]);
+        }
+        sFXMap.clear();
+        for (const auto& soundPair: musicMap) {
+            Mix_FreeMusic(musicMap[soundPair.first]);
+        }
+        musicMap.clear();
     }
 }

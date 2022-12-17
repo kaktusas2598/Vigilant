@@ -42,7 +42,11 @@ namespace Vigilant {
 				}
 			}
 			// Deprecated
-            virtual void clean() {}
+            virtual void clean() {
+				// Ok this was silly of me, array has 32 elements  so deletion is a bad idea
+				//for (auto& c: componentArray) { delete c;}
+				components.clear();
+            }
 			// Deprecated
 			virtual void load(const LoaderParams *params) {}
 
@@ -130,7 +134,13 @@ namespace Vigilant {
 			TransformComponent* transform;
 			IdComponent* id;
 
-			~Entity(){}
+			// I mean won't be called anyway, because calling this explicitely in lua's __gc is
+			// not a good idea
+			virtual ~Entity(){
+				std::cout << "Entity Destructor called\n";
+				for (auto& c: componentArray) { delete c;}
+				components.clear();
+			}
 		private:
 			std::vector<std::shared_ptr<Component>> components;
 			bool alive = true;

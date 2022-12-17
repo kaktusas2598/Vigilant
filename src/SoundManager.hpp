@@ -23,6 +23,7 @@ namespace Vigilant {
             }
 
             bool load(std::string fileName, std::string id, SoundType type);
+            void cleanSoundMaps();
 
             void playSound(std::string id, int loop);
             void playMusic(std::string id, int loop);

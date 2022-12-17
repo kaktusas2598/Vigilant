@@ -6,10 +6,10 @@
 #include "LevelParser.hpp"
 #include "StateMachine.hpp"
 #include "TextureManager.hpp"
+#include "SoundManager.hpp"
 #include "EntityManager.hpp"
 #include <vector>
-
-#include "Collision.hpp"
+#include "ScriptEngine.hpp"
 
 namespace Vigilant {
 
@@ -22,7 +22,7 @@ namespace Vigilant {
             TheEngine::Instance()->getStateMachine()->getCurrentState()->setScreenState(ScreenState::CHANGE_NEXT);
         }
 
-		// Make sure camera doesn't go out of bounds of map
+        // Make sure camera doesn't go out of bounds of map
         if (TheEngine::Instance()->camera.x < 0) {
             TheEngine::Instance()->camera.x = 0;
         }
@@ -38,7 +38,7 @@ namespace Vigilant {
         }
 
         //if (TheEngine::Instance()->camera.y > TheEngine::Instance()->camera.h) {
-		if (TheEngine::Instance()->camera.y > (level->getHeight() - TheEngine::Instance()->camera.h)) {
+        if (TheEngine::Instance()->camera.y > (level->getHeight() - TheEngine::Instance()->camera.h)) {
             //TheEngine::Instance()->camera.y = TheEngine::Instance()->camera.h;
             TheEngine::Instance()->camera.y = level->getHeight() - TheEngine::Instance()->camera.h;
         }
@@ -51,7 +51,7 @@ namespace Vigilant {
     void PlayState::onEntry() {
         LevelParser levelParser;
         // TODO: implement level loading without hardcoding name
-        level = levelParser.parseLevel("map.tmx");
+        level = levelParser.parseLevel("map.tmx", &textureIDs);
         TheEngine::Instance()->setLevel(level);
 
         StateParser stateParser;
@@ -64,6 +64,7 @@ namespace Vigilant {
         for(size_t i = 0; i < textureIDs.size(); i++) {
             TheTextureManager::Instance()->clearFromTextureMap(textureIDs[i]);
         }
+        SoundManager::Instance()->cleanSoundMaps();
 
         ScriptEngine::Instance()->close();
 
