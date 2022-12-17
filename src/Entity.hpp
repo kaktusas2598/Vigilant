@@ -31,15 +31,14 @@ namespace Vigilant {
 			}
 
 			virtual void update(float deltaTime) {
-				// or for (auto& c: components)
-				for(int i = components.size() - 1; i >= 0; i--) {
-					components[i]->preUpdate(deltaTime);
-					components[i]->update(deltaTime);
+				for (auto& c: components) {
+					c->preUpdate(deltaTime);
+					c->update(deltaTime);
 				}
 			}
 			virtual void draw(float deltaTime) {
-				for(int i = components.size() - 1; i >= 0; i--) {
-					components[i]->render();
+				for (auto& c: components) {
+					c->render();
 				}
 			}
 			// Deprecated

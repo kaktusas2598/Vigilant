@@ -47,76 +47,76 @@ namespace Vigilant {
                 return true;
             }
 
-			//static bool checkEntityOnEntityCollision(Entity* actor, const std::vector<std::shared_ptr<Entity>>& entities) {
-				//return false;
-			//}
+            //static bool checkEntityOnEntityCollision(Entity* actor, const std::vector<std::shared_ptr<Entity>>& entities) {
+                //return false;
+            //}
 
             static void checkProjectileEntityCollision(Entity* projectile, const std::vector<Entity*> entities) {
-            	// Sane as playerEntityCollision but need to call event not for entity, but Entity* shooter
-				// This is tempporary because lua wont know if player collided with entity or players projectile
-				// Also npcs will not be able to create projectiles themselves
-				Entity* owner = projectile->getComponent<ProjectileComponent>()->getShooter();
-				auto sprite = projectile->getComponent<SpriteComponent>();
-				SDL_Rect collider{
-					int(projectile->transform->getX()),
-					int(projectile->transform->getY()),
-					int(sprite->getWidth() * owner->transform->getScaleX()),
-					int(sprite->getHeight() * owner->transform->getScaleY())
-				};
+                // Sane as playerEntityCollision but need to call event not for entity, but Entity* shooter
+                // This is tempporary because lua wont know if player collided with entity or players projectile
+                // Also npcs will not be able to create projectiles themselves
+                Entity* owner = projectile->getComponent<ProjectileComponent>()->getShooter();
+                auto sprite = projectile->getComponent<SpriteComponent>();
+                SDL_Rect collider{
+                    int(projectile->transform->getX()),
+                    int(projectile->transform->getY()),
+                    int(sprite->getWidth() * owner->transform->getScaleX()),
+                    int(sprite->getHeight() * owner->transform->getScaleY())
+                };
 
                 for (auto &entity : entities) {
                     // Projectile won't collide with other projectiles or player for now
                     if (entity->hasComponent<ProjectileComponent>() || entity->hasComponent<InputComponent>())
                         continue;
 
-                	auto entityCollider = entity->getComponent<ColliderComponent>();
-                	auto entitySprite = entity->getComponent<SpriteComponent>();
-                	if (entityCollider == 0 || entitySprite == 0)
-                		continue;
+                    auto entityCollider = entity->getComponent<ColliderComponent>();
+                    auto entitySprite = entity->getComponent<SpriteComponent>();
+                    if (entityCollider == 0 || entitySprite == 0)
+                        continue;
 
-					// BROAD PHASE on X axis only
-					if (entity->transform->getX() > projectile->transform->getX() + sprite->getWidth() * projectile->transform->getScaleX() ||
-							entity->transform->getX() + entitySprite->getWidth() * entity->transform->getScaleX() < projectile->transform->getX()) {
-						continue;
-					}
+                    // BROAD PHASE on X axis only
+                    if (entity->transform->getX() > projectile->transform->getX() + sprite->getWidth() * projectile->transform->getScaleX() ||
+                            entity->transform->getX() + entitySprite->getWidth() * entity->transform->getScaleX() < projectile->transform->getX()) {
+                        continue;
+                    }
 
-					// NARROW PHASE
-					if(AABB(collider, entityCollider->getCollider())) {
-						std::cout << "Projectile and entity collision detected" << std::endl;
-						std::string listener = owner->getComponent<ColliderComponent>()->getListener();
-						ScriptEngine::Instance()->onCollide(listener, owner->id->get(), entity->id->get());
-					}
-				}
-			}
-			//static void checkPlayerEntityCollision(Entity* player, const std::vector<Entity*> entities) {
-				//if (checkEntityOnEntityCollision(player, entities)) {
-				//}
-			//}
+                    // NARROW PHASE
+                    if(AABB(collider, entityCollider->getCollider())) {
+                        std::cout << "Projectile and entity collision detected" << std::endl;
+                        std::string listener = owner->getComponent<ColliderComponent>()->getListener();
+                        ScriptEngine::Instance()->onCollide(listener, owner->id->get(), entity->id->get());
+                    }
+                }
+            }
+            //static void checkPlayerEntityCollision(Entity* player, const std::vector<Entity*> entities) {
+                //if (checkEntityOnEntityCollision(player, entities)) {
+                //}
+            //}
 
             static void checkPlayerEntityCollision(Entity* player, const std::vector<Entity*>& entities) {
-				auto playerCollider = player->getComponent<ColliderComponent>();
-				auto playerSprite = player->getComponent<SpriteComponent>();
+                auto playerCollider = player->getComponent<ColliderComponent>();
+                auto playerSprite = player->getComponent<SpriteComponent>();
 
                 for (auto &entity : entities) {
                     // Player won't collide with himself or any projectiles for now
                     if(entity->hasComponent<InputComponent>() || entity->hasComponent<ProjectileComponent>())
                         continue;
 
-					auto collider = entity->getComponent<ColliderComponent>();
-					auto sprite = entity->getComponent<SpriteComponent>();
+                    auto collider = entity->getComponent<ColliderComponent>();
+                    auto sprite = entity->getComponent<SpriteComponent>();
 
-					if (collider && sprite) {
-						// BROAD PHASE
-						// Try to dismiss some entities earlier for performance?
-						// This dumb check I made surprisingly fixes performance lag caused by calling this method with entities
-						// created from Lua and held by EntityManager
-						if (entity->transform->getX() > player->transform->getX() + playerSprite->getWidth() * player->transform->getScaleX() ||
-							entity->transform->getX() + sprite->getWidth() * entity->transform->getScaleX() < player->transform->getX()) {
-							continue;
-						}
+                    if (collider && sprite) {
+                        // BROAD PHASE
+                        // Try to dismiss some entities earlier for performance?
+                        // This dumb check I made surprisingly fixes performance lag caused by calling this method with entities
+                        // created from Lua and held by EntityManager
+                        if (entity->transform->getX() > player->transform->getX() + playerSprite->getWidth() * player->transform->getScaleX() ||
+                            entity->transform->getX() + sprite->getWidth() * entity->transform->getScaleX() < player->transform->getX()) {
+                            continue;
+                        }
 
-						// NARROW PHASE
-						if(AABB(playerCollider->getCollider(), collider->getCollider())) {
+                        // NARROW PHASE
+                        if(AABB(playerCollider->getCollider(), collider->getCollider())) {
                             // Resolve rigid bodies
                             // TODO: need better algorithm here, also player affects entity, but entity also should affect
                             // player because currently player will just fly through entity,
@@ -124,33 +124,33 @@ namespace Vigilant {
                             auto playerBody = player->getComponent<PhysicsComponent>();
                             auto entityBody = entity->getComponent<PhysicsComponent>();
                             if (entityBody) {
-								// 1st try, horrible, player is not affected at all here
-								entityBody->applyForceX(playerBody->getAccelerationX() * playerBody->getMass());
-								entityBody->applyForceY(playerBody->getAccelerationY() * playerBody->getMass());
+                                // 1st try, horrible, player is not affected at all here
+                                entityBody->applyForceX(playerBody->getAccelerationX() * playerBody->getMass());
+                                entityBody->applyForceY(playerBody->getAccelerationY() * playerBody->getMass());
 
-								// 2nd try using 1D Newtonian Elastic Collision
+                                // 2nd try using 1D Newtonian Elastic Collision
                                 // m1v11 * m2v21 = m1v12 * m2v22
                                 // v12 = (m1 - m2)(m1 + m2)*v11 + 2m2/(m1+m2)*v2
                                 // v22 = 2m1/(m1 + m2)*v11 + (m2 - m1)/(m1+m2)*v2
-								// Velocity after collision
+                                // Velocity after collision
                                 //Vector2D nPVelocity = (pMass - eMass) / (pMass + eMass) * pVelocity + (2 * eMass) / (pMass + eMass) * eVelocity;
                                 //Vector2D nEVelocity = (2 * pMass) / (pMass + eMass) * pVelocity + (pMass - eMass) / (pMass + eMass) * eVelocity;
-								//playerBody->setVelocity(pNewVelocity);
-								//entityBody->setVelocity(eNewVelocity);
+                                //playerBody->setVelocity(pNewVelocity);
+                                //entityBody->setVelocity(eNewVelocity);
 
                                 // 3rd try
-								//Vector2D finalVelocity = playerBody->getVelocity() * playerBody->getMass();
-								//finalVelocity /= (playerBody->getMass() + entityBody->getMass());
-								// Does not do anything at all it seems
-								//playerBody->setVelocity(finalVelocity);
-								//entityBody->setVelocity(finalVelocity);
-							}
+                                //Vector2D finalVelocity = playerBody->getVelocity() * playerBody->getMass();
+                                //finalVelocity /= (playerBody->getMass() + entityBody->getMass());
+                                // Does not do anything at all it seems
+                                //playerBody->setVelocity(finalVelocity);
+                                //entityBody->setVelocity(finalVelocity);
+                            }
 
-							// std::cout << "Player and entity collision detected" << std::endl;
-							std::string listener = playerCollider->getListener();
-							ScriptEngine::Instance()->onCollide(listener, player->id->get(), entity->id->get());
-						}
-					}
+                            // std::cout << "Player and entity collision detected" << std::endl;
+                            std::string listener = playerCollider->getListener();
+                            ScriptEngine::Instance()->onCollide(listener, player->id->get(), entity->id->get());
+                        }
+                    }
 
                 }
             }
@@ -164,14 +164,14 @@ namespace Vigilant {
                 auto projectile = entity->getComponent<ProjectileComponent>();
                 int origX, origY;
                 if (physics) {
-					origX = physics->getPreviousPosition().getX();
-					origY = physics->getPreviousPosition().getY();
-				} else if (projectile) {
-					origX = entity->transform->getX();
-					origY = entity->transform->getY();
-				} else {
-					return;
-				}
+                    origX = physics->getPreviousPosition().getX();
+                    origY = physics->getPreviousPosition().getY();
+                } else if (projectile) {
+                    origX = entity->transform->getX();
+                    origY = entity->transform->getY();
+                } else {
+                    return;
+                }
                 // Projectiles: Sprite, Collider, Projectile
                 // Actors: Sprite, Collider, Physics
                 if ( sprite == 0 || collider == 0) {
@@ -201,16 +201,16 @@ namespace Vigilant {
                     }
 
                     if (entityX > 0 && entityY > 0) {
-						// FIXME: collision only works if going down or to the left so if velocity is positive
+                        // FIXME: collision only works if going down or to the left so if velocity is positive
                         if (velocityX >= 0 || velocityY >= 0) {
                             tileColumn = ((entityX + width) / (tileLayer->getTileSize() * tileLayer->getScale()));
                             tileRow = ((entityY + height) / (tileLayer->getTileSize() * tileLayer->getScale()));
-							if (tileRow < tileLayer->getMapHeight() && tileColumn < tileLayer->getMapWidth())
+                            if (tileRow < tileLayer->getMapHeight() && tileColumn < tileLayer->getMapWidth())
                                 tileid = tiles[tileRow][tileColumn];
                         } else if(velocityX < 0 || velocityY < 0) {
                             tileColumn = entityX / (tileLayer->getTileSize() * tileLayer->getScale());
                             tileRow = entityY / (tileLayer->getTileSize() * tileLayer->getScale());
-							if (tileRow < tileLayer->getMapHeight() && tileColumn < tileLayer->getMapWidth())
+                            if (tileRow < tileLayer->getMapHeight() && tileColumn < tileLayer->getMapWidth())
                                 tileid = tiles[tileRow][tileColumn];
                         }
                     }
@@ -221,7 +221,7 @@ namespace Vigilant {
                         entity->transform->setY(origY);
                         // Reversing velocities is not a good solution for collision resolution
                         if (physics) {
-						    entity->getComponent<PhysicsComponent>()->setVelocityX(0);
+                            entity->getComponent<PhysicsComponent>()->setVelocityX(0);
                             entity->getComponent<PhysicsComponent>()->setVelocityY(0);
                         } else if (projectile) {
                             entity->destroy(); // Destroy projectiles so that they don't go through walls
