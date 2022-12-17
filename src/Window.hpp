@@ -56,6 +56,7 @@ namespace Vigilant {
 			SDL_Window* getSDLWindow() { return m_pWindow; } ///< SDL_Window pointer getter
 			SDL_Renderer* getSDLRenderer() { return renderer; } ///<Optional SDL_Renderer getter
 			void setSDLRendering(bool sdlRenderingEnabled) { GLContextEnabled =  !sdlRenderingEnabled; }
+			void setWindowTitle(const char* title);
 
 		private:
 

@@ -112,4 +112,7 @@ namespace Vigilant {
 		}
 	}
 
+	void Window::setWindowTitle(const char* title) {
+		SDL_SetWindowTitle(m_pWindow, title);
+	}
 }
