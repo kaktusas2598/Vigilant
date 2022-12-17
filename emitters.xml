@@ -15,4 +15,21 @@
 		<blendMode mode ="add"/>
 		<lifetime value ="-1"/>
 	</emitter>
-</emitters>
+        <emitter type ="burst">
+            <angleRange min ="0" max ="360"/>
+            <rotSpeed value ="1" randMin ="-1" randMax ="1"/>
+            <startSpeed value ="300" randMin ="0" randMax ="1"/>
+            <endSpeed value ="300" randMin ="0" randMax ="1"/>
+            <startSize value ="20" randMin ="0" randMax ="1"/>
+            <endSize value =" 100" randMin ="1" randMax ="1"/>
+            <emitNumber value ="60"/>
+            <emitVariance value ="80" randMin ="0" randMax ="1"/>
+            <maxParticleLife value ="150" randMin ="0" randMax ="1"/>
+            <textureRect x="0" y="0" w="16" h="16"/>
+            <startColor r ="255" g="100" b="0" a="255"/>
+            <endColor r ="210" g="210" b="210" a ="0"/>
+            <blendMode mode ="add"/>
+            <lifetime value ="50"/>
+            <vortexSensitive state = "true"/>
+        </emitter>
+    </emitters>
