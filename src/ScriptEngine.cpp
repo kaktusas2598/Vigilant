@@ -110,6 +110,9 @@ namespace Vigilant {
         lua_pushcfunction(state, lua_setButtonListener);
         lua_setfield(state, -2 , "setButtonListener");
 
+        lua_pushcfunction(state, lua_addBackground);
+        lua_setfield(state, -2 , "addBackground");
+
         lua_pushcfunction(state, lua_addLabel);
         lua_setfield(state, -2 , "addLabel");
         lua_pushcfunction(state, lua_setLabel);

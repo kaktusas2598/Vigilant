@@ -68,6 +68,7 @@ namespace Vigilant {
             void setWidth(int w) { width = w; }
             void setHeight(int h) { height = h; }
             void setTextureID(const std::string& id) { textureID = id; }
+            const std::string& getTextureID() { return textureID; }
             void setAnimated(bool animate) { isAnimated = animate; }
             void setFlipped(bool flip) { isFlipped = flip; }
 

@@ -8,8 +8,6 @@
 #include "MainMenuState.hpp"
 #include "PlayState.hpp"
 
-#include "ScrollingBackground.hpp"
-
 #include <string>
 #include <cstdio> // For sprintf
 #include "Logger.hpp"
@@ -89,9 +87,6 @@ namespace Vigilant {
 			Logger::Instance()->info("Setting up SDL renderer.");
 			TheTextureManager::Instance()->setRenderer(m_window.getSDLRenderer());
 		}
-
-		// TODO: get rid of these and implement using ECS
-		TheEntityFactory::Instance()->registerType("ScrollingBackground", new ScrollingBackgroundCreator());
 
 		//initialize the current game
 		// onInit();

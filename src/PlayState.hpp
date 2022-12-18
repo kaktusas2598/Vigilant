@@ -4,12 +4,10 @@
 #include <vector>
 
 #include "IGameState.hpp"
-#include "SDLEntity.hpp"
 #include "Level.hpp"
 
-#include "Engine.hpp"
-
 namespace Vigilant {
+
     class PlayState : public IGameState {
     public:
         int getNextStateIndex() const { return 0; }

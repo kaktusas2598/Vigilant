@@ -11,6 +11,7 @@
 #include "ColliderComponent.hpp"
 #include "InputComponent.hpp"
 #include "ButtonComponent.hpp"
+#include "BackgroundComponent.hpp"
 #include "UILabelComponent.hpp"
 
 #include "SoundManager.hpp"
@@ -278,6 +279,13 @@ namespace Vigilant {
                 Entity* entity = (Entity*)lua_touserdata(L, 1);
                 std::string listener = (std::string)lua_tostring(L, 2);
                 entity->getComponent<ButtonComponent>()->setListener(listener);
+                return 0;
+            }
+
+            static int lua_addBackground(lua_State *L) {
+                Entity* entity = (Entity*)lua_touserdata(L, 1);
+                int scrollSpeed = (int)lua_tonumber(L, 2);
+                entity->addComponent<BackgroundComponent>()->load(scrollSpeed);
                 return 0;
             }
 

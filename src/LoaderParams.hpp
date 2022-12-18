@@ -7,6 +7,7 @@ namespace Vigilant {
     /***
      * Facilitates parameter loading into engine entities. Not sure what is the name of this pattern and if I should change this
      */
+    // DEPRECATED CLASS
     class LoaderParams {
         public:
             LoaderParams(int x, int y, int width, int height, std::string textureID, int numFrames, int callbackID = 0, int animSpeed = 0)

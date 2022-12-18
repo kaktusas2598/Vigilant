@@ -17,14 +17,10 @@
         <FONTS>
             <font filename="assets/fonts/arcade_classic.TTF" ID="arcade"/>
         </FONTS>
-
         <SCRIPTS>
             <script name="state" filename="scripts/main.lua" type="entity"/>
         </SCRIPTS>
-
-        <OBJECTS>
-            <object type="ScrollingBackground" x="0" y="0" width="800" height="600" textureID="clouds2" numFrames="0"/>
-        </OBJECTS>
+        <OBJECTS></OBJECTS>
     </MENU>
     <!--The Play State-->
     <PLAY>

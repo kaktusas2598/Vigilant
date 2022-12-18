@@ -3,7 +3,6 @@
 #include "ErrorHandler.hpp"
 #include "TextureManager.hpp"
 #include "SoundManager.hpp"
-#include "EntityFactory.hpp"
 #include "EntityManager.hpp"
 #include "ScriptEngine.hpp"
 
@@ -137,9 +136,9 @@ namespace Vigilant {
             e->Attribute("animSpeed", &animSpeed);
             textureID = e->Attribute("textureID");
 
-            Entity* entity = TheEntityFactory::Instance()->create(e->Attribute("type"));
-            entity->load(new LoaderParams(x, y, width, height, textureID, numFrames, callbackID, animSpeed));
-            entities->push_back(entity);
+            //Entity* entity = TheEntityFactory::Instance()->create(e->Attribute("type"));
+            //entity->load(new LoaderParams(x, y, width, height, textureID, numFrames, callbackID, animSpeed));
+            //entities->push_back(entity);
         }
     }
 

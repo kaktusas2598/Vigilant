@@ -4,9 +4,7 @@
 #include "ObjectLayer.hpp"
 #include "CollisionLayer.hpp"
 #include "TextureManager.hpp"
-#include "EntityFactory.hpp"
 #include "Entity.hpp"
-#include "LoaderParams.hpp"
 #include <string>
 
 #include "Engine.hpp"
@@ -187,6 +185,7 @@ namespace Vigilant {
         }
     }
 
+    // NOT USED at the moment, because Entity Factory has been removed, need to refactor this to use Lua Entitites instead
     void LevelParser::parseObjectLayer(TiXmlElement *objectRoot, std::vector<Layer*>* layers) {
         ObjectLayer* objLayer = new ObjectLayer();
 
@@ -199,7 +198,7 @@ namespace Vigilant {
                 e->Attribute("y", &y);
                 e->Attribute("width", &width);
                 e->Attribute("height", &height);
-                Entity* entity = TheEntityFactory::Instance()->create(e->Attribute("class"));
+                //Entity* entity = TheEntityFactory::Instance()->create(e->Attribute("class"));
 
                 for (TiXmlElement* properties = e->FirstChildElement(); properties != NULL; properties = properties->NextSiblingElement()) {
                     if (properties->Value() == std::string("properties")) {
@@ -211,12 +210,11 @@ namespace Vigilant {
                             } else if (property->Attribute("name") == std::string("callbackID")) {
                                 property->Attribute("value", &callbackId);
                             }
-                            // TODO: Parse more properties like animation speed and so on
                         }
                     }
                 }
-                entity->load(new LoaderParams(x, y, width, height, textureId, numFrames, callbackId));
-                objLayer->getEntities()->push_back(entity);
+                //entity->load(new LoaderParams(x, y, width, height, textureId, numFrames, callbackId));
+                //objLayer->getEntities()->push_back(entity);
             }
         }
         layers->push_back(objLayer);
