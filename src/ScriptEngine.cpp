@@ -156,6 +156,7 @@ namespace Vigilant {
         lua_register(state, "getScreenWidth", lua_getScreenWidth);
         lua_register(state, "getScreenHeight", lua_getScreenHeight);
         lua_register(state, "changeState", lua_changeState);
+        lua_register(state, "quit", lua_quit);
 
         script->open();
     }

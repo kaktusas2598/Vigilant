@@ -5,52 +5,47 @@
         <TEXTURES>
             <texture filename="assets/ui/button.png" ID="playbutton"/>
             <texture filename="assets/ui/quit.png" ID="exitbutton"/>
-			<texture filename="assets/ui/clouds2.png" ID="clouds2"/>
+            <texture filename="assets/ui/clouds2.png" ID="clouds2"/>
             <!--<texture filename="assets/particles/bullet2.png" ID="particle"/>-->
-			<!--<texture filename="assets/particles/Color/fire/fire_1.png" ID="particle"/>-->
+            <!--<texture filename="assets/particles/Color/fire/fire_1.png" ID="particle"/>-->
         </TEXTURES>
-		<SOUNDS>
-			<sound filename="assets/sounds/button.wav" ID="button" type = "1"/>
-		</SOUNDS>
-		<!--This is problematic because some resources like fonts should really be global across multiple states-->
-		<!--Also I would like to be able to add states dynamically using Lua -->
-		<FONTS>
-			<font filename="assets/fonts/arcade_classic.TTF" ID="arcade"/>
-		</FONTS>
+        <SOUNDS>
+            <sound filename="assets/sounds/button.wav" ID="button" type = "1"/>
+        </SOUNDS>
+        <!--This is problematic because some resources like fonts should really be global across multiple states-->
+        <!--Also I would like to be able to add states dynamically using Lua -->
+        <FONTS>
+            <font filename="assets/fonts/arcade_classic.TTF" ID="arcade"/>
+        </FONTS>
 
-		<SCRIPTS>
-			<script name="state" filename="scripts/main.lua" type="entity"/>
+        <SCRIPTS>
+            <script name="state" filename="scripts/main.lua" type="entity"/>
         </SCRIPTS>
 
         <OBJECTS>
-            <!-- Buttons measure for 1024 x 768 resolution-->
-            <!-- <object type="MenuButton" x="362" y="234" width="300" height="100" textureID="playbutton"  numFrames="0" callbackID="1"/>
-            <object type="MenuButton" x="362" y="468" width="300" height="100" textureID="exitbutton"  numFrames="0" callbackID="2"/> -->
-			<object type="ScrollingBackground" x="0" y="0" width="800" height="600" textureID="clouds2" numFrames="0"/>
-            <object type="MenuButton" x="250" y="146" width="300" height="100" textureID="playbutton"  numFrames="0" callbackID="1"/>
-            <object type="MenuButton" x="250" y="394" width="300" height="100" textureID="exitbutton"  numFrames="0" callbackID="2"/>
+            <object type="ScrollingBackground" x="0" y="0" width="800" height="600" textureID="clouds2" numFrames="0"/>
         </OBJECTS>
     </MENU>
     <!--The Play State-->
     <PLAY>
         <TEXTURES>
-			<texture filename="assets/sprites/player.png" ID="player"/>
+            <texture filename="assets/sprites/player.png" ID="player"/>
             <texture filename="assets/sprites/slime.png" ID="slime"/>
             <texture filename="assets/particles/bullet1.png" ID="bullet"/>
-			<!--<texture filename="assets/particles/Color/fire/fire_1.png" ID="particle"/>-->
+            <!--<texture filename="assets/particles/Color/fire/fire_1.png" ID="particle"/>-->
             <texture filename="assets/particles/bullet2.png" ID="particle"/>
             <texture filename="assets/ui/main.png" ID="mainmenubutton"/>
-		</TEXTURES>
-		<SOUNDS>
-			<sound filename="assets/sounds/button.wav" ID="button" type = "1"/>
-			<sound filename="assets/sounds/jump.wav" ID="jump" type = "1"/>
-			<sound filename="assets/sounds/boom.wav" ID="boom" type = "1"/>
-			<sound filename="assets/sounds/phaser.wav" ID="phaser" type = "1"/>
-			<sound filename="assets/sounds/DST_ElectroRock.ogg" ID="mainTheme" type = "0"/>
-		</SOUNDS>
-		<MAPS>
-			<map filename="assets/rpg.tmx" index="1"/>
-		</MAPS>
+        </TEXTURES>
+        <SOUNDS>
+            <sound filename="assets/sounds/button.wav" ID="button" type = "1"/>
+            <sound filename="assets/sounds/jump.wav" ID="jump" type = "1"/>
+            <sound filename="assets/sounds/boom.wav" ID="boom" type = "1"/>
+            <sound filename="assets/sounds/phaser.wav" ID="phaser" type = "1"/>
+            <sound filename="assets/sounds/DST_ElectroRock.ogg" ID="mainTheme" type = "0"/>
+        </SOUNDS>
+        <MAPS>
+            <map filename="assets/rpg.tmx" index="1"/>
+        </MAPS>
         <SCRIPTS>
             <script name="state" filename="scripts/play.lua" type="entity"/>
         </SCRIPTS>

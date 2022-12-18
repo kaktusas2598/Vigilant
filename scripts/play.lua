@@ -85,17 +85,15 @@ end
 
 
 -- Player event listeners
--- FIXME: how to prevent this firing 10-200 times every time there is a collision?
---  Firing this event so many times causes massive lag when adding particles on collision, need to limit these events
---  Solution 1: Using Timer and setting cooldown for these events in the Engine
---  Solution 2:Probably a better Rigid Body resolution would help, as entities would bounce away from each other
---  Solution 3: Implement CharacterComponent and make them have "state" like onDamage, attacking, idle or similar
 function onCollide(thisId, secondId)
     if entities[thisId]:getType() == "playerProjectile" then
         playSound("boom")
         entities[thisId]:remove()
         -- MASSIVE FPS DROPS HERE if calling this without removing second entity to stop collision dispatches
         addParticleEmitter(entities[secondId]:getX(), entities[secondId]:getY(), "burst")
+    else -- player collided with someone
+        if entities[secondId]:getType() == "enemy" then
+        end
     end
 end
 

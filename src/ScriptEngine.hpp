@@ -126,6 +126,11 @@ namespace Vigilant {
                 return 1;
             }
 
+            static int lua_quit(lua_State *L) {
+                TheEngine::Instance()->setRunning(false);
+                return 0;
+            }
+
 
             // Allocates new user data and sends reference to EntityManager
             static int lua_createEntity(lua_State *L);

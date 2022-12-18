@@ -8,7 +8,6 @@
 #include "MainMenuState.hpp"
 #include "PlayState.hpp"
 
-#include "MenuButton.hpp"
 #include "ScrollingBackground.hpp"
 
 #include <string>
@@ -47,6 +46,7 @@ namespace Vigilant {
 
 	void Engine::addStates() {
 		Logger::Instance()->info("Adding states.");
+		// TODO: refactor this to create states dynamically from lua/xml? only using 1 game state class for all
 		MainMenuState *menuState = new MainMenuState();
 		PlayState *playState = new PlayState();
 		//Currently states is std:vector and each time they are just pushed to it in order
@@ -91,7 +91,6 @@ namespace Vigilant {
 		}
 
 		// TODO: get rid of these and implement using ECS
-		TheEntityFactory::Instance()->registerType("MenuButton", new MenuButtonCreator());
 		TheEntityFactory::Instance()->registerType("ScrollingBackground", new ScrollingBackgroundCreator());
 
 		//initialize the current game
@@ -242,7 +241,8 @@ namespace Vigilant {
 	 */
 	void Engine::renderDebug(float deltaTime) {
 		// Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-		//ImGui::ShowDemoWindow(&show_demo_window);
+                static bool showDemoWindow = true;
+                ImGui::ShowDemoWindow(&showDemoWindow);
 
 		ImGui::Begin("Debug Log");                          // Create a window called "Hello, world!" and append into it.
 		//ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
@@ -259,6 +259,8 @@ namespace Vigilant {
 				i++;
 			}
 		}
+
+		char inputBuf[256];
 
 		ImGui::End();
 	}
