@@ -84,7 +84,7 @@ namespace Vigilant {
                     if(AABB(collider, entityCollider->getCollider())) {
                         std::cout << "Projectile and entity collision detected" << std::endl;
                         std::string listener = owner->getComponent<ColliderComponent>()->getListener();
-                        ScriptEngine::Instance()->onCollide(listener, owner->id->get(), entity->id->get());
+                        ScriptEngine::Instance()->onCollide(listener, projectile->id->get(), entity->id->get());
                     }
                 }
             }

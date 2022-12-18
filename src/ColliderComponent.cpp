@@ -15,8 +15,7 @@ namespace Vigilant {
 		yOffset = 0;
 	}
 
-	void ColliderComponent::load(std::string tag, int width, int height) {
-		type = tag;
+	void ColliderComponent::load(int width, int height) {
 		collider.w = width;
 		collider.h = height;
 		collider.x = 0;

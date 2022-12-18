@@ -17,14 +17,14 @@ namespace Vigilant {
     }
 
     void LuaScript::open() {
-		 if (luaL_loadfile(L, fileName.c_str()) || lua_pcall(L, 0, 0, 0)) {
+        if (luaL_loadfile(L, fileName.c_str()) || lua_pcall(L, 0, 0, 0)) {
             std::string errorMessage = lua_tostring(L, -1);
             exitWithError("Could not load script: " + fileName + ". " + errorMessage);
             L = 0;
         }
     }
 
-	void LuaScript::close() {
+    void LuaScript::close() {
         Logger::Instance()->info("Closing Lua state.");
         if (L) {
             lua_close(L);

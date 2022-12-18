@@ -14,16 +14,14 @@ namespace Vigilant {
         public:
             ColliderComponent(Entity* owner);
 
-            void load(std::string tag, int width, int height);
+            void load(int width, int height);
             void update(float deltaTime);
             void render();
 
             SDL_Rect& getCollider() { return collider; }
             void setCollider(SDL_Rect col) { collider = col; }
-
         private:
             SDL_Rect collider;
-            std::string type;
             // Collider box offsets from sprite texture
             int xOffset, yOffset;
     };

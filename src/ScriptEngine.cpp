@@ -14,7 +14,7 @@
 
 namespace Vigilant {
 
-	ScriptEngine* ScriptEngine::s_pInstance = nullptr;
+    ScriptEngine* ScriptEngine::s_pInstance = nullptr;
 
     int ScriptEngine::lua_createEntity(lua_State *L) {
         // Important to understand here that memory is being allocated by Lua and
@@ -23,11 +23,10 @@ namespace Vigilant {
         // Placement new operator takes already allocated memory and calls constructor
         new (entity) Entity();
 
-		EntityManager::Instance()->addEntity(entity);
+        EntityManager::Instance()->addEntity(entity);
 
         luaL_getmetatable(L, "EntityMetaTable");
         lua_setmetatable(L, -2);
-
 
         return 1;
     }
@@ -48,11 +47,14 @@ namespace Vigilant {
 
     ScriptEngine::ScriptEngine() {}
 
-    void ScriptEngine::init(std::string filename) {
+    void ScriptEngine::init(std::string fileName) {
         //id = tag;
-        fileName = filename;
+        //fileName = filename;
         script = new LuaScript(fileName);
         state = script->getLuaState();
+
+        lua_newtable(state);
+        lua_setglobal(state, "entities");
 
         // Setup table for Entity class with __index and __gc metamethods
         lua_newtable(state);
@@ -69,6 +71,15 @@ namespace Vigilant {
 
         lua_pushcfunction(state, lua_entityId);
         lua_setfield(state, -2 , "id");
+        lua_pushcfunction(state, lua_getTag);
+        lua_setfield(state, -2 , "getTag");
+        lua_pushcfunction(state, lua_setTag);
+        lua_setfield(state, -2 , "setTag");
+        lua_pushcfunction(state, lua_getType);
+        lua_setfield(state, -2 , "getType");
+        lua_pushcfunction(state, lua_setType);
+        lua_setfield(state, -2 , "setType");
+
         lua_pushcfunction(state, lua_teleportEntity);
         lua_setfield(state, -2 , "move");
         lua_pushcfunction(state, lua_scaleEntity);
@@ -147,6 +158,22 @@ namespace Vigilant {
         lua_register(state, "changeState", lua_changeState);
 
         script->open();
+    }
+
+    void ScriptEngine::loadScript(std::string fileName) {
+        if (luaL_loadfile(state, fileName.c_str()) || lua_pcall(state, 0, 0, 0)) {
+            std::string errorMessage = lua_tostring(state, -1);
+            std::cout << errorMessage << std::endl;
+            Logger::Instance()->error(errorMessage.c_str());
+        }
+    }
+
+    void ScriptEngine::loadChunk(const char* chunk) {
+        if (luaL_loadstring(state, chunk) || lua_pcall(state, 0, 0, 0)) {
+            std::string errorMessage = lua_tostring(state, -1);
+            std::cout << errorMessage << std::endl;
+            Logger::Instance()->error(errorMessage.c_str());
+        }
     }
 
     void ScriptEngine::update(float deltaTime) {
