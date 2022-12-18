@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <STATES>
     <!--The Menu State-->
-    <MENU>
+    <MENU next="PLAY">
         <TEXTURES>
             <texture filename="assets/ui/button.png" ID="playbutton"/>
             <texture filename="assets/ui/quit.png" ID="exitbutton"/>
@@ -23,7 +23,7 @@
         <OBJECTS></OBJECTS>
     </MENU>
     <!--The Play State-->
-    <PLAY>
+    <PLAY next="MENU">
         <TEXTURES>
             <texture filename="assets/sprites/player.png" ID="player"/>
             <texture filename="assets/sprites/slime.png" ID="slime"/>
@@ -40,13 +40,13 @@
             <sound filename="assets/sounds/DST_ElectroRock.ogg" ID="mainTheme" type = "0"/>
         </SOUNDS>
         <MAPS>
-            <map filename="assets/rpg.tmx" index="1"/>
+            <map filename="map.tmx" index="1"/>
         </MAPS>
         <SCRIPTS>
             <script name="state" filename="scripts/play.lua" type="entity"/>
         </SCRIPTS>
     </PLAY>
     <!-- The Game Over State -->
-    <GAMEOVER>
-    </GAMEOVER>
+    <!--<GAMEOVER>-->
+    <!--</GAMEOVER>-->
 </STATES>

@@ -7,8 +7,6 @@
 #include "Entity.hpp"
 #include <string>
 
-#include "Engine.hpp"
-
 // For SDL_Rect, want to replace with own structure for representing colliders
 #include <SDL2/SDL.h>
 
@@ -163,10 +161,7 @@ namespace Vigilant {
         layer->setMapHeight(height);
 
         //Initialise game camera
-        // TODO: probably not the best place to do this, but it needs to know map size
-		// TheEngine::Instance()->camera = {0, 0, width, height};
-        // FIXME: using screen measurements causes segfault in TileLayer::render()
-        TheEngine::Instance()->camera = {0, 0, TheEngine::Instance()->getScreenWidth(), TheEngine::Instance()->getScreenHeight()};
+        // TheEngine::Instance()->camera = {0, 0, TheEngine::Instance()->getScreenWidth(), TheEngine::Instance()->getScreenHeight()};
 
         if (collidable) {
 	    layer->setVisible(false);

@@ -5,11 +5,32 @@
 #include "SoundManager.hpp"
 #include "EntityManager.hpp"
 #include "ScriptEngine.hpp"
+#include "GameState.hpp"
 
 #include "Logger.hpp"
 
 namespace Vigilant {
-    bool StateParser::parseState(const char* stateFile, std::string stateID, std::vector<Entity*> *pEntities,  std::vector<std::string> *pTextureIDs, std::vector<std::string> *pSoundsIDs) {
+    bool StateParser::loadStates(const char* stateFile, std::vector<GameState*> *gameStates) {
+        TiXmlDocument xmlDoc;
+
+        if (!xmlDoc.LoadFile(stateFile)) {
+            exitWithError("Could not load XML state file");
+        }
+
+        TiXmlElement *root = xmlDoc.RootElement();
+
+        for (TiXmlElement *e = root->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
+            GameState* state = new GameState(e->Value());
+            std::string nextId = e->Attribute("next");
+            state->setNextID(nextId);
+            gameStates->push_back(state);
+        }
+
+
+        return true;
+    }
+
+    bool StateParser::parseState(const char* stateFile, std::string stateID, std::vector<std::string> *pTextureIDs, std::vector<std::string> *pSoundsIDs) {
         TiXmlDocument xmlDoc;
 
         if (!xmlDoc.LoadFile(stateFile)) {
@@ -43,7 +64,6 @@ namespace Vigilant {
         if (fontRoot != 0)
             parseFonts(fontRoot);
 
-
         TiXmlElement *soundRoot = 0;
         for (TiXmlElement *e = stateRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
             if (e->Value() == std::string("SOUNDS")) {
@@ -54,16 +74,6 @@ namespace Vigilant {
         if (soundRoot != 0)
             parseSounds(soundRoot, pSoundsIDs);
 
-        TiXmlElement *objectRoot = 0;
-        for (TiXmlElement *e = stateRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
-            if (e->Value() == std::string("OBJECTS")) {
-                objectRoot = e;
-            }
-        }
-
-        if (objectRoot != 0)
-            parseObjects(objectRoot, pEntities);
-
         TiXmlElement *scriptRoot = 0;
         for (TiXmlElement *e = stateRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
             if (e->Value() == std::string("SCRIPTS")) {
@@ -72,7 +82,14 @@ namespace Vigilant {
         }
 
         if (scriptRoot != 0)
-            parseScripts(scriptRoot, pEntities);
+            parseScripts(scriptRoot);
+
+        // TiXmlElement *mapRoot = 0;
+        // for (TiXmlElement *e = stateRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
+        //     if (e->Value() == std::string("MAPS")) {
+        //         mapRoot = e;
+        //     }
+        // }
 
         return true;
     }
@@ -119,31 +136,7 @@ namespace Vigilant {
         }
     }
 
-
-    // TODO: Deprecate once loading from sripts have been implemented
-    void StateParser::parseObjects(TiXmlElement* pStateRoot, std::vector<Entity*> *entities) {
-        Logger::Instance()->info("Loading objects for factory.");
-        for (TiXmlElement *e = pStateRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
-            int x,y, width, height, numFrames, callbackID, animSpeed;
-            std::string textureID;
-
-            e->Attribute("x", &x);
-            e->Attribute("y", &y);
-            e->Attribute("width", &width);
-            e->Attribute("height", &height);
-            e->Attribute("numFrames", &numFrames);
-            e->Attribute("callbackID", &callbackID);
-            e->Attribute("animSpeed", &animSpeed);
-            textureID = e->Attribute("textureID");
-
-            //Entity* entity = TheEntityFactory::Instance()->create(e->Attribute("type"));
-            //entity->load(new LoaderParams(x, y, width, height, textureID, numFrames, callbackID, animSpeed));
-            //entities->push_back(entity);
-        }
-    }
-
-
-    void StateParser::parseScripts(TiXmlElement* pScriptRoot, std::vector<Entity*> *entities) {
+    void StateParser::parseScripts(TiXmlElement* pScriptRoot) {
         Logger::Instance()->info("Initialising scripts.");
         for (TiXmlElement *e = pScriptRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
             std::string name, fileName, type;
@@ -157,4 +150,44 @@ namespace Vigilant {
             }
         }
     }
+
+    // This is the most basic approach so far, only loads first found map
+    // But maybe 1 map/level is all we want?
+    std::string StateParser::getMapName(const char* stateFile, std::string stateID) {
+        TiXmlDocument xmlDoc;
+
+        if (!xmlDoc.LoadFile(stateFile)) {
+            exitWithError("Could not load XML state file");
+        }
+
+        TiXmlElement *root = xmlDoc.RootElement();
+
+        // Find state
+        TiXmlElement *stateRoot = 0;
+        for (TiXmlElement *e = root->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
+            if (e->Value() == stateID) {
+                stateRoot = e;
+            }
+        }
+
+        if (stateRoot != 0) {
+            TiXmlElement *mapRoot = 0;
+            for (TiXmlElement *e = stateRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
+                if (e->Value() == std::string("MAPS")) {
+                    mapRoot = e;
+                }
+            }
+
+             if (mapRoot != 0) {
+                for (TiXmlElement *e = mapRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
+                    std::string fileName;
+
+                    fileName = e->Attribute("filename");
+                    return fileName;
+                }
+             }
+        }
+
+        return std::string();
+     }
 }

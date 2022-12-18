@@ -28,7 +28,7 @@
 -- getMapHeight()
 -- getScreenWidth()
 -- getScreenHeight()
--- changeState() - currently sets the next state in state machine
+-- changeState(stateID)
 
 -- Globals
 -- Tried putting this in init script and loading it for all states, but it doesn't seem to work correctly
@@ -138,8 +138,7 @@ end
 -- back to Main Menu callback and definition
 function onMainMenuClick(thisId)
     playSound("button")
-    -- TODO: make this binding better, accept state id or ScreenState enum
-    changeState()
+    changeState("MENU")
 end
 mainMenuButton = create()
 mainMenuButton:move((getScreenWidth() - 200), 0)

@@ -1,85 +1,61 @@
 #include "StateMachine.hpp"
-#include "IGameState.hpp"
+#include "GameState.hpp"
 #include "Engine.hpp"
 
 namespace Vigilant {
 
-	StateMachine::StateMachine(Engine* game) :
-		m_game(game)
-	{
-		//empty
-	}
+    StateMachine::StateMachine(Engine* game) : m_game(game) {}
 
-	StateMachine::~StateMachine()
-	{
-		destroy();
-	}
+    StateMachine::~StateMachine() {
+        destroy();
+    }
 
-	IGameState* StateMachine::moveNext()
-	{
-		IGameState* currentState = getCurrentState();
+    GameState* StateMachine::moveNext() {
+        GameState* currentState = getCurrentState();
 
-		if (currentState->getNextStateIndex() != STATE_NONE)
-		{
-			m_currentStateIndex = currentState->getNextStateIndex();
-		}
-		return getCurrentState();
-	}
+        if (!currentState->getNextID().empty()) {
+            currentStateID = currentState->getNextID();
+        }
 
-	IGameState* StateMachine::movePrev()
-	{
-		IGameState* currentState = getCurrentState();
+        return getCurrentState();
+    }
 
-		if (currentState->getPrevStateIndex() != STATE_NONE)
-		{
-			m_currentStateIndex = currentState->getPrevStateIndex();
-		}
-		return getCurrentState();
-	}
+    GameState* StateMachine::movePrev() {
+        GameState* currentState = getCurrentState();
 
-	void StateMachine::setState(int nextScreenIndex)
-	{
-		m_currentStateIndex = nextScreenIndex;
-	}
+        if (!currentState->getPrevID().empty()) {
+            currentStateID = currentState->getPrevID();
+        }
 
-	void StateMachine::addState(IGameState* newScreen)
-	{
-		//TODO: This is shit, I think this was causing segfault, I need to replace order of consts in States.hpp
-		//It seems like this is just assigning them in order - poor design
-		newScreen->m_screenIndex = (int)m_states.size();
+        return getCurrentState();
+    }
 
-		//add new screen to vector of screens
-		m_states.push_back(newScreen);
+    void StateMachine::setState(std::string nextStateID) {
+        currentStateID = nextStateID;
+    }
 
-		//set up the new screen
-		newScreen->build();
-		newScreen->setParentGame(m_game);
-	}
+    void StateMachine::addState(GameState* newScreen) {
+        stateMap[newScreen->getID()] = newScreen;
+        newScreen->build();
+        newScreen->setParentGame(m_game);
+    }
 
-	void StateMachine::destroy()
-	{
-		//destroy the entire screenList
-		for (size_t i = 0; i < m_states.size(); i++)
-		{
-			m_states[i]->destroy();
-		}
+    void StateMachine::destroy() {
+        //destroy the entire screenList
+        for (auto const& s : stateMap) {
+            s.second->destroy();
+        }
 
-		//no screens left
-		m_states.resize(0);
-		m_currentStateIndex = STATE_NONE;
-	}
+        //no screens left
+        //m_states.resize(0);
+        currentStateID.erase();
+    }
 
-	IGameState* StateMachine::getCurrentState()
-	{
-		//error check
-		//FIXME: why did I do this? if no state provided, engine will segfault
-		if(m_currentStateIndex == STATE_NONE) {
-			return nullptr;
-		}
-	
+    GameState* StateMachine::getCurrentState() {
+        if (currentStateID.empty()) {
+            return nullptr;
+        }
 
-		return m_states[m_currentStateIndex];
-	}
-
-
+        return stateMap[currentStateID];
+    }
 }

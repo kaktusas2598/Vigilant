@@ -12,7 +12,7 @@
 
 namespace Vigilant {
 
-	class IGameState;
+	class GameState;
 	class Entity;
 
 	/*! \brief Engine
@@ -88,7 +88,7 @@ namespace Vigilant {
 			float m_fps = 0; ///< main application's fps
 
 			std::unique_ptr<StateMachine> m_stateMachine = nullptr; ///< state machine's instance
-			IGameState* m_currentState = nullptr; ///< current state's instance
+			GameState* m_currentState = nullptr; ///< current state's instance
 
 			std::vector<Entity*> entities;
 			Level* level;

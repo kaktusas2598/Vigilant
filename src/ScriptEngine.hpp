@@ -17,7 +17,7 @@
 #include "SoundManager.hpp"
 #include "TextureManager.hpp"
 #include "Engine.hpp"
-#include "IGameState.hpp"
+#include "GameState.hpp"
 #include "ParticleSystem.hpp"
 #include "EntityManager.hpp"
 
@@ -121,8 +121,9 @@ namespace Vigilant {
                 return 1;
             }
 
-            // TODO: this is temporary, it will need to accept state id as param
             static int lua_changeState(lua_State *L) {
+                std::string id = (std::string)lua_tostring(L, 1);
+                TheEngine::Instance()->getStateMachine()->getCurrentState()->setNextID(id);
                 TheEngine::Instance()->getStateMachine()->getCurrentState()->setScreenState(ScreenState::CHANGE_NEXT);
                 return 1;
             }

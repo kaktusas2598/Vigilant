@@ -11,8 +11,7 @@ title:setLabelAlignment(1, 0)
 -- because I couldn't get entities table be shared across multiple scripts
 function onPlayClick(thisId)
     playSound("button")
-    -- TODO: make this binding better, accept state id or ScreenState enum
-    changeState()
+    changeState("PLAY")
 end
 
 function onQuit(thisId)

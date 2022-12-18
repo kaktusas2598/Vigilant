@@ -5,40 +5,40 @@
 
 #include <stdio.h>
 #include <vector>
+#include <string>
+#include <map>
 
-namespace Vigilant
-{
-	class Engine;
-	class IGameState;
+namespace Vigilant {
+    class Engine;
+    class GameState;
 
-	/*! \brief StateMachine
-	*         Finite State Machine Manager class.
-	*
-	* Finite State Machine. Manages std::vector of IGameState instances
-	* Limitations: changes between states sequentually 
-	*  @sa IGameState, Engine
-	*/
-	class StateMachine
-	{
-		public:
-			StateMachine(Engine* game);
-			~StateMachine();
+    /*! \brief StateMachine
+     *         Finite State Machine Manager class.
+     *
+     * Finite State Machine. Manages std::vector of GameState instances
+     * Limitations: changes between states sequentually
+     *  @sa GameState, Engine
+     */
+    class StateMachine {
+        public:
+            StateMachine(Engine* game);
+            ~StateMachine();
 
-			IGameState* moveNext();
-			IGameState* movePrev();
+            GameState* moveNext();
+            GameState* movePrev();
 
-			void setState(int nextStateIndex);
-			void addState(IGameState* newState);
+            void setState(std::string nextStateID);
+            void addState(GameState* newState);
 
-			void destroy();
+            void destroy();
 
-			IGameState* getCurrentState();
+            GameState* getCurrentState();
 
-		protected:
-			Engine* m_game = nullptr; ///< Pointer to main engine's class
-			std::vector<IGameState*> m_states; ///< Collection of states
-			int m_currentStateIndex = -1; ///< Indicates index of current state in states collection, -1 indicates none
-	};
+        protected:
+            std::map<std::string, GameState*> stateMap; ///< State collection mapped against state name
+            std::string currentStateID; ///< Indicates urrent state in states collection, -1 indicates none
+            Engine* m_game = nullptr; ///< Pointer to main engine's class
+    };
 }
 
 
