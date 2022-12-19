@@ -9,13 +9,14 @@
 
  * SDL2 2D rendering (OpenGL support will be coming later)
  * Finite State Machine and state loading from XML file
- * Entities defined using Lua scripts including lua listener functions on events
+ * Entities defined using Lua scripts including Lua listener functions on events
+ * Entities can have dynamic behaviours coded using Lua coroutines
  * Keyboard and Mouse input handling with SDL2
  * Window and GL context handling with SDL2
  * GLSL shader program loading
  * Texture loading (Using stb_image.h and SDL2_image)
  * TTF Font loading (Using SDL_ttf)
- * Menu buttons with callbacks
+ * Menu buttons with callbacks, labels, backgrounds
  * Sprite animations
  * Basic Audio Support (one shot sfx and music)
  * Tiled map loading from tmx files including collision layers
@@ -32,6 +33,7 @@
  * Model Loading (simple .obj loader or assimp?)
  * Skeletal animation support
  * Saving/loading
+ * Items/inventory
 
 
 ### Used Libraries
@@ -81,3 +83,14 @@ pacman -S mingw64/mingw-w64-x86_64-SDL2_mixer
 pacman -S mingw64/mingw-w64-x86_64-SDL2_image
 pacman -S mingw64/mingw-w64-x86_64-SDL2_ttf
 ```
+
+
+## Post-Mortem
+
+I've learned a lot of things so far while working on this project and it still serves as primarily learning
+tool for me. I would I could have done some things better and if for some reason it would require to much
+work to do them, I will write them down here instead:
+
+ * Instead of binding Entity class to lua using metatable, I could have used lightuserdata and pointers to make memory
+   management easier.
+

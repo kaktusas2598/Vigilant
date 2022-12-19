@@ -10,6 +10,7 @@
 #include "ProjectileComponent.hpp"
 #include "ColliderComponent.hpp"
 #include "InputComponent.hpp"
+#include "BehaviourComponent.hpp"
 #include "ButtonComponent.hpp"
 #include "BackgroundComponent.hpp"
 #include "UILabelComponent.hpp"
@@ -73,6 +74,9 @@ namespace Vigilant {
             void onInput(std::string listener, int thisId, unsigned int keyID);
             void onCollide(std::string listener, int thisId, int secondId);
             // void onCollide(Entity* entity);
+
+            // Issues next task for dynamic behaviours
+            void issueNextTask(int id);
 
             // Lua API is written in C so only static C++ class methods can be wrapped for lua
             // Alternative way would be to use global functions
@@ -279,6 +283,20 @@ namespace Vigilant {
                 Entity* entity = (Entity*)lua_touserdata(L, 1);
                 std::string listener = (std::string)lua_tostring(L, 2);
                 entity->getComponent<InputComponent>()->setListener(listener);
+                return 0;
+            }
+
+            static int lua_addBehaviour(lua_State* L) {
+                Entity* entity = (Entity*)lua_touserdata(L, 1);
+                entity->addComponent<BehaviourComponent>();
+                return 0;
+            }
+            static int lua_addMoveBehaviour(lua_State* L) {
+                Entity* entity = (Entity*)lua_touserdata(L, 1);
+                float x = (float)lua_tonumber(L, 2);
+                float y = (float)lua_tonumber(L, 3);
+                float time = (float)lua_tonumber(L, 4);
+                entity->getComponent<BehaviourComponent>()->move(Vector2D(x,y), time);
                 return 0;
             }
 
