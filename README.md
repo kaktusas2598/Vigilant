@@ -21,7 +21,7 @@
  * Basis Axis Aligned Collision Detection
  * Basic Rigid Body Dynamics
  * Particle System
- * Debug UI
+ * Debug UI with console for Lua scripting, support history and autocompletion
 
 #### Planned feature list:
 

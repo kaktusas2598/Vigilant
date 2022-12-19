@@ -25,6 +25,7 @@ namespace Vigilant {
         commands.push_back("quit()");
         commands.push_back("Entity:create()");
         commands.push_back(":addSprite");
+        commands.push_back("addParticleEmitter");
         // "CLASSIFY" is here to provide the test case where "C"+[tab] completes to "CL" and display multiple matches.
         //Commands.push_back("HELP");
         //Commands.push_back("HISTORY");
@@ -143,10 +144,10 @@ namespace Vigilant {
                 // (e.g. make Items[] an array of structure, store color/type etc.)
                 ImVec4 color;
                 bool has_color = false;
-                // TODO: more colours, maybe push logs to here as well
                 if (strstr(item, "[error]")) { color = ImVec4(1.0f, 0.4f, 0.4f, 1.0f); has_color = true; }
                 else if (strncmp(item, "# ", 2) == 0) { color = ImVec4(1.0f, 0.8f, 0.6f, 1.0f); has_color = true; }
                 else if (strstr(item, "[lua]") == 0) { color = ImVec4(0.4f, 1.0f, 0.4f, 1.0f); has_color = true; }
+                else if (strstr(item, "[info]") == 0) { color = ImVec4(0.44f, 0.7f, 0.09f, 1.0f); has_color = true; }
                 if (has_color)
                     ImGui::PushStyleColor(ImGuiCol_Text, color);
                 ImGui::TextUnformatted(item);

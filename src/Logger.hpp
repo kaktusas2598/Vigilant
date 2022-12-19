@@ -3,6 +3,7 @@
 
 #include "ErrorHandler.hpp"
 #include "LuaScript.hpp"
+#include "DebugConsole.hpp"
 #include <fstream>
 
 /**
@@ -16,15 +17,21 @@ namespace Vigilant {
                     s_pInstance = new Logger();
                     return s_pInstance;
                 }
-                return s_pInstance;   
+                return s_pInstance;
             }
 
             void info(const char* message) {
                 logFile << "[INFO]: " << message << std::endl;
+                std::string output = message;
+                output = "[info]: " + output;
+                DebugConsole::Instance()->addLog(output.c_str());
             }
 
             void error(const char* message) {
                 logFile << "[ERROR]: " << message << std::endl;
+                std::string output = message;
+                output = "[error]: " + output;
+                DebugConsole::Instance()->addLog(output.c_str());
             }
 
             void dumpStack (lua_State *L);
@@ -39,7 +46,7 @@ namespace Vigilant {
                 logFile.close();
             }
             static Logger* s_pInstance;
-            
+
             std::ofstream logFile;
     };
 }
