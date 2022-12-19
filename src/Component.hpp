@@ -19,7 +19,7 @@ namespace Vigilant {
 
     // Makes sure each component has a unique id associated to it, so it should be:
     // Id - 0, Transform = 1 and so on
-    template <typename T> inline getComponentTypeID() noexcept {
+    template <typename T> inline ComponentID getComponentTypeID() noexcept {
         static ComponentID typeID = getComponentTypeID();
         return typeID;
     }

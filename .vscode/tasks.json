@@ -8,6 +8,7 @@
                 "*.cpp",
                 "src/*.cpp",
                 "src/include/imgui/*.cpp",
+                "src/include/tinyxml/*.cpp",
                 "-o",
                 "main",
                 "-IC:\\msys64\\mingw64\\include",

@@ -160,6 +160,7 @@ namespace Vigilant {
         lua_register(state, "getScreenHeight", lua_getScreenHeight);
         lua_register(state, "changeState", lua_changeState);
         lua_register(state, "quit", lua_quit);
+        lua_register(state, "addLog", lua_addLog);
 
         script->open();
     }
@@ -179,6 +180,23 @@ namespace Vigilant {
             Logger::Instance()->error(errorMessage.c_str());
         }
     }
+
+    std::string ScriptEngine::runChunk(const char* chunk) {
+        script->clean();
+        if (luaL_dostring (state, chunk)) {
+            std::string errorMessage = lua_tostring(state, -1);
+            Logger::Instance()->error(errorMessage.c_str());
+            return errorMessage;
+        }
+        // Else if no error check for other output
+        if (lua_isstring(state, -1)) {
+            std::string output = lua_tostring(state, -1);
+            return output;
+        }
+        // Return an empty string if not output, any print() calls will be redirected to loggers in C++
+        return std::string();
+    }
+
 
     void ScriptEngine::update(float deltaTime) {
         // luaL_dofile(state, fileName.c_str());

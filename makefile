@@ -12,7 +12,8 @@ CXXF=-Wall -std=c++11 -std=c++14 -std=c++17 -fexceptions
 
 LDF=
 
-PCH_SRC = imgui.h
+# TODO
+PCH_SRC = src/include/imgui/imgui.h
 PCH_HEADERS = imgui_impl_sdl.h img_impl_sdlrenderer.h img_textedit.h
 PCH_OUT = imgui.h.gch
 
@@ -23,7 +24,7 @@ debug: CXXF += -DDEBUG -g
 debug: executable
 
 $(PCH_OUT): $(PCH_SRC) $(PCH_HEADERS)
-	$(CXX) $(CXX) -o $@ $<
+	$(CC) $(CXXF) -o $@ $<
 
 UNAME := $(shell uname -s)
 # For Mac

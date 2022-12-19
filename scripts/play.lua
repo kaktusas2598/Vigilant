@@ -40,6 +40,19 @@ function create()
     return entity
 end
 
+-- Redefining lua print() so we can redirect output to debug console and logs if needed
+luaPrint = print
+print = function(...)
+    --logStub = '[LUA]: '
+    luaPrint(...)
+    addLog(...)
+    -- For some reason arg is always nil
+    --for i,v in ipairs(arg) do
+        --logStub = logStub..tostring(v)
+    --end
+    --addLog(logStub)
+end
+
 function define(data, tag)
     entity = create()
     -- Components must be setup and initialised in this order:

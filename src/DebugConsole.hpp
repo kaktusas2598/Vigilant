@@ -16,15 +16,15 @@ namespace Vigilant {
         }
 
         char inputBuf[256];
-        //ImVector<char*>       Items;
-        //ImVector<const char*> Commands;
-        //ImVector<char*>       History;
-        //int HistoryPos;    // -1: new line, 0..History.Size-1 browsing history.
+        ImVector<char*> items;
+        ImVector<const char*> commands;
+        ImVector<char*> history;
+        int historyPos; // -1: new line, 0..History.Size-1 browsing history.
         ImGuiTextFilter filter;
         bool autoScroll;
         bool scrollToBottom;
 
-        void addLog(const char* log); //(const char* fmt, ...) IM_FMTARGS(2)
+        void addLog(const char* fmt, ...);// IM_FMTARGS(2)
         void clearLog();
 
         void exec(const char* command);

@@ -62,6 +62,7 @@ namespace Vigilant {
             // Loads and runs script
             void loadScript(std::string fileName);
             void loadChunk(const char* chunk);
+            std::string runChunk(const char* chunk); // Identical as loadChunk(), but returns any output
 
             // Close all scripts
             void close() {
@@ -130,6 +131,17 @@ namespace Vigilant {
 
             static int lua_quit(lua_State *L) {
                 TheEngine::Instance()->setRunning(false);
+                return 0;
+            }
+
+            static int lua_addLog(lua_State *L) {
+                int nArgs = lua_gettop(L);
+                // TODO: support building variadic args
+                for (int i = 0; i < nArgs; i++) {
+                    if (lua_isstring(L, i)) {
+                        DebugConsole::Instance()->addLog(lua_tostring(L,i));
+                    }
+                }
                 return 0;
             }
 
