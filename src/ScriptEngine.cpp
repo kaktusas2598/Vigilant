@@ -185,7 +185,6 @@ namespace Vigilant {
         script->clean();
         if (luaL_dostring (state, chunk)) {
             std::string errorMessage = lua_tostring(state, -1);
-            Logger::Instance()->error(errorMessage.c_str());
             return errorMessage;
         }
         // Else if no error check for other output
