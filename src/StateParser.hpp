@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 // TODO: Replace with TinyXML2!
-// Also move this to includes to reduce clutter and make sure to include TinyXML to source list because it needs to be compiled
 #include "tinyxml.h"
 
 namespace Vigilant {
