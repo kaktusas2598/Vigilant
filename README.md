@@ -16,6 +16,7 @@
  * Texture loading (Using stb_image.h and SDL2_image)
  * TTF Font loading (Using SDL_ttf)
  * Menu buttons with callbacks
+ * Sprite animations
  * Basic Audio Support (one shot sfx and music)
  * Tiled map loading from tmx files including collision layers
  * Basis Axis Aligned Collision Detection
@@ -25,12 +26,12 @@
 
 #### Planned feature list:
 
- * Multiple animation support
+ * Multiple levels/ warp zones
  * 3D Rendering with OpenGL
  * Entity Component System
  * Model Loading (simple .obj loader or assimp?)
- * Using Lua for dynamic state creation
  * Skeletal animation support
+ * Saving/loading
 
 
 ### Used Libraries
