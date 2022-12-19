@@ -3,8 +3,7 @@
 #  Or 'make debug' to compile with debug symbols
 #
 #SOURCES
-OBJS= *.cpp src/*.cpp src/include/imgui/*.cpp
- # src/imgui/imgui*cpp
+OBJS= *.cpp src/*.cpp src/include/imgui/*.cpp src/include/tinyxml/*.cpp
 
 #COMPILER
 CC= g++ # Or clang++
@@ -13,11 +12,18 @@ CXXF=-Wall -std=c++11 -std=c++14 -std=c++17 -fexceptions
 
 LDF=
 
+PCH_SRC = imgui.h
+PCH_HEADERS = imgui_impl_sdl.h img_impl_sdlrenderer.h img_textedit.h
+PCH_OUT = imgui.h.gch
+
 all: executable
 
 # Add -g flag to generate debug symbols on debug build
 debug: CXXF += -DDEBUG -g
 debug: executable
+
+$(PCH_OUT): $(PCH_SRC) $(PCH_HEADERS)
+	$(CXX) $(CXX) -o $@ $<
 
 UNAME := $(shell uname -s)
 # For Mac
@@ -30,9 +36,9 @@ else
 LDF+= -lmingw32 -lSDL2main -lSDL2 -mwindows -lglew32  -lopengl32 -lm -lSDL2_image -lSDL2_mixer -lSDL2_ttf -llua54# -lglu32
 endif
 
-INCLUDE_PATHS = -I/usr/local/include -I/opt/X11/include -Isrc/include -Isrc/include/imgui
+INCLUDE_PATHS = -I/usr/local/include -I/opt/X11/include -Isrc/include -Isrc/include/imgui -Isrc/include/tinyxml
 LIBRARY_PATHS = -L/usr/local/lib -L/opt/X11/lib -Lsrc/lib
 OBJ_NAME= main
 
 executable : $(OBJS)
-	$(CC) $(OBJS) $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(CXXF) $(LDF) -o $(OBJ_NAME)
+	$(CC) $(OBJS) $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(CXXF) $(LDF) -include $(PCH_SRC) -o $(OBJ_NAME)
