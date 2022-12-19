@@ -9,13 +9,14 @@
 
  * SDL2 2D rendering (OpenGL support will be coming later)
  * Finite State Machine and state loading from XML file
- * Entities defined using Lua scripts including lua listener functions on events
+ * Entities defined using Lua scripts including Lua listener functions on events
+ * Entities can have dynamic behaviours coded using Lua coroutines
  * Keyboard and Mouse input handling with SDL2
  * Window and GL context handling with SDL2
  * GLSL shader program loading
  * Texture loading (Using stb_image.h and SDL2_image)
  * TTF Font loading (Using SDL_ttf)
- * Menu buttons with callbacks
+ * Menu buttons with callbacks, labels, backgrounds
  * Sprite animations
  * Basic Audio Support (one shot sfx and music)
  * Tiled map loading from tmx files including collision layers
@@ -32,6 +33,7 @@
  * Model Loading (simple .obj loader or assimp?)
  * Skeletal animation support
  * Saving/loading
+ * Items/inventory
 
 
 ### Used Libraries
