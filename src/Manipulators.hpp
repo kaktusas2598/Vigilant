@@ -9,12 +9,7 @@
 
 namespace Vigilant {
 
-    // TODO
-    // Testing out automation/ behaviours/ manipulators on entities
-    // Beginning of 'AI'?
-    // Lua co-routines
-    // and so on...
-
+    // Base Manipulator class for Dynamic Behaviours scriptable in Lua using coroutines
     struct Manipulator {
         Entity* entity;
         virtual bool update(float elapsedTime) = 0;
@@ -48,10 +43,10 @@ namespace Vigilant {
                 entity->transform->setPosition(targetPos);
                 complete = true;
             }
+
+            return complete;
         }
     };
-
-
 }
 
 #endif // __Manipulator__

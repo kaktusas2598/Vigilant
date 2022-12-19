@@ -105,6 +105,11 @@ namespace Vigilant {
         lua_pushcfunction(state, lua_setInputListener);
         lua_setfield(state, -2 , "setInputListener");
 
+        lua_pushcfunction(state, lua_addBehaviour);
+        lua_setfield(state, -2 , "addBehaviour");
+        lua_pushcfunction(state, lua_addMoveBehaviour);
+        lua_setfield(state, -2 , "addMoveBehaviour");
+
         lua_pushcfunction(state, lua_addButton);
         lua_setfield(state, -2 , "addButton");
         lua_pushcfunction(state, lua_setButtonListener);
@@ -222,6 +227,16 @@ namespace Vigilant {
 
             if (luaOk(state, lua_pcall(state, 2, 0, 0))) {
                 //std::cout << "onCollide() Called sucessfully!!!" << std::endl;
+            }
+        }
+    }
+
+    void ScriptEngine::issueNextTask(int id) {
+        lua_getglobal(state, "issueNextTask");
+        if (lua_isfunction(state, -1)) {
+            lua_pushnumber(state, id);
+            if(!luaOk(state, lua_pcall(state, 1, 0, 0))) {
+                // behaviour function error or script error
             }
         }
     }

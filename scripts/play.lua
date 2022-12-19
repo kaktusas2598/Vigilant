@@ -43,11 +43,14 @@ end
 
 function issueNextTask(id)
     -- check if coroutine is not dead
-    if coroutine.status(dynamics[id].behaviour) ~= 'dead' then
+    if coroutine.status(behaviours[id].behaviour) ~= 'dead' then
         -- resume method needs coroutine and any parameters
-        coroutine.resume(dynamics[id].behaviour, id)
+        coroutine.resume(behaviours[id].behaviour, id)
     end
 end
+
+--dofile("scripts/main.lua")
+
 
 -- Redefining lua print() so we can redirect output to debug console and logs if needed
 luaPrint = print
@@ -104,6 +107,8 @@ function define(data, tag)
     entities[entity:id()] = entity
     return entity
 end
+
+-------------------------------------------------------------------------------
 
 
 -- Player event listeners
@@ -273,6 +278,21 @@ print("Slime ID: "..testEntity:id())
 --entities[testEntity:id()] = nil
 --testEntity = nil
 
+-- Simple behaviour makes enemy go around in perimeter
+function enemyBehaviour(id)
+    while true do
+        -- x, y, time
+        entities[id]:addMoveBehaviour(entities[id]:getX() + 400.0, entities[id]:getY(), 5.0)
+        coroutine.yield()
+        entities[id]:addMoveBehaviour(entities[id]:getX(), entities[id]:getY() + 400.0, 5.0)
+        coroutine.yield()
+        entities[id]:addMoveBehaviour(entities[id]:getX() - 400.0, entities[id]:getY(), 5.0)
+        coroutine.yield()
+        entities[id]:addMoveBehaviour(entities[id]:getX(), entities[id]:getY() - 400.0, 5.0)
+        coroutine.yield()
+    end
+end
+
 
 entityTable = {}
 for i = 1, 100 do
@@ -285,4 +305,9 @@ for i = 1, 100 do
     entityTable[i]:setAnimation("default")
     entityTable[i]:addCollider(15, 30)
     entityTable[i]:addPhysics(2.0, 0.3)
+    -- Attach dynamic behavioir and start it
+    enemyId = entityTable[i]:id()
+    entityTable[i]:addBehaviour()
+    behaviours[enemyId] = {behaviour = coroutine.create(enemyBehaviour)}
+    issueNextTask(enemyId)
 end
