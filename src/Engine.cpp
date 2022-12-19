@@ -23,9 +23,6 @@
 
 namespace Vigilant {
 
-    bool Engine::layerVisibility = false;
-    bool Engine::colliderVisibility = false;
-
     Engine* Engine::s_pInstance = nullptr;
 
     Engine::Engine() {
@@ -36,26 +33,23 @@ namespace Vigilant {
         level = nullptr;
     }
 
-    Engine::~Engine()
-    {
-    }
+    Engine::~Engine() {}
 
     void Engine::addStates() {
         Logger::Instance()->info("Adding states.");
         StateParser stateParser;
-                std::vector<GameState*> states;
-                if (!stateParser.loadStates("state.xml", &states)) {
-                    Logger::Instance()->error("Failed adding states.");
-                }
-                for (auto& state: states) {
-                    m_stateMachine->addState(state);
-                }
-                m_stateMachine->setState(states[0]->getID());
-                states.clear();
-
-                return;
+        std::vector<GameState*> states;
+        if (!stateParser.loadStates("state.xml", &states)) {
+            Logger::Instance()->error("Failed adding states.");
         }
+        for (auto& state: states) {
+            m_stateMachine->addState(state);
+        }
+        m_stateMachine->setState(states[0]->getID());
+        states.clear();
 
+        return;
+    }
 
     void Engine::init(std::string title, int height, int width, unsigned int currentFlags, bool sdlEnabled){
         screenHeight = height;
@@ -194,7 +188,7 @@ namespace Vigilant {
         ImGui::NewFrame();
 
         if (debugMode) {
-            renderDebug(deltaTime);
+            DebugConsole::Instance()->render();
         }
 
         if (SDLRenderingEnabled) {
@@ -230,38 +224,6 @@ namespace Vigilant {
             glEnd();
             ///////////////////////
         }
-    }
-
-
-    /**
-     * Defines Debug tool using IMGui
-     * @param deltaTime
-     */
-    void Engine::renderDebug(float deltaTime) {
-        // Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-        static bool showDemoWindow = true;
-        ImGui::ShowDemoWindow(&showDemoWindow);
-
-        ImGui::Begin("Debug Log");                          // Create a window called "Hello, world!" and append into it.
-                                                            //ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-                                                            //ImGui::SameLine();
-        ImGui::Checkbox("Show IMGui Demo Window", &showDemoWindow);
-        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-        ImGui::Text("Active entities: %d", EntityManager::livingCount);
-        ImGui::Checkbox("Show collision layers", &layerVisibility);
-        ImGui::Checkbox("Show colliders", &colliderVisibility);
-
-        if (level != nullptr) {
-            int i = 0;
-            for (auto it = level->getCollisionLayers()->begin(); it != level->getCollisionLayers()->end(); ++it) {
-                (*it)->setVisible(layerVisibility);
-                i++;
-            }
-        }
-
-        char inputBuf[256];
-
-        ImGui::End();
     }
 
     /**

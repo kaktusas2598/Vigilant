@@ -10,93 +10,91 @@
 #include <memory>
 #include <vector>
 
+#include "DebugConsole.hpp"
+#include "imgui/imgui.h"
+
 namespace Vigilant {
 
-	class GameState;
-	class Entity;
+    class GameState;
+    class Entity;
 
-	/*! \brief Engine
-	 *         Main Engine Class.
-	 *
-	 */
-	class Engine {
-		public:
-			static Engine* Instance() {
-				if (s_pInstance == 0) {
-					s_pInstance = new Engine();
-					return s_pInstance;
-				}
-				return s_pInstance;
-			}
-			/**
-			 * init systems, create window and GL context
-			 * @param title Title to be displayed on window title bar
-			 * @param height Screen height in pixels
-			 * @param width Screen width in pixels
-			 * @param currentFlags window flags
-			 * @param sdlEnabled Optional SDL rendering
-			 * @sa WindowFlags
-			 */
-			void init(std::string title, int height, int width, unsigned int currentFlags, bool sdlRendering = false);
-			void run(); ///< runs main application's loop
-			void exit(); //< clean resources and exit application
+    /*! \brief Engine
+     *         Main Engine Class.
+     *
+     */
+    class Engine {
+        public:
+            static Engine* Instance() {
+                if (s_pInstance == 0) {
+                    s_pInstance = new Engine();
+                    return s_pInstance;
+                }
+                return s_pInstance;
+            }
+            /**
+             * init systems, create window and GL context
+             * @param title Title to be displayed on window title bar
+             * @param height Screen height in pixels
+             * @param width Screen width in pixels
+             * @param currentFlags window flags
+             * @param sdlEnabled Optional SDL rendering
+             * @sa WindowFlags
+             */
+            void init(std::string title, int height, int width, unsigned int currentFlags, bool sdlRendering = false);
+            void run(); ///< runs main application's loop
+            void exit(); //< clean resources and exit application
 
-			// void onInit();
-			void addStates();
-			void onExit();
+            // void onInit();
+            void addStates();
+            void onExit();
 
-			void handleEvents(SDL_Event& event);
+            void handleEvents(SDL_Event& event);
 
-			bool running(){ return m_isRunning; }
-			void setRunning(bool running) { m_isRunning = running; }
+            bool running(){ return m_isRunning; }
+            void setRunning(bool running) { m_isRunning = running; }
 
-			const float getFps() const { return m_fps; }
+            const float getFps() const { return m_fps; }
 
-			StateMachine* getStateMachine() { return m_stateMachine.get(); }
-			SDL_Renderer* getSDLRenderer() { return m_window.getSDLRenderer(); } ///<Optional SDL_Renderer getter
+            StateMachine* getStateMachine() { return m_stateMachine.get(); }
+            SDL_Renderer* getSDLRenderer() { return m_window.getSDLRenderer(); } ///<Optional SDL_Renderer getter
 
-			int getScreenWidth() const { return screenWidth; }
-			int getScreenHeight() const { return screenHeight; }
+            int getScreenWidth() const { return screenWidth; }
+            int getScreenHeight() const { return screenHeight; }
 
-			// Mainly used for Lua to get current level dimensions
-			int getMapWidth() const { return level != nullptr ? level->getWidth() : 0; }
-			int getMapHeight() const { return level != nullptr ? level->getHeight() : 0; }
-			void setLevel(Level* lvl) { level = lvl; }
+            // Mainly used for Lua to get current level dimensions
+            int getMapWidth() const { return level != nullptr ? level->getWidth() : 0; }
+            int getMapHeight() const { return level != nullptr ? level->getHeight() : 0; }
+            // Current level or nullptr if none
+            void setLevel(Level* lvl) { level = lvl; }
+            Level* getLevel() { return level; }
 
+            SDL_Rect camera;
+        private:
+            Engine();
+            ~Engine();
 
-			SDL_Rect camera;
+            static Engine* s_pInstance;
 
-			// Debug variables
-			static bool layerVisibility; ///< Toggle collision layer render
-			static bool colliderVisibility; ///< Toggle collider component render
-		private:
-			Engine();
-			~Engine();
+            void render(float deltaTime); ///< Main render method, renders current state
+            void update(float deltaTime); ///< Main update method, sets different state or updates current one
 
-			static Engine* s_pInstance;
+            bool m_isRunning = false; ///< appliction running flag
+            bool debugMode = false; ///< enables IMGui Debug Console
+            Window m_window; ///< main window instance
+            int screenWidth, screenHeight;
 
-			void render(float deltaTime); ///< Main render method, renders current state
-			void update(float deltaTime); ///< Main update method, sets different state or updates current one
+            float m_fps = 0; ///< main application's fps
 
-			void renderDebug(float deltaTime); ///< Optional debug tools rendering
+            std::unique_ptr<StateMachine> m_stateMachine = nullptr; ///< state machine's instance
+            GameState* m_currentState = nullptr; ///< current state's instance
 
-			bool m_isRunning = false; ///< appliction running flag
-			bool debugMode = false; ///< enables IMGui Debug Window
-			Window m_window; ///< main window instance
-			int screenWidth, screenHeight;
+            std::vector<Entity*> entities;
+            Level* level;
 
-			float m_fps = 0; ///< main application's fps
+            bool SDLRenderingEnabled = false;
+    };
 
-			std::unique_ptr<StateMachine> m_stateMachine = nullptr; ///< state machine's instance
-			GameState* m_currentState = nullptr; ///< current state's instance
-
-			std::vector<Entity*> entities;
-			Level* level;
-
-			bool SDLRenderingEnabled = false;
-	};
-
-	typedef Engine TheEngine;
+    typedef Engine TheEngine;
 }
 
 #endif // __Engine__

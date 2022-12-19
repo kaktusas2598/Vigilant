@@ -39,7 +39,7 @@ namespace Vigilant {
 	}
 
     void ColliderComponent::render() {
-		if (Engine::colliderVisibility) {
+		if (DebugConsole::colliderVisibility) {
 			SDL_Rect renderCollider = collider;
 			renderCollider.x -= Engine::Instance()->camera.x;
 			renderCollider.y -= Engine::Instance()->camera.y;
