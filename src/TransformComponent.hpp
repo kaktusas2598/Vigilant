@@ -9,24 +9,25 @@ namespace Vigilant {
     class TransformComponent : public Component {
         public:
             TransformComponent(Entity* owner) : Component(owner) {
-                x = 0;
-                y = 0;
+                position = Vector2D(0.0f, 0.0f);
                 scaleX = 1.0f;
                 scaleY = 1.0f;
             }
 
-            float getX() const { return x; }
-            float getY() const { return y; }
+            Vector2D& getPosition() { return position; }
+            void setPosition(Vector2D pos) { position = pos; }
+
+            float getX() { return position.getX(); }
+            float getY() { return position.getY(); }
             float getScaleX() const { return scaleX; }
             float getScaleY() const { return scaleY; }
 
-            void setX(float X) { x = X; }
-            void setY(float Y) { y = Y; }
+            void setX(float X) { position.setX(X); }
+            void setY(float Y) { position.setY(Y); }
             void setScaleX(float scale) { scaleX = scale; }
             void setScaleY(float scale) { scaleY = scale; }
         private:
-            float x;
-            float y;
+            Vector2D position;
             float scaleX;
             float scaleY;
     };

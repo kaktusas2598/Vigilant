@@ -33,11 +33,20 @@
 -- Globals
 -- Tried putting this in init script and loading it for all states, but it doesn't seem to work correctly
 entities = {} -- All Lua Managed entities will be here sorted by id
+behaviours = {} -- All dynamic behaviours will be managed by Lua so that it knows which entity to issue which function
 
 function create()
     entity = Entity.create()
     entities[entity:id()] = entity
     return entity
+end
+
+function issueNextTask(id)
+    -- check if coroutine is not dead
+    if coroutine.status(dynamics[id].behaviour) ~= 'dead' then
+        -- resume method needs coroutine and any parameters
+        coroutine.resume(dynamics[id].behaviour, id)
+    end
 end
 
 -- Redefining lua print() so we can redirect output to debug console and logs if needed
@@ -255,7 +264,7 @@ testEntity:scale(2, 2)
 testEntity:addSprite("slime", "assets/sprite/slime.png", 32, 32)
 testEntity:addAnimation("default", "0", "4")
 testEntity:setAnimation("default")
-testEntity:addCollider(48, 48)
+testEntity:addCollider(24, 24)
 testEntity:addPhysics(4.0, 0.3)
 print("Slime ID: "..testEntity:id())
 
