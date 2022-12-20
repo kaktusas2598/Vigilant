@@ -4,9 +4,6 @@
 #include "Entity.hpp"
 #include "Vector2D.hpp"
 
-#include <vector>
-#include <memory>
-
 namespace Vigilant {
 
     // Base Manipulator class for Dynamic Behaviours scriptable in Lua using coroutines
@@ -52,6 +49,7 @@ namespace Vigilant {
     // For example:
     //  Teleporter
     //  Move entities along curve (bezier splines) - non linear interpolation
+    //  A* pathfind to target
 }
 
 #endif // __Manipulator__
