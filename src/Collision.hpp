@@ -124,6 +124,9 @@ namespace Vigilant {
                             auto playerBody = player->getComponent<PhysicsComponent>();
                             auto entityBody = entity->getComponent<PhysicsComponent>();
                             if (entityBody) {
+                                // Maybe try law of conservation of momentum again:
+                                // m1v11 * m2v21 = m1v12 * m2v22
+                                // Remember it disregards external forces like gravity and friction
                                 // 1st try, horrible, player is not affected at all here
                                 entityBody->applyForceX(playerBody->getAccelerationX() * playerBody->getMass());
                                 entityBody->applyForceY(playerBody->getAccelerationY() * playerBody->getMass());
