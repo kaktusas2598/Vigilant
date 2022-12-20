@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <memory>
+#include <map>
 
 #include "Component.hpp"
 #include "TransformComponent.hpp"
@@ -130,6 +131,19 @@ namespace Vigilant {
             TransformComponent* transform;
             IdComponent* id;
 
+            // Lua listener methods
+            bool hasListener (const std::string& type) {
+                return !(listenerMap.find(type) == listenerMap.end());
+            }
+
+            const std::string& getListener(const std::string& type) {
+                if (hasListener(type))
+                    return listenerMap.find(type)->second;
+            }
+            void registerListener(const std::string& type, const std::string& name) {
+                listenerMap.insert({type, name});
+            }
+
             // I mean won't be called anyway, because calling this explicitely in lua's __gc is not a good idea
             virtual ~Entity() { std::cout << "Entity Destructor called\n"; }
         private:
@@ -138,6 +152,9 @@ namespace Vigilant {
 
             ComponentArray componentArray;
             ComponentBitSet componentBitset;
+
+            // Maps listener types to lua listener function
+            std::map<std::string, std::string> listenerMap;
     };
 }
 #endif // __Entity__
