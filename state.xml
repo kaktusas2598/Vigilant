@@ -16,6 +16,7 @@
         <!--Also I would like to be able to add states dynamically using Lua -->
         <FONTS>
             <font filename="assets/fonts/arcade_classic.TTF" ID="arcade"/>
+            <font filename="assets/fonts/PixelEmulator.ttf" ID="pixel"/>
         </FONTS>
         <SCRIPTS>
             <script name="state" filename="scripts/main.lua" type="entity"/>

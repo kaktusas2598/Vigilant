@@ -244,15 +244,31 @@ playerTable = {
 }
 
 player = define(playerTable)
+player:addCharacter(100, 1, 5, 5)
+
+--print(player:level())
+print(player:hp())
 
 mapWidth = getMapWidth()
 mapHeight = getMapHeight()
 screenWidth = getScreenWidth()
 screenHeight = getScreenHeight()
 
+-- Setup player UI
+playerHp = create()
+playerHp:addLabel("HP : "..math.floor(player:hp()), "pixel", 10, 110, 192, 204, 255)
+playerHp:setAlignment(2,2)
+
+playerXp = create()
+playerXp:addLabel("XP : "..math.floor(player:xp()), "pixel", 10, 60, 192, 204, 255)
+playerXp:setAlignment(2,2)
+
+playerLevel = create()
+playerLevel:addLabel("Level : "..math.floor(player:level()), "pixel", 10, 10, 192, 204, 255)
+playerLevel:setAlignment(2,2)
+
 playerPosLabel = create()
--- ':' and ',' are displayed as squares because of the font!
-playerPosLabel:addLabel("Player  Pos  "..math.floor(player:getX())..", "..math.floor(player:getY()), "arcade", 10, 10, 0, 102, 204, 255)
+playerPosLabel:addLabel("Player  Pos  "..math.floor(player:getX())..", "..math.floor(player:getY()), "pixel", 10, 10, 0, 102, 204, 255)
 playerPosLabel:setAlignment(0, 2)
 
 print("Map Width: "..mapWidth.."\nMap Height: "..mapHeight)

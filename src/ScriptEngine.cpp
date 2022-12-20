@@ -85,6 +85,15 @@ namespace Vigilant {
         lua_pushcfunction(state, lua_scaleEntity);
         lua_setfield(state, -2 , "scale");
 
+        lua_pushcfunction(state, lua_addCharacter);
+        lua_setfield(state, -2 , "addCharacter");
+        lua_pushcfunction(state, lua_entityHp);
+        lua_setfield(state, -2 , "hp");
+        lua_pushcfunction(state, lua_entityXp);
+        lua_setfield(state, -2 , "xp");
+        lua_pushcfunction(state, lua_entityLevel);
+        lua_setfield(state, -2 , "level");
+
         lua_pushcfunction(state, lua_addSprite);
         lua_setfield(state, -2 , "addSprite");
         lua_pushcfunction(state, lua_setAbsolutePosition);

@@ -14,6 +14,7 @@
 #include "ButtonComponent.hpp"
 #include "BackgroundComponent.hpp"
 #include "UILabelComponent.hpp"
+#include "CharacterComponent.hpp"
 
 #include "SoundManager.hpp"
 #include "TextureManager.hpp"
@@ -311,6 +312,37 @@ namespace Vigilant {
                 float time = (float)lua_tonumber(L, 4);
                 entity->getComponent<BehaviourComponent>()->move(Vector2D(x,y), time);
                 return 0;
+            }
+
+            static int lua_addCharacter(lua_State *L) {
+                Entity* entity = (Entity*)lua_touserdata(L, 1);
+                int health = (int)lua_tonumber(L, 2);
+                int level = (int)lua_tonumber(L, 3);
+                int attack = (int)lua_tonumber(L, 4);
+                int defense = (int)lua_tonumber(L, 5);
+                entity->addComponent<CharacterComponent>()->load(health, level, attack, defense);
+                return 0;
+            }
+
+            static int lua_entityHp(lua_State *L) {
+                Entity* entity = (Entity*)lua_touserdata(L, 1);
+                int health = entity->getComponent<CharacterComponent>()->getHP();
+                lua_pushnumber(L, health);
+                return 1;
+            }
+
+            static int lua_entityXp(lua_State *L) {
+                Entity* entity = (Entity*)lua_touserdata(L, 1);
+                int xp = entity->getComponent<CharacterComponent>()->getXP();
+                lua_pushnumber(L, xp);
+                return 1;
+            }
+
+            static int lua_entityLevel(lua_State *L) {
+                Entity* entity = (Entity*)lua_touserdata(L, 1);
+                int level = entity->getComponent<CharacterComponent>()->getLevel();
+                lua_pushnumber(L, level);
+                return 1;
             }
 
             static int lua_addButton(lua_State *L) {
