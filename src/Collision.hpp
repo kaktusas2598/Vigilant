@@ -201,18 +201,18 @@ namespace Vigilant {
                     }
 
                     if (entityX > 0 && entityY > 0) {
-                        // FIXME: collision only works if going down or to the left so if velocity is positive
-                        if (velocityX >= 0 || velocityY >= 0) {
+                        if (velocityX >= 0) {
                             tileColumn = ((entityX + width) / (tileLayer->getTileSize() * tileLayer->getScale()));
-                            tileRow = ((entityY + height) / (tileLayer->getTileSize() * tileLayer->getScale()));
-                            if (tileRow < tileLayer->getMapHeight() && tileColumn < tileLayer->getMapWidth())
-                                tileid = tiles[tileRow][tileColumn];
-                        } else if(velocityX < 0 || velocityY < 0) {
+                        } else {
                             tileColumn = entityX / (tileLayer->getTileSize() * tileLayer->getScale());
-                            tileRow = entityY / (tileLayer->getTileSize() * tileLayer->getScale());
-                            if (tileRow < tileLayer->getMapHeight() && tileColumn < tileLayer->getMapWidth())
-                                tileid = tiles[tileRow][tileColumn];
                         }
+                        if (velocityY >= 0) {
+                            tileRow = ((entityY + height) / (tileLayer->getTileSize() * tileLayer->getScale()));
+                        } else {
+                            tileRow = entityY / (tileLayer->getTileSize() * tileLayer->getScale());
+                        }
+                        if (tileRow < tileLayer->getMapHeight() && tileColumn < tileLayer->getMapWidth())
+                            tileid = tiles[tileRow][tileColumn];
                     }
 
                     // Collision between entity and a tile detected!

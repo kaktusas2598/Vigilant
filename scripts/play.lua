@@ -49,8 +49,6 @@ function issueNextTask(id)
     end
 end
 
---dofile("scripts/main.lua")
-
 
 -- Redefining lua print() so we can redirect output to debug console and logs if needed
 luaPrint = print
@@ -238,7 +236,7 @@ playerTable = {
     collider = {
         type = "player",
         width = 15,
-        height = 30,
+        height = 26,
         listener = "onCollide"
     },
     input = {
@@ -282,19 +280,19 @@ print("Slime ID: "..testEntity:id())
 function enemyBehaviour(id)
     while true do
         -- x, y, time
-        entities[id]:addMoveBehaviour(entities[id]:getX() + 400.0, entities[id]:getY(), 5.0)
+        entities[id]:addMoveBehaviour(entities[id]:getX() + 400.0, entities[id]:getY(), 7.0)
         coroutine.yield()
-        entities[id]:addMoveBehaviour(entities[id]:getX(), entities[id]:getY() + 400.0, 5.0)
+        entities[id]:addMoveBehaviour(entities[id]:getX(), entities[id]:getY() + 400.0, 7.0)
         coroutine.yield()
-        entities[id]:addMoveBehaviour(entities[id]:getX() - 400.0, entities[id]:getY(), 5.0)
+        entities[id]:addMoveBehaviour(entities[id]:getX() - 400.0, entities[id]:getY(), 7.0)
         coroutine.yield()
-        entities[id]:addMoveBehaviour(entities[id]:getX(), entities[id]:getY() - 400.0, 5.0)
+        entities[id]:addMoveBehaviour(entities[id]:getX(), entities[id]:getY() - 400.0, 7.0)
         coroutine.yield()
     end
 end
 
 
-entityTable = {}
+local entityTable = {}
 for i = 1, 100 do
     entityTable[i] = create()
     entityTable[i]:setType("enemy")

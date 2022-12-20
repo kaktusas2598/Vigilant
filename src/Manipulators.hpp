@@ -47,6 +47,11 @@ namespace Vigilant {
             return complete;
         }
     };
+
+    // TODO: Implement MORE Manipulators!!
+    // For example:
+    //  Teleporter
+    //  Move entities along curve (bezier splines) - non linear interpolation
 }
 
 #endif // __Manipulator__

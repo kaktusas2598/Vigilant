@@ -23,6 +23,7 @@ namespace Vigilant {
 
 		// Collider MUST be loaded AFTER the sprite!
 		// Seems to save some FPS, but logic would brake if scale is changed after this or sprite changes
+		// TODO: check here if offset not zero then use that, otherwise calculate centered collider box
 		auto sprite = owner->getComponent<SpriteComponent>();
 		if (sprite) {
 			xOffset = (sprite->getWidth() - collider.w)/2 * owner->transform->getScaleX();
