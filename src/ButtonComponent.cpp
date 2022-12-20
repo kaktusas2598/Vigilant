@@ -26,7 +26,7 @@ namespace Vigilant {
                 TheSoundManager::Instance()->playSound("button", 0);
                 //callback();
                 // TODO: third argument is SDL Key Code, do something about this, overload onInput or something
-                ScriptEngine::Instance()->onInput(getListener(), owner->id->get(), 0);
+                ScriptEngine::Instance()->dispatch(owner->getListener("CLICK"), owner->id->get(), 0);
                 isReleased = false;
             } /*else if (TheInputManager::Instance()->isKeyDown(SDL_BUTTON_LEFT)) {
                 isReleased = true;

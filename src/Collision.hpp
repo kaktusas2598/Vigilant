@@ -82,9 +82,7 @@ namespace Vigilant {
 
                     // NARROW PHASE
                     if(AABB(collider, entityCollider->getCollider())) {
-                        std::cout << "Projectile and entity collision detected" << std::endl;
-                        std::string listener = owner->getComponent<ColliderComponent>()->getListener();
-                        ScriptEngine::Instance()->onCollide(listener, projectile->id->get(), entity->id->get());
+                        ScriptEngine::Instance()->dispatch(owner->getListener("COLLIDE"), projectile->id->get(), entity->id->get());
                     }
                 }
             }
@@ -149,9 +147,7 @@ namespace Vigilant {
                                 //entityBody->setVelocity(finalVelocity);
                             }
 
-                            // std::cout << "Player and entity collision detected" << std::endl;
-                            std::string listener = playerCollider->getListener();
-                            ScriptEngine::Instance()->onCollide(listener, player->id->get(), entity->id->get());
+                            ScriptEngine::Instance()->dispatch(player->getListener("COLLIDE"), player->id->get(), entity->id->get());
                         }
                     }
 

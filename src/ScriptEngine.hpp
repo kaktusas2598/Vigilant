@@ -71,12 +71,12 @@ namespace Vigilant {
                 script->close();
             }
 
-            // Listeners
-            void onInput(std::string listener, int thisId, unsigned int keyID);
-            void onCollide(std::string listener, int thisId, int secondId);
-            // void onCollide(Entity* entity);
+            // Dispatch event from the engine to lua by calling listener in lua
+            // First param will always be entity Id, second param is optional
+            // Will need a better way to pass different params
+            void dispatch(const std::string listener, int firstParam, int secondParam = -1);
 
-            // Issues next task for dynamic behaviours
+            // Issues next task for dynamic behaviours/coroutines
             void issueNextTask(int id);
 
             // Lua API is written in C so only static C++ class methods can be wrapped for lua
@@ -173,6 +173,14 @@ namespace Vigilant {
             static int lua_removeEntity(lua_State *L) {
                 Entity* entity = (Entity*)lua_touserdata(L, -1);
                 EntityManager::Instance()->remove(entity->id->get());
+                return 0;
+            }
+
+            static int lua_registerListener(lua_State *L) {
+                Entity* entity = (Entity*)lua_touserdata(L, 1);
+                std::string type = (std::string)lua_tostring(L, 2);
+                std::string listener = (std::string)lua_tostring(L, 3);
+                entity->registerListener(type, listener);
                 return 0;
             }
 
@@ -293,13 +301,6 @@ namespace Vigilant {
                 return 0;
             }
 
-            static int lua_setInputListener(lua_State *L) {
-                Entity* entity = (Entity*)lua_touserdata(L, 1);
-                std::string listener = (std::string)lua_tostring(L, 2);
-                entity->getComponent<InputComponent>()->setListener(listener);
-                return 0;
-            }
-
             static int lua_addBehaviour(lua_State* L) {
                 Entity* entity = (Entity*)lua_touserdata(L, 1);
                 entity->addComponent<BehaviourComponent>();
@@ -358,13 +359,6 @@ namespace Vigilant {
                 return 0;
             }
 
-            static int lua_setButtonListener(lua_State *L) {
-                Entity* entity = (Entity*)lua_touserdata(L, 1);
-                std::string listener = (std::string)lua_tostring(L, 2);
-                entity->getComponent<ButtonComponent>()->setListener(listener);
-                return 0;
-            }
-
             static int lua_addBackground(lua_State *L) {
                 Entity* entity = (Entity*)lua_touserdata(L, 1);
                 int scrollSpeed = (int)lua_tonumber(L, 2);
@@ -411,13 +405,6 @@ namespace Vigilant {
                 int width = (int)lua_tonumber(L, 2);
                 int height = (int)lua_tonumber(L, 3);
                 entity->addComponent<ColliderComponent>()->load(width, height);
-                return 0;
-            }
-
-            static int lua_setCollideListener(lua_State *L) {
-                Entity* entity = (Entity*)lua_touserdata(L, 1);
-                std::string listener = (std::string)lua_tostring(L, 2);
-                entity->getComponent<ColliderComponent>()->setListener(listener);
                 return 0;
             }
 

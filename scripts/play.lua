@@ -10,15 +10,13 @@
 -- Entity.setAbsolutePosition(isAbsolute): takes boolean argument
 -- Entity.addPhysics(mass, frictionCoefficient) : friction from 0.00 to 1.00
 -- Entity.addCollider(width, height)
--- Entity.setColliderListener(funcName)
 -- Entity.addInput()
--- Entity.setInputListener(funcName)
 -- Entity.addButton()
--- Entity.setButtonListener(funcName)
 -- Entity.addLabel(x, y, text, fontId, r, g, b, a)
 -- Entity.setLabel(text)
 -- Entity.setLabelAlignment(enum horizontal, enum vertical)
 -- Entity.id()
+-- Entity:registerListener(type, name)
 
 -- General Functions:
 -- playSound(id)
@@ -29,6 +27,7 @@
 -- getScreenWidth()
 -- getScreenHeight()
 -- changeState(stateID)
+-- quit()
 
 -- Globals
 -- Tried putting this in init script and loading it for all states, but it doesn't seem to work correctly
@@ -92,14 +91,14 @@ function define(data, tag)
         end
         if k == "input" then
             entity:addInput()
-            entity:setInputListener("onInput")
+            entity:registerListener("INPUT", v['listener'])
         end
         if k == "physics" then
             entity:addPhysics(v['mass'], v['friction'])
         end
         if k == "collider" then
             entity:addCollider(v['width'], v['height'])
-            entity:setCollideListener("onCollide")
+            entity:registerListener("COLLIDE", v['listener'])
         end
     end
     entities[entity:id()] = entity
@@ -168,12 +167,7 @@ end
 mainMenuButton = create()
 mainMenuButton:addButton("mainmenubutton", 200, 80, 10, 10)
 mainMenuButton:setAlignment(2, 0)
-mainMenuButton:setButtonListener("onMainMenuClick")
-
--- Projectile template
-projectileTable = {
-}
-
+mainMenuButton:registerListener("CLICK", "onMainMenuClick")
 
 -- Entity
 playerTable = {
@@ -245,9 +239,6 @@ playerTable = {
 
 player = define(playerTable)
 player:addCharacter(100, 1, 5, 5)
-
---print(player:level())
-print(player:hp())
 
 mapWidth = getMapWidth()
 mapHeight = getMapHeight()

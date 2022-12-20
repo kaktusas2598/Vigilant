@@ -68,7 +68,9 @@ namespace Vigilant {
         lua_setfield(state, -2 , "create");
         lua_pushcfunction(state, lua_removeEntity);
         lua_setfield(state, -2 , "remove");
-
+        lua_pushcfunction(state, lua_registerListener);
+        lua_setfield(state, -2 , "registerListener");
+        // ID Component
         lua_pushcfunction(state, lua_entityId);
         lua_setfield(state, -2 , "id");
         lua_pushcfunction(state, lua_getTag);
@@ -80,6 +82,7 @@ namespace Vigilant {
         lua_pushcfunction(state, lua_setType);
         lua_setfield(state, -2 , "setType");
 
+        // Transform Component
         lua_pushcfunction(state, lua_teleportEntity);
         lua_setfield(state, -2 , "move");
         lua_pushcfunction(state, lua_scaleEntity);
@@ -98,7 +101,6 @@ namespace Vigilant {
         lua_setfield(state, -2 , "addSprite");
         lua_pushcfunction(state, lua_setAbsolutePosition);
         lua_setfield(state, -2 , "setAbsolutePosition");
-
         lua_pushcfunction(state, lua_addAnimation);
         lua_setfield(state, -2 , "addAnimation");
         lua_pushcfunction(state, lua_setAnimation);
@@ -106,14 +108,9 @@ namespace Vigilant {
 
         lua_pushcfunction(state, lua_addCollider);
         lua_setfield(state, -2 , "addCollider");
-        lua_pushcfunction(state, lua_setCollideListener);
-        lua_setfield(state, -2 , "setCollideListener");
 
         lua_pushcfunction(state, lua_addInput);
         lua_setfield(state, -2 , "addInput");
-        lua_pushcfunction(state, lua_setInputListener);
-        lua_setfield(state, -2 , "setInputListener");
-
         lua_pushcfunction(state, lua_addBehaviour);
         lua_setfield(state, -2 , "addBehaviour");
         lua_pushcfunction(state, lua_addMoveBehaviour);
@@ -121,12 +118,8 @@ namespace Vigilant {
 
         lua_pushcfunction(state, lua_addButton);
         lua_setfield(state, -2 , "addButton");
-        lua_pushcfunction(state, lua_setButtonListener);
-        lua_setfield(state, -2 , "setButtonListener");
-
         lua_pushcfunction(state, lua_addBackground);
         lua_setfield(state, -2 , "addBackground");
-
         lua_pushcfunction(state, lua_addLabel);
         lua_setfield(state, -2 , "addLabel");
         lua_pushcfunction(state, lua_setLabel);
@@ -217,27 +210,18 @@ namespace Vigilant {
         // luaL_dofile(state, fileName.c_str());
     }
 
-    void ScriptEngine::onInput(std::string listener, int thisId, unsigned int keyID) {
+    void ScriptEngine::dispatch(const std::string listener, int firstParam, int secondParam) {
         // Find appropriate lua function and call
         if (!listener.empty()){
             lua_getglobal(state, listener.c_str());
-            lua_pushnumber(state, thisId);
-            lua_pushnumber(state, keyID);
-
-            if (luaOk(state, lua_pcall(state, 2, 0, 0))) {
-                //std::cout << "onInput() Called sucessfully!!!" << std::endl;
+            lua_pushnumber(state, firstParam);
+            // Need a better way to handle params, this would break if we actually want to pass -1
+            if (secondParam != -1) {
+                lua_pushnumber(state, secondParam);
             }
-        }
-    }
-
-    void ScriptEngine::onCollide(std::string listener, int thisId, int secondId) {
-        if (!listener.empty()){
-            lua_getglobal(state, listener.c_str());
-            lua_pushnumber(state, thisId);
-            lua_pushnumber(state, secondId);
 
             if (luaOk(state, lua_pcall(state, 2, 0, 0))) {
-                //std::cout << "onCollide() Called sucessfully!!!" << std::endl;
+                //std::cout << "Listener invoked successfully" << std::endl;
             }
         }
     }

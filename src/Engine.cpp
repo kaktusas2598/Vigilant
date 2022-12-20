@@ -325,7 +325,7 @@ namespace Vigilant {
                 // be one of the first entities defined in lua
                 for (auto& e: EntityManager::Instance()->getEntities()) {
                     if (e->hasComponent<InputComponent>()) {
-                        ScriptEngine::Instance()->onInput(e->getComponent<InputComponent>()->getListener(), e->id->get(), event.key.keysym.sym);
+                        ScriptEngine::Instance()->dispatch(e->getListener("INPUT"), e->id->get(), event.key.keysym.sym);
                         break;
                     }
                 }

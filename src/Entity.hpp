@@ -136,9 +136,10 @@ namespace Vigilant {
                 return !(listenerMap.find(type) == listenerMap.end());
             }
 
-            const std::string& getListener(const std::string& type) {
+            std::string getListener(const std::string& type) {
                 if (hasListener(type))
                     return listenerMap.find(type)->second;
+                return std::string();
             }
             void registerListener(const std::string& type, const std::string& name) {
                 listenerMap.insert({type, name});

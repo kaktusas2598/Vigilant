@@ -26,9 +26,9 @@ end
 playButton = Entity:create()
 playButton:addButton("playbutton", 300, 100, 0, -75)
 playButton:setAlignment(1, 1)
-playButton:setButtonListener("onPlayClick")
+playButton:registerListener("CLICK", "onPlayClick")
 
 quitButton = Entity:create()
 quitButton:addButton("exitbutton", 300, 100, 0, 75)
 quitButton:setAlignment(1, 1)
-quitButton:setButtonListener("onQuit")
+quitButton:registerListener("CLICK", "onQuit")
