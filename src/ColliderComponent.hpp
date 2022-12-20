@@ -12,8 +12,7 @@ namespace Vigilant {
         public:
             ColliderComponent(Entity* owner);
 
-            // TODO: need to support offset loading as well
-            void load(int width, int height);
+            void load(int width, int height, int x = 0, int y = 0);
             void update(float deltaTime);
             void render();
 
