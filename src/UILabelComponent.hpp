@@ -12,6 +12,8 @@ namespace Vigilant {
         public:
             UILabelComponent(Entity* owner);
 
+            // TODO: Define float lifeTime and update method, so that we can destroy label after some time
+            // like displaying damage given for example
             // X and Y will be used as offset depending on allignment, except for central allignments
             void load(int x, int y, std::string text, std::string font, SDL_Color& color) {
                 ui.x = x;
