@@ -6,23 +6,21 @@
 #include "Entity.hpp"
 #include "Vector2D.hpp"
 
-#include "SpriteComponent.hpp"
-
 namespace Vigilant {
 
     ButtonComponent::ButtonComponent(Entity* owner) : Component(owner), LuaListener() {
-		// From MenuButton class
-		// Starting frame is 1st one
+        // Todo, need basic animation here, Animation struct could go to a new file
+        // From MenuButton class
+        // Starting frame is 1st one
         //m_currentFrame = MOUSE_OUT;
-
     }
 
     void ButtonComponent::update(float deltaTime) {
         Vector2D mousePosition = TheInputManager::Instance()->getMouseCoords();
-        auto sprite = owner->getComponent<SpriteComponent>();
 
-        if (mousePosition.getX() < (owner->transform->getX() + sprite->getWidth() * owner->transform->getScaleX()) && (mousePosition.getX() > owner->transform->getX())
-                && mousePosition.getY() < (owner->transform->getY() + sprite->getHeight() * owner->transform->getScaleY()) && mousePosition.getY() > owner->transform->getY()) {
+        // TODO: should use transform position instead?
+        if (mousePosition.getX() < (ui.x + ui.width * owner->transform->getScaleX()) && (mousePosition.getX() > ui.x)
+                && mousePosition.getY() < (ui.y + ui.height * owner->transform->getScaleY()) && mousePosition.getY() > ui.y) {
             if (TheInputManager::Instance()->isKeyPressed(SDL_BUTTON_LEFT)/* && isReleased*/) {
                 //m_currentFrame = CLICKED;
                 TheSoundManager::Instance()->playSound("button", 0);
@@ -33,10 +31,34 @@ namespace Vigilant {
             } /*else if (TheInputManager::Instance()->isKeyDown(SDL_BUTTON_LEFT)) {
                 isReleased = true;
                 m_currentFrame = MOUSE_OVER;
-            }*/
+                }*/
         } else {
             //m_currentFrame = MOUSE_OUT;
         }
 
-	}
+    }
+
+    void ButtonComponent::render() {
+        SDL_Rect srcRect;
+        SDL_Rect destRect;
+
+        srcRect.x = 0;
+        srcRect.y = 0;
+        srcRect.w = ui.width;
+        srcRect.h = ui.height;
+        destRect.w = ui.width * owner->transform->getScaleX();
+        destRect.h = ui.height * owner->transform->getScaleY();
+        destRect.x = ui.x;
+        destRect.y = ui.y;
+
+        SDL_RenderCopyEx(
+                TheEngine::Instance()->getSDLRenderer(),
+                TheTextureManager::Instance()->getTexture(textureID),
+                &srcRect,
+                &destRect,
+                0,
+                0,
+                SDL_FLIP_NONE
+                );
+    }
 }

@@ -366,16 +366,15 @@ namespace Vigilant {
                         (*it)->init();
                     }
                 }
-                // TODO: recalculate button and background positions
                 // Update UI
                 for (auto& e: EntityManager::Instance()->getEntities()) {
                     // Need much better way than this, probably using render groups? but every component belonging to group
                     // needs to have same method, extend from another class?
                     if (e->hasComponent<UILabelComponent>()) {
-                        e->getComponent<UILabelComponent>()->reload();
+                        e->getComponent<UILabelComponent>()->ui.refresh();
                         continue;
                     } else if (e->hasComponent<ButtonComponent>()) {
-                        e->getComponent<ButtonComponent>()->reload();
+                        e->getComponent<ButtonComponent>()->ui.refresh();
                         continue;
                     } else if (e->hasComponent<BackgroundComponent>()) {
                         e->getComponent<BackgroundComponent>()->reload();

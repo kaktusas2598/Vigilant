@@ -10,7 +10,7 @@ namespace Vigilant {
         isAnimated = false;
         isFlipped = false;
         isAbsolute = false;
-		animationState = STILL;
+        animationState = STILL;
     }
 
     void SpriteComponent::render() {

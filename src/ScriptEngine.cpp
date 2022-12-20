@@ -122,8 +122,8 @@ namespace Vigilant {
         lua_setfield(state, -2 , "addLabel");
         lua_pushcfunction(state, lua_setLabel);
         lua_setfield(state, -2 , "setLabel");
-        lua_pushcfunction(state, lua_setLabelAlignment);
-        lua_setfield(state, -2 , "setLabelAlignment");
+        lua_pushcfunction(state, lua_setAlignment);
+        lua_setfield(state, -2 , "setAlignment");
 
         lua_pushcfunction(state, lua_addPhysics);
         lua_setfield(state, -2 , "addPhysics");
@@ -163,6 +163,8 @@ namespace Vigilant {
         lua_register(state, "getMapHeight", lua_getMapHeight);
         lua_register(state, "getScreenWidth", lua_getScreenWidth);
         lua_register(state, "getScreenHeight", lua_getScreenHeight);
+        lua_register(state, "getCameraX", lua_getCameraX);
+        lua_register(state, "getCameraY", lua_getCameraY);
         lua_register(state, "changeState", lua_changeState);
         lua_register(state, "quit", lua_quit);
         lua_register(state, "addLog", lua_addLog);

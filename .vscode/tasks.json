@@ -13,6 +13,8 @@
                 "main",
                 "-IC:\\msys64\\mingw64\\include",
                 "-Isrc/include",
+                "-Isrc/include/imgui",
+                "-Isrc/include/tinyxml",
                 "-Lsrc/lib",
                 "-LC:\\msys64\\mingw64\\lib",
                 "-v",

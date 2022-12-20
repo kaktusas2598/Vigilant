@@ -126,6 +126,19 @@ namespace Vigilant {
                 return 1;
             }
 
+            static int lua_getCameraX(lua_State *L) {
+                int x = TheEngine::Instance()->camera.x;
+                lua_pushnumber(L, x);
+                return 1;
+            }
+
+            static int lua_getCameraY(lua_State *L) {
+                int y = TheEngine::Instance()->camera.y;
+                lua_pushnumber(L, y);
+                return 1;
+            }
+
+
             static int lua_changeState(lua_State *L) {
                 std::string id = (std::string)lua_tostring(L, 1);
                 TheEngine::Instance()->getStateMachine()->getCurrentState()->setNextID(id);
@@ -303,6 +316,13 @@ namespace Vigilant {
             static int lua_addButton(lua_State *L) {
                 Entity* entity = (Entity*)lua_touserdata(L, 1);
                 entity->addComponent<ButtonComponent>();
+                std::string id = (std::string)lua_tostring(L, 2);
+                int w = (int)lua_tonumber(L, 3);
+                int h = (int)lua_tonumber(L, 4);
+                int x = (int)lua_tonumber(L, 5);
+                int y = (int)lua_tonumber(L, 6);
+                entity->getComponent<ButtonComponent>()->load(id, w, h, x, y);
+
                 return 0;
             }
 
@@ -323,10 +343,10 @@ namespace Vigilant {
             static int lua_addLabel(lua_State *L) {
                 Entity* entity = (Entity*)lua_touserdata(L, 1);
                 entity->addComponent<UILabelComponent>();
-                int x = (int)lua_tonumber(L, 2);
-                int y = (int)lua_tonumber(L, 3);
-                std::string text = (std::string)lua_tostring(L, 4);
-                std::string fontId = (std::string)lua_tostring(L, 5);
+                std::string text = (std::string)lua_tostring(L, 2);
+                std::string fontId = (std::string)lua_tostring(L, 3);
+                int x = (int)lua_tonumber(L, 4);
+                int y = (int)lua_tonumber(L, 5);
                 int r = (int)lua_tonumber(L, 6);
                 int g = (int)lua_tonumber(L, 7);
                 int b = (int)lua_tonumber(L, 8);
@@ -343,11 +363,14 @@ namespace Vigilant {
                 return 0;
             }
 
-            static int lua_setLabelAlignment(lua_State *L) {
+            static int lua_setAlignment(lua_State *L) {
                 Entity* entity = (Entity*)lua_touserdata(L, 1);
                 int alignH = (int)lua_tonumber(L, 2);
                 int alignV = (int)lua_tonumber(L, 3);
-                entity->getComponent<UILabelComponent>()->setAlignment(static_cast<Align>(alignH), static_cast<VerticalAlign>(alignV));
+                if (entity->hasComponent<UILabelComponent>())
+                    entity->getComponent<UILabelComponent>()->ui.setAlignment(static_cast<Align>(alignH), static_cast<VerticalAlign>(alignV));
+                else if (entity->hasComponent<ButtonComponent>())
+                    entity->getComponent<ButtonComponent>()->ui.setAlignment(static_cast<Align>(alignH), static_cast<VerticalAlign>(alignV));
                 return 0;
             }
 

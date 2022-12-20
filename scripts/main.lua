@@ -4,8 +4,8 @@ background:addSprite("clouds2", "", 800, 600)
 background:addBackground(1)
 
 title = Entity.create()
-title:addLabel(0, 10, "VIGILANT ENGINE", "arcade", 0, 102, 204, 255)
-title:setLabelAlignment(1, 0)
+title:addLabel("VIGILANT ENGINE", "arcade", 0, 10, 0, 102, 204, 255)
+title:setAlignment(1, 0)
 
 -- FIXME: Currently listener will be triggered, but thisId is useless,
 -- because I couldn't get entities table be shared across multiple scripts
@@ -19,16 +19,11 @@ function onQuit(thisId)
 end
 
 playButton = Entity:create()
-playButton:move((getScreenWidth() - 300)/2, (getScreenHeight() - 175)/2)
-playButton:addSprite("playbutton", "", 300, 100)
-playButton:setAbsolutePosition(true)
-playButton:addButton()
+playButton:addButton("playbutton", 300, 100, 0, -75)
+playButton:setAlignment(1, 1)
 playButton:setButtonListener("onPlayClick")
 
 quitButton = Entity:create()
-quitButton:move((getScreenWidth() - 300)/2, (getScreenHeight() + 75)/2)
-quitButton:addSprite("exitbutton", "", 300, 100)
-quitButton:setAbsolutePosition(true)
-quitButton:addButton()
+quitButton:addButton("exitbutton", 300, 100, 0, 75)
+quitButton:setAlignment(1, 1)
 quitButton:setButtonListener("onQuit")
-

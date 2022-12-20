@@ -115,7 +115,7 @@ function onCollide(thisId, secondId)
         playSound("boom")
         entities[thisId]:remove()
         -- MASSIVE FPS DROPS HERE if calling this without removing second entity to stop collision dispatches
-        addParticleEmitter(entities[secondId]:getX(), entities[secondId]:getY(), "burst")
+        addParticleEmitter(entities[secondId]:getX() - getCameraX(), entities[secondId]:getY() - getCameraY(), "burst")
     else -- player collided with someone
         if entities[secondId]:getType() == "enemy" then
         end
@@ -166,10 +166,8 @@ function onMainMenuClick(thisId)
     changeState("MENU")
 end
 mainMenuButton = create()
-mainMenuButton:move((getScreenWidth() - 200), 0)
-mainMenuButton:addSprite("mainmenubutton", "", 200, 80)
-mainMenuButton:setAbsolutePosition(true)
-mainMenuButton:addButton()
+mainMenuButton:addButton("mainmenubutton", 200, 80, 10, 10)
+mainMenuButton:setAlignment(2, 0)
 mainMenuButton:setButtonListener("onMainMenuClick")
 
 -- Projectile template
@@ -254,8 +252,8 @@ screenHeight = getScreenHeight()
 
 playerPosLabel = create()
 -- ':' and ',' are displayed as squares because of the font!
-playerPosLabel:addLabel(10, 10, "Player  Pos  "..math.floor(player:getX())..", "..math.floor(player:getY()), "arcade", 0, 102, 204, 255)
-playerPosLabel:setLabelAlignment(0, 2)
+playerPosLabel:addLabel("Player  Pos  "..math.floor(player:getX())..", "..math.floor(player:getY()), "arcade", 10, 10, 0, 102, 204, 255)
+playerPosLabel:setAlignment(0, 2)
 
 print("Map Width: "..mapWidth.."\nMap Height: "..mapHeight)
 print("Screen Width: "..screenWidth.."\nScreen Height: "..screenHeight)
