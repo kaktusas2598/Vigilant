@@ -2,15 +2,13 @@
 #define __ColliderComponent__
 
 #include "Component.hpp"
-#include "LuaListener.hpp"
 #include <SDL2/SDL.h>
-#include <string>
 
 namespace Vigilant {
 
     class Entity;
 
-    class ColliderComponent : public Component, public LuaListener {
+    class ColliderComponent : public Component {
         public:
             ColliderComponent(Entity* owner);
 

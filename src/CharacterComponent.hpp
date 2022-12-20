@@ -2,7 +2,7 @@
 #define __CharacterComponent__
 
 #include "Component.hpp"
-#include "LuaListener.hpp"
+#include "ScriptEngine.hpp"
 #include <math.h>
 
 namespace Vigilant {
@@ -18,11 +18,9 @@ namespace Vigilant {
         DEFENDING
     };
 
-    // FIXME: Inherting from LuaListener is not such a good idea anymore
-    // For this component we might want to have multiple events like onDamage(), onLevelUp(), etc
-    class CharacterComponent : public Component, public LuaListener {
+    class CharacterComponent : public Component {
         public:
-            CharacterComponent(Entity* owner): Component(owner), LuaListener() {}
+            CharacterComponent(Entity* owner): Component(owner) {}
 
             void load(int health, int level, int attack, int defense) {
                 this->hp = health;

@@ -2,12 +2,10 @@
 #define __InputComponent__
 
 #include "Component.hpp"
-#include "LuaListener.hpp"
-#include <string>
 
 namespace Vigilant {
 
-    class InputComponent : public Component, public LuaListener {
+    class InputComponent : public Component {
         public:
             InputComponent(Entity* owner);
             void update(float deltaTime);

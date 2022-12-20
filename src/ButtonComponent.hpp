@@ -3,7 +3,6 @@
 
 #include "Component.hpp"
 #include "UI.hpp"
-#include "LuaListener.hpp"
 #include "TextureManager.hpp"
 
 namespace Vigilant {
@@ -12,7 +11,7 @@ namespace Vigilant {
      * This Component is problematic because it shares some stuff like texture with Sprite
      * and alignment options as UILabel
      */
-    class ButtonComponent : public Component, public LuaListener {
+    class ButtonComponent : public Component {
         public:
             ButtonComponent(Entity* owner);
 

@@ -10,7 +10,7 @@
 
 namespace Vigilant {
 
-	ColliderComponent::ColliderComponent(Entity* owner) : Component(owner), LuaListener() {
+	ColliderComponent::ColliderComponent(Entity* owner) : Component(owner) {
 		xOffset = 0;
 		yOffset = 0;
 	}

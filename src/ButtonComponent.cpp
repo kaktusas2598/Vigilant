@@ -8,7 +8,7 @@
 
 namespace Vigilant {
 
-    ButtonComponent::ButtonComponent(Entity* owner) : Component(owner), LuaListener() {
+    ButtonComponent::ButtonComponent(Entity* owner) : Component(owner){
         // Todo, need basic animation here, Animation struct could go to a new file
         // From MenuButton class
         // Starting frame is 1st one
