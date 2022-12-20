@@ -13,6 +13,10 @@ namespace Vigilant {
             // Default backgroun will be static, if scroll speed not 0, it will scroll
             void load(int scrollSp = 0);
 
+            void reload() {
+                load(scrollSpeed);
+            }
+
             void render();
             void update(float deltaTime);
 

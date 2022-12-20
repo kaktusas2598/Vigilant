@@ -360,13 +360,30 @@ namespace Vigilant {
             case SDL_WINDOWEVENT_SIZE_CHANGED:
                 screenWidth = camera.w = event.window.data1;
                 screenHeight = camera.h = event.window.data2;
-                // TODO: recalculate button and background positions
+                // Update map
                 if (level != nullptr) {
                     for (auto it = level->getLayers()->begin(); it != level->getLayers()->end(); ++it) {
                         (*it)->init();
                     }
                 }
-                //SDL_RenderPresent( m_window.getSDLRenderer() );
+                // TODO: recalculate button and background positions
+                // Update UI
+                for (auto& e: EntityManager::Instance()->getEntities()) {
+                    // Need much better way than this, probably using render groups? but every component belonging to group
+                    // needs to have same method, extend from another class?
+                    if (e->hasComponent<UILabelComponent>()) {
+                        e->getComponent<UILabelComponent>()->reload();
+                        continue;
+                    } else if (e->hasComponent<ButtonComponent>()) {
+                        e->getComponent<ButtonComponent>()->reload();
+                        continue;
+                    } else if (e->hasComponent<BackgroundComponent>()) {
+                        e->getComponent<BackgroundComponent>()->reload();
+                        continue;
+                    }
+                }
+
+                SDL_RenderPresent( m_window.getSDLRenderer() );
                 break;
             default:
                 break;
