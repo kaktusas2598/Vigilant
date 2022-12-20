@@ -21,19 +21,19 @@ namespace Vigilant {
         collider.x = 0;
         collider.y = 0;
 
-        // Seems to save some FPS, but logic would brake if scale is changed after this or sprite changes
-        // If no offset provided assume sprite is centered
-        if (x == 0 && y == 0) {
-            // Collider MUST be loaded AFTER the sprite!
-            auto sprite = owner->getComponent<SpriteComponent>();
-            if (sprite) {
-                xOffset = (sprite->getWidth() - collider.w)/2 * owner->transform->getScaleX();
-                yOffset = (sprite->getHeight() - collider.h)/2 * owner->transform->getScaleY();
-            }
-        } else {
-            xOffset *= owner->transform->getScaleX();
-            yOffset *= owner->transform->getScaleY();
-        }
+        // Collider MUST be loaded AFTER the sprite!
+        auto sprite = owner->getComponent<SpriteComponent>();
+
+        // If no offset provided assume collider is centered within sprite frame
+        if (x == 0)
+            xOffset = (sprite->getWidth() - collider.w)/2 * owner->transform->getScaleX();
+        else
+            xOffset = x * owner->transform->getScaleX();
+        if (y == 0)
+            yOffset = (sprite->getHeight() - collider.h)/2 * owner->transform->getScaleY();
+        else
+            yOffset = y * owner->transform->getScaleY();
+
         collider.w = width * owner->transform->getScaleX();
         collider.h = height * owner->transform->getScaleY();
     }

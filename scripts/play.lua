@@ -97,7 +97,7 @@ function define(data, tag)
             entity:addPhysics(v['mass'], v['friction'])
         end
         if k == "collider" then
-            entity:addCollider(v['width'], v['height'])
+            entity:addCollider(v['width'], v['height'], 0, 25)
             entity:registerListener("COLLIDE", v['listener'])
         end
     end
@@ -116,7 +116,10 @@ function onCollide(thisId, secondId)
         -- MASSIVE FPS DROPS HERE if calling this without removing second entity to stop collision dispatches
         addParticleEmitter(entities[secondId]:getX() - getCameraX(), entities[secondId]:getY() - getCameraY(), "burst")
     else -- player collided with someone
+        -- TODO: need to have a way to know if player is not already taking damage, so that player doesn't die instantly
+        -- probably CharacterStte will have that, do we need a cooldown timer too?
         if entities[secondId]:getType() == "enemy" then
+            --player:damage(10)
         end
     end
 end
@@ -228,7 +231,7 @@ playerTable = {
     collider = {
         type = "player",
         width = 15,
-        height = 26,
+        height = 20,
         listener = "onCollide"
     },
     input = {

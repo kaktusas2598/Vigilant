@@ -404,7 +404,15 @@ namespace Vigilant {
                 Entity* entity = (Entity*)lua_touserdata(L, 1);
                 int width = (int)lua_tonumber(L, 2);
                 int height = (int)lua_tonumber(L, 3);
-                entity->addComponent<ColliderComponent>()->load(width, height);
+                int x = 0, y = 0;
+                // Check for optional params
+                int stackSize = lua_gettop(L);
+                if (stackSize > 3) {
+                    x = (int)lua_tonumber(L, 4);
+                    if (stackSize > 4)
+                        y = (int)lua_tonumber(L, 5);
+                }
+                entity->addComponent<ColliderComponent>()->load(width, height, x, y);
                 return 0;
             }
 
