@@ -23,7 +23,6 @@ namespace Vigilant {
         destRect1.y = owner->transform->getY();
 
         srcRect1.w = srcRect2Width = sprite->getWidth();
-        // TODO: these should also react to window resize events
         destRect1.w = destRect1Width = TheEngine::Instance()->getScreenWidth();
         srcRect1.h = sprite->getHeight();
         destRect1.h = TheEngine::Instance()->getScreenHeight();
