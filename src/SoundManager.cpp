@@ -16,6 +16,10 @@ namespace Vigilant {
 
     bool SoundManager::load(std::string fileName, std::string id, SoundType type) {
         if (type == SOUND_MUSIC) {
+            if (musicMap.find(id) != musicMap.end()) {
+                return true;
+            }
+
             Mix_Music* music = Mix_LoadMUS(fileName.c_str());
             if (music == 0) {
                 exitWithError("Could not load music file");
@@ -24,6 +28,10 @@ namespace Vigilant {
             musicMap[id] = music;
             return true;
         } else if (type == SOUND_SFX) {
+            if (sFXMap.find(id) != sFXMap.end()) {
+                return true;
+            }
+
             Mix_Chunk* fx = Mix_LoadWAV(fileName.c_str());
             if (fx == 0) {
                 exitWithError("Could not load wav file");

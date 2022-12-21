@@ -255,7 +255,8 @@ namespace Vigilant {
                 float width = (int)lua_tonumber(L, 4);
                 float height = (int)lua_tonumber(L, 5);
 
-                TheTextureManager::Instance()->load(fileName, id);
+                //Not sure why I put this here, probably better to load textures elsewhere, liek state xml
+                //TheTextureManager::Instance()->load(fileName, id);
                 entity->addComponent<SpriteComponent>();
                 entity->getComponent<SpriteComponent>()->load(id, width, height);
                 return 0;

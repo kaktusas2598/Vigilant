@@ -9,6 +9,13 @@ namespace Vigilant {
     TextureManager* TextureManager::s_pInstance = 0;
 
     bool TextureManager::load(std::string fileName, std::string id) {
+        // Protect against loading texture with same id for now
+        // In the future we just want to make sure we dont double load same id unless we want to change
+        // actual texture, this will be used to catch any logical errors for now!
+        if (m_textureMap.find(id) != m_textureMap.end()) {
+            std::cout << "Trying to load texture with existing id: " << id << std::endl;
+            return true;
+        }
         SDL_Surface* pTempSurface = IMG_Load(fileName.c_str());
 
         if(pTempSurface == 0)
@@ -31,14 +38,18 @@ namespace Vigilant {
 
 
     bool TextureManager::loadFont(std::string fileName, std::string id) {
-		TTF_Font* font = TTF_OpenFont(fileName.c_str(), 28 );
-		if ( font == NULL ) {
+        if (m_fontMap.find(id) != m_fontMap.end()) {
+            return true;
+        }
+
+        TTF_Font* font = TTF_OpenFont(fileName.c_str(), 28 );
+        if ( font == NULL ) {
             Logger::Instance()->error(TTF_GetError());
-			return false;
-		}
-		m_fontMap[id] = font;
-		return true;
-	}
+            return false;
+        }
+        m_fontMap[id] = font;
+        return true;
+    }
 
     void TextureManager::draw(std::string id, int x, int y, int width, int height, SDL_RendererFlip flip) {
         SDL_Rect srcRect;
@@ -109,6 +120,10 @@ namespace Vigilant {
     }
 
     void TextureManager::clearFromTextureMap(std::string id) {
+        // Lack of this line was the cause of massive memory leak!
+        // Beginning of this class many years ago originated from SDL2 Game Development book and it was
+        // full of errors like these, so lesson: always make sure clear any dynamically allocted memory!
+        SDL_DestroyTexture(m_textureMap[id]);
         m_textureMap.erase(id);
     }
 
@@ -117,7 +132,7 @@ namespace Vigilant {
     }
 
     void TextureManager::clearFromFontMap(std::string id) {
-        TTF_CloseFont( m_fontMap[id] );
+        TTF_CloseFont(m_fontMap[id]);
         m_fontMap.erase(id);
     }
 
