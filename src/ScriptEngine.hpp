@@ -261,6 +261,8 @@ namespace Vigilant {
                 return 0;
             }
 
+            // TODO: All the methods below need to check if comopnents exist first
+            // and handle any errors
             static int lua_setAbsolutePosition(lua_State *L) {
                 Entity* entity = (Entity*)lua_touserdata(L, 1);
                 bool absol = (bool)lua_toboolean(L, 2);
@@ -345,6 +347,14 @@ namespace Vigilant {
                 lua_pushnumber(L, level);
                 return 1;
             }
+
+            static int lua_damage(lua_State *L) {
+                Entity* entity = (Entity*)lua_touserdata(L, 1);
+                int dmg = (int)lua_tonumber(L, 2);
+                entity->getComponent<CharacterComponent>()->damage(dmg);
+                return 1;
+            }
+
 
             static int lua_addButton(lua_State *L) {
                 Entity* entity = (Entity*)lua_touserdata(L, 1);

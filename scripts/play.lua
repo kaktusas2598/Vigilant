@@ -113,6 +113,7 @@ function onCollide(thisId, secondId)
     if entities[thisId]:getType() == "playerProjectile" then
         playSound("boom")
         entities[thisId]:remove()
+        entities[secondId]:damage(10)
         -- MASSIVE FPS DROPS HERE if calling this without removing second entity to stop collision dispatches
         addParticleEmitter(entities[secondId]:getX() - getCameraX(), entities[secondId]:getY() - getCameraY(), "burst")
     else -- player collided with someone
@@ -120,6 +121,7 @@ function onCollide(thisId, secondId)
         -- probably CharacterStte will have that, do we need a cooldown timer too?
         if entities[secondId]:getType() == "enemy" then
             --player:damage(10)
+            --playerHp:setLabel("HP : "..math.floor(player:hp()), "pixel", 10, 110, 192, 204, 255)
         end
     end
 end
@@ -311,6 +313,7 @@ for i = 1, 100 do
     entityTable[i]:setAnimation("default")
     entityTable[i]:addCollider(15, 30)
     entityTable[i]:addPhysics(2.0, 0.3)
+    entityTable[i]:addCharacter(50, 1, 5, 5)
     -- Attach dynamic behavioir and start it
     enemyId = entityTable[i]:id()
     entityTable[i]:addBehaviour()

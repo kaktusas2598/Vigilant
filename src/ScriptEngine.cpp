@@ -96,6 +96,8 @@ namespace Vigilant {
         lua_setfield(state, -2 , "xp");
         lua_pushcfunction(state, lua_entityLevel);
         lua_setfield(state, -2 , "level");
+        lua_pushcfunction(state, lua_damage);
+        lua_setfield(state, -2 , "damage");
 
         lua_pushcfunction(state, lua_addSprite);
         lua_setfield(state, -2 , "addSprite");
