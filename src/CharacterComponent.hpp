@@ -10,6 +10,7 @@ namespace Vigilant {
     // TODO: load these from config or something?
     constexpr int XP_BASE = 100;
     constexpr double XP_SCALE = 1.1d;
+    // XP formula, XP = (XP_BASE * (currentLevel - 1)) ^ XP_SCALE
 
     // Animations could be tied to different character states :0 ?
     enum class CharacterState {
@@ -31,16 +32,26 @@ namespace Vigilant {
                 this->defense = defense;
             }
 
+            double xpToNextLevel() {
+                return pow(XP_BASE * level. XP_SCALE) - xp;
+            }
+
             void damage(int dmg) {
                 hp -= dmg;
                 if (hp < 0) {
+                    // TODO: instead of destroy maybe fire an event which does additional stuff
+                    // and is responsible for destroying an entity
                     owner->destroy();
                 }
             }
 
              void gainXP(int xp) {
+                 // TODO: Fire gain xp event
                  this->xp += xp;
-                 // TODO: check for lvl up
+                 if (xpToNextLevel() <= 0) {
+                     level++;
+                     // Fire level up event
+                 }
              }
 
              int getHP() const { return hp; }
@@ -51,9 +62,6 @@ namespace Vigilant {
             int xp;
             int level;
             CharacterState state = CharacterState::IDLE;
-
-            // TODO: relationship between level and XP
-            // Example: xpToLevel = (xpBase * currentLevel) ^ scale - xp needed for next level
 
             // TODO: this is just the beginning, we will need ItemComponent for weapoins and items, InventoryComponent
             // Some kind of combat system, which will also need improved animation support
