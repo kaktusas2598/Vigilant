@@ -33,7 +33,7 @@ namespace Vigilant {
             }
 
             double xpToNextLevel() {
-                return pow(XP_BASE * level. XP_SCALE) - xp;
+                return pow(XP_BASE * level, XP_SCALE) - xp;
             }
 
             void damage(int dmg) {
