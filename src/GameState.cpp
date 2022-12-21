@@ -21,7 +21,7 @@ namespace Vigilant {
 
         if (!map.empty()) {
             Logger::Instance()->info("Loading level.");
-            level = levelParser.parseLevel(map.c_str(), &textureIDs);
+            level = levelParser.parseLevel(map.c_str());
             TheEngine::Instance()->setLevel(level);
         }
     }
@@ -30,15 +30,19 @@ namespace Vigilant {
         for(size_t i = 0; i < textureIDs.size(); i++) {
             TheTextureManager::Instance()->clearFromTextureMap(textureIDs[i]);
         }
+
         SoundManager::Instance()->cleanSoundMaps();
 
         ScriptEngine::Instance()->close();
 
         EntityManager::Instance()->clean();
 
-        TheEngine::Instance()->setLevel(nullptr);
-        if (level != nullptr)
+        if (level != nullptr) {
+            for (auto id : level->getTextureIDs())
+                TheTextureManager::Instance()->clearFromTextureMap(id);
             delete level;
+            TheEngine::Instance()->setLevel(nullptr);
+        }
     }
 
     void GameState::update(float deltaTime) {

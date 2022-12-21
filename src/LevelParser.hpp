@@ -16,10 +16,10 @@ namespace Vigilant {
 
     class LevelParser {
         public:
-            Level* parseLevel(const char* levelFile, std::vector<std::string> *pTextureIDs);
+            Level* parseLevel(const char* levelFile);
         private:
-            void parseTileSets(TiXmlElement *tilesetRoot, std::vector<TileSet>* tilesets);
-            void parseTextures(TiXmlElement *textureRoot);
+            void parseTileSets(TiXmlElement *tilesetRoot, Level* level);
+            void parseTextures(TiXmlElement *textureRoot, Level* level);
             void parseTileLayer(
                 TiXmlElement *tileElement,
                 std::vector<Layer*>* layers,

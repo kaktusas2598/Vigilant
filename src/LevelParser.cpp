@@ -12,7 +12,7 @@
 
 namespace Vigilant {
 
-    Level* LevelParser::parseLevel(const char* levelFile, std::vector<std::string> *pTextureIDs) {
+    Level* LevelParser::parseLevel(const char* levelFile) {
         TiXmlDocument levelDoc;
         levelDoc.LoadFile(levelFile);
 
@@ -29,7 +29,7 @@ namespace Vigilant {
         // Parse properties for entity texture sources
         for (TiXmlElement* e = root->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
             if (e->Value() == std::string("properties")) {
-                parseTextures(e);
+                parseTextures(e, level);
             }
         }
 
@@ -38,7 +38,7 @@ namespace Vigilant {
 
         for (TiXmlElement* e = root->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
             if (e->Value() == std::string("tileset")) {
-                parseTileSets(e, level->getTilesets());
+                parseTileSets(e, level);
             }
         }
 
@@ -67,12 +67,13 @@ namespace Vigilant {
         return level;
     }
 
-    void LevelParser::parseTileSets(TiXmlElement *tilesetRoot, std::vector<TileSet>* tilesets) {
+    void LevelParser::parseTileSets(TiXmlElement *tilesetRoot, Level* level) {
         // Load tileset textures
         TheTextureManager::Instance()->load(
             tilesetRoot->FirstChildElement()->Attribute("source"),
             tilesetRoot->Attribute("name")
         );
+        level->addTexture(tilesetRoot->Attribute("name"));
 
         TileSet tileset;
         tileset.spacing = 0;
@@ -92,7 +93,7 @@ namespace Vigilant {
 
         tileset.numColumns = tileset.width / (tileset.tileWidth + tileset.spacing);
 
-        tilesets->push_back(tileset);
+        level->getTilesets()->push_back(tileset);
 
     }
 
@@ -173,12 +174,13 @@ namespace Vigilant {
         layers->push_back(layer);
     }
 
-    void LevelParser::parseTextures(TiXmlElement *textureRoot) {
+    void LevelParser::parseTextures(TiXmlElement *textureRoot, Level* level) {
         for (TiXmlElement* e = textureRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
 	    if (e->Attribute("name") == std::string("scale")) {
 	        e->Attribute("value", &scale);
 	    }
             TheTextureManager::Instance()->load(e->Attribute("value"), e->Attribute("name"));
+	    level->addTexture(e->Attribute("name"));
         }
     }
 

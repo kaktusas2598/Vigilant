@@ -41,6 +41,10 @@ namespace Vigilant {
 
             CollisionLayer* getCollisionLayer() { return collisionLayer; }
             void setCollisionLayer(CollisionLayer* colLayer) { collisionLayer = colLayer; }
+
+            std::vector<std::string> getTextureIDs() { return textureIDs; }
+            void addTexture(const std::string& id) { textureIDs.push_back(id); }
+
         private:
             friend class LevelParser;
             Level() {} // Constructor is private to ensure Level is only created by LevelParser
@@ -55,6 +59,8 @@ namespace Vigilant {
             std::vector<TileLayer*> collisionLayers;
             // Collision layer defined by individual bounding boxes
             CollisionLayer* collisionLayer;
+
+            std::vector<std::string> textureIDs;
     };
 }
 
