@@ -46,12 +46,14 @@ namespace Vigilant {
         for (TiXmlElement* e = root->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
             if (e->Value() == std::string("objectgroup") || e->Value() == std::string("layer")) {
                 if (e->FirstChildElement()->Value() == std::string("object")) {
-                    if (e->Attribute("type") == std::string("entity")) {
+                    // This will crash if creating default object layer in Tiled because it doesn't attach type attribute
+                    // and actually seems to delete it if you save map again
+                    /*if (e->Attribute("type") == std::string("entity")) {
                         parseObjectLayer(e, level->getLayers());
                     } else if (e->Attribute("type") == std::string("collider")) {
                         CollisionLayer* colLayer = parseCollisionLayer(e, level->getLayers());
                         level->setCollisionLayer(colLayer);
-                    }
+                    }*/
                     // Tile Layer or tile layer with properties such as "collidable"
                 } else if (e->FirstChildElement()->Value() == std::string("data") ||
                     (e->FirstChildElement()->NextSiblingElement() != 0
