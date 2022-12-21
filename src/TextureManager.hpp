@@ -21,7 +21,15 @@ namespace Vigilant {
     public:
 
         bool load(std::string fileName, std::string id);
-        void draw(std::string id, int x, int y, int width, int height, SDL_RendererFlip flip = SDL_FLIP_NONE);
+        void draw(
+                std::string id,
+                int x, int y,
+                int width, int height,
+                SDL_RendererFlip flip = SDL_FLIP_NONE,
+                float scaleX = 1.0f,
+                float scaleY = 1.0f,
+                bool absolutePos = true
+                );
         void draw(std::string id, int x, int y, int width, int height, double angle, SDL_RendererFlip flip = SDL_FLIP_NONE);
         /*
          * Render a tile from a spritesheet
@@ -29,14 +37,15 @@ namespace Vigilant {
          * @param absolutePos if set to true will always stay in the same position on the screen,
          * if false, it will render according to the camera
          */
-        void drawFrame(std::string id,
+        void drawFrame(
+            std::string id,
             int x, int y,
             int width, int height,
             int currentRow, int currentFrame,
-            SDL_RendererFlip flip,
+            SDL_RendererFlip flip = SDL_FLIP_NONE,
             float scaleX = 1.0f,
             float scaleY = 1.0f,
-            bool absolutePos = false
+            bool absolutePos = true
             );
         void drawTile(std::string id, int margin, int spacing, int x, int y, int width, int height, int currentRow, int currentFrame, double scale = 1.0f);
 

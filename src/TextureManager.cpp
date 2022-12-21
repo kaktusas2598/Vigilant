@@ -51,16 +51,28 @@ namespace Vigilant {
         return true;
     }
 
-    void TextureManager::draw(std::string id, int x, int y, int width, int height, SDL_RendererFlip flip) {
+    void TextureManager::draw(std::string id,
+            int x, int y,
+            int width, int height,
+            SDL_RendererFlip flip,
+            float scaleX, float scaleY,
+            bool absolutePos
+            ) {
+        // All these draw methods do very similar stuff with rectangles,
+        // this could be refactored
         SDL_Rect srcRect;
         SDL_Rect destRect;
 
         srcRect.x = 0;
         srcRect.y = 0;
-        srcRect.w = destRect.w = width;
-        srcRect.h = destRect.h = height;
+        srcRect.w = width;
+        srcRect.h = height;
+        destRect.w = width * scaleX;
+        destRect.h = height * scaleY;
         destRect.x = x;
         destRect.y = y;
+        destRect.x = x - (absolutePos ? 0 : TheEngine::Instance()->camera.x);
+        destRect.y = y - (absolutePos ? 0 : TheEngine::Instance()->camera.y);
 
         if (SDL_RenderCopyEx(renderer, m_textureMap[id], &srcRect, &destRect, 0, 0, flip) != 0) {
             Logger::Instance()->error(SDL_GetError());

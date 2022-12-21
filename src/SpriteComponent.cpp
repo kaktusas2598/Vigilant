@@ -1,7 +1,6 @@
 #include "SpriteComponent.hpp"
 
 #include "Entity.hpp"
-#include "Engine.hpp"
 #include "TextureManager.hpp"
 
 namespace Vigilant {
@@ -38,32 +37,18 @@ namespace Vigilant {
     }
 
     void SpriteComponent::draw(SDL_RendererFlip flip) {
-        SDL_Rect srcRect;
-        SDL_Rect destRect;
+        TheTextureManager::Instance()->draw(
+                textureID,
+                owner->transform->getX(),
+                owner->transform->getY(),
+                width,
+                height,
+                flip,
+                owner->transform->getScaleX(),
+                owner->transform->getScaleY(),
+                isAbsolute
+                );
 
-        srcRect.x = 0;
-        srcRect.y = 0;
-        srcRect.w = width;
-        srcRect.h = height;
-        destRect.w = width * owner->transform->getScaleX();
-        destRect.h = height * owner->transform->getScaleY();
-        if (isAbsolute) {
-            destRect.x = owner->transform->getX();
-            destRect.y = owner->transform->getY();
-        } else {
-            destRect.x = owner->transform->getX() - TheEngine::Instance()->camera.x;
-            destRect.y = owner->transform->getY() - TheEngine::Instance()->camera.y;
-        }
-
-        SDL_RenderCopyEx(
-            TheEngine::Instance()->getSDLRenderer(),
-            TheTextureManager::Instance()->getTexture(textureID),
-            &srcRect,
-            &destRect,
-            0,
-            0,
-            flip
-        );
     }
 
     void SpriteComponent::drawFrame(SDL_RendererFlip flip) {
