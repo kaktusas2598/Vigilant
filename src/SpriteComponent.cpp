@@ -67,9 +67,6 @@ namespace Vigilant {
     }
 
     void SpriteComponent::drawFrame(SDL_RendererFlip flip) {
-        SDL_Rect srcRect;
-        SDL_Rect destRect;
-
         // FIXME: for some reason SpriteComponent::update() is called after render(), therefore had to calculate frame here
         currentFrame = int(((SDL_GetTicks() / 100) % animationList[currentAnimation].numFrames));
 
@@ -77,28 +74,18 @@ namespace Vigilant {
         if (animationState == ONE_SHOT && currentFrame == animationList[currentAnimation].numFrames)
         	animationState = STILL;
 
-        srcRect.x = width * currentFrame;
-        srcRect.y = height * animationList[currentAnimation].row;
-        srcRect.w = width;
-        srcRect.h = height;
-        destRect.w = width * owner->transform->getScaleX();
-        destRect.h = height * owner->transform->getScaleY();
-        if (isAbsolute) {
-            destRect.x = owner->transform->getX();
-            destRect.y = owner->transform->getY();
-        } else {
-            destRect.x = owner->transform->getX() - TheEngine::Instance()->camera.x;
-            destRect.y = owner->transform->getY() - TheEngine::Instance()->camera.y;
-        }
-
-        SDL_RenderCopyEx(
-            TheEngine::Instance()->getSDLRenderer(),
-            TheTextureManager::Instance()->getTexture(textureID),
-            &srcRect,
-            &destRect,
-            0,
-            0,
-            flip
-        );
+        TheTextureManager::Instance()->drawFrame(
+                textureID,
+                owner->transform->getX(),
+                owner->transform->getY(),
+                width,
+                height,
+                animationList[currentAnimation].row,
+                currentFrame,
+                flip,
+                owner->transform->getScaleX(),
+                owner->transform->getScaleY(),
+                isAbsolute
+                );
     }
 }

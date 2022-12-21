@@ -85,15 +85,24 @@ namespace Vigilant {
     }
 
 
-    void TextureManager::drawFrame(std::string id, int x, int y, int width, int height, int currentRow, int currentFrame, SDL_RendererFlip flip) {
+    void TextureManager::drawFrame(std::string id,
+            int x, int y,
+            int width, int height,
+            int currentRow, int currentFrame,
+            SDL_RendererFlip flip,
+            float scaleX, float scaleY,
+            bool absolutePos
+            ) {
         SDL_Rect srcRect;
         SDL_Rect destRect;
         srcRect.x = width * currentFrame;
-        srcRect.y = height * (currentRow - 1);
-        srcRect.w = destRect.w = width;
-        srcRect.h = destRect.h = height;
-        destRect.x = x;
-        destRect.y = y;
+        srcRect.y = height * currentRow;
+        srcRect.w = width;
+        srcRect.h = height;
+        destRect.w = width * scaleX;
+        destRect.h = height * scaleY;
+        destRect.x = x - (absolutePos ? 0 : TheEngine::Instance()->camera.x);
+        destRect.y = y - (absolutePos ? 0 : TheEngine::Instance()->camera.y);
 
         if (SDL_RenderCopyEx(renderer, m_textureMap[id], &srcRect, &destRect, 0, 0, flip) != 0) {
             Logger::Instance()->error(SDL_GetError());
