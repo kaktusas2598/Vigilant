@@ -21,6 +21,7 @@ namespace Vigilant {
     public:
 
         bool load(std::string fileName, std::string id);
+
         void draw(
                 std::string id,
                 int x, int y,
@@ -48,6 +49,7 @@ namespace Vigilant {
             bool absolutePos = true
             );
         void drawTile(std::string id, int margin, int spacing, int x, int y, int width, int height, int currentRow, int currentFrame, double scale = 1.0f);
+        void drawRect(SDL_Rect rect, SDL_Color color, bool absolutePos = true, bool fill = false);
 
 
         // These 2 should go to FontManager class OR could refactor this class to AssetManager?

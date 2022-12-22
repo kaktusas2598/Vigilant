@@ -136,6 +136,19 @@ namespace Vigilant {
         SDL_RenderCopyEx(renderer, m_textureMap[id], &srcRect, &destRect, 0, 0, SDL_FLIP_NONE);
     }
 
+    void TextureManager::drawRect(SDL_Rect rect, SDL_Color color, bool absolutePos, bool fill) {
+        if (!absolutePos) {
+            rect.x -= TheEngine::Instance()->camera.x;
+            rect.y -= TheEngine::Instance()->camera.y;
+        }
+
+        SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+        if (fill)
+            SDL_RenderFillRect(renderer, &rect);
+        else
+            SDL_RenderDrawRect(renderer, &rect);
+    }
+
     void TextureManager::clearTextureMap() {
         m_textureMap.clear();
     }
