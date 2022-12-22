@@ -311,7 +311,7 @@ for i = 1, 100 do
     entityTable[i]:addSprite("player", "assets/sprite/player.png", 48, 48)
     entityTable[i]:addAnimation("default", 1, 6)
     entityTable[i]:setAnimation("default")
-    entityTable[i]:addCollider(15, 30)
+    entityTable[i]:addCollider(15, 20, 0, 25)
     entityTable[i]:addPhysics(2.0, 0.3)
     entityTable[i]:addCharacter(50, 1, 5, 5)
     -- Attach dynamic behavioir and start it

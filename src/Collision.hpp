@@ -182,22 +182,33 @@ namespace Vigilant {
                 int width = collider->getCollider().w;
                 int height = collider->getCollider().h;
 
+                float velocityX, velocityY;
+                if (physics) {
+                    velocityX = physics->getVelocityX();
+                    velocityY = physics->getVelocityY();
+                } else if(projectile) {
+                    velocityX = projectile->getVelocityX();
+                    velocityY = projectile->getVelocityY();
+                } else {
+                    return; // If not rigid body nor a projectile
+                }
+
                 for(std::vector<TileLayer*>::const_iterator it = collisionLayers.begin(); it != collisionLayers.end(); ++it) {
                     TileLayer* tileLayer = (*it);
                     std::vector<std::vector<int>> tiles = tileLayer->getTileIDs();
 
-                    int tileColumn, tileRow, tileid = 0;
-                    float velocityX, velocityY;
-
-                    if (physics) {
-                        velocityX = physics->getVelocityX();
-                        velocityY = physics->getVelocityY();
-                    } else if(projectile) {
-                        velocityX = projectile->getVelocityX();
-                        velocityY = projectile->getVelocityY();
-                    } else {
-                        return; // If not rigid body nor a projectile
+                    // Check entity is not out of map bounds
+                    if ((entityX < 0 || (entityX + width) > (tileLayer->getMapWidth() * tileLayer->getTileSize() * tileLayer->getScale())) && physics) {
+                        physics->setVelocityX(velocityX * -0.5f);
                     }
+
+                    if ((entityY < 0 || (entityY + height) > (tileLayer->getMapHeight() * tileLayer->getTileSize() * tileLayer->getScale())) && physics) {
+                        physics->setVelocityY(velocityY * -0.5f);
+                    }
+
+
+                    int tileColumn, tileRow, tileid = 0;
+
 
                     if (entityX > 0 && entityY > 0) {
                         if (velocityX >= 0) {
