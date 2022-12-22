@@ -79,7 +79,7 @@ namespace Vigilant {
         }
     }
 
-	void TextureManager::draw(std::string id, int x, int y, int width, int height, double angle, SDL_RendererFlip flip) {
+    void TextureManager::draw(std::string id, int x, int y, int width, int height, double angle, SDL_RendererFlip flip) {
         SDL_Rect srcRect;
         SDL_Rect destRect;
 
@@ -148,6 +148,33 @@ namespace Vigilant {
         else
             SDL_RenderDrawRect(renderer, &rect);
     }
+
+    SDL_Texture* TextureManager::getTextTexture(std::string font, std::string text, SDL_Color color) {
+        // TODO: read about TTF_RenderText_Blended() as well
+        SDL_Surface* textSurface = TTF_RenderText_Solid(getFont(font) , text.c_str(), color);
+        if( textSurface == NULL ) {
+            Logger::Instance()->error(TTF_GetError());
+        }
+        //Create texture from surface pixels
+        SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, textSurface);
+        if( texture == NULL ) {
+            Logger::Instance()->error(SDL_GetError());
+        }
+
+        // Get rid of old surface
+        SDL_FreeSurface(textSurface);
+
+        return texture;
+    }
+
+    void TextureManager::draw(SDL_Texture* texture, int x, int y) {
+        SDL_Rect dest;
+        dest.x = x;
+        dest.y = y;
+        SDL_QueryTexture(texture, NULL, NULL, &dest.w, &dest.h);
+        SDL_RenderCopy(renderer, texture, NULL, &dest);
+    }
+
 
     void TextureManager::clearTextureMap() {
         m_textureMap.clear();

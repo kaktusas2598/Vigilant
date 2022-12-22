@@ -11,6 +11,7 @@ namespace Vigilant {
     class UILabelComponent: public Component {
         public:
             UILabelComponent(Entity* owner);
+            ~UILabelComponent();
 
             // TODO: Define float lifeTime and update method, so that we can destroy label after some time
             // like displaying damage given for example

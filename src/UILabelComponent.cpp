@@ -6,29 +6,27 @@
 
 namespace Vigilant {
 
-    UILabelComponent::UILabelComponent(Entity* owner) : Component(owner) {}
+    UILabelComponent::UILabelComponent(Entity* owner) : Component(owner) {
+        texture = nullptr;
+    }
+
+    UILabelComponent::~UILabelComponent() {
+        // Instead of destroying it here, it could be added to texture map and then
+        // cleared from it here, which would destroy texture too,
+        // unless we resize screen or change text and then we need a new texture,
+        // need to make sure we destroy old one as well
+        SDL_DestroyTexture(texture);
+    }
 
     void UILabelComponent::setValue(std::string text) {
         value = text;
-        //Render text surface
-        // TODO: read about TTF_RenderText_Blended() as well
-        SDL_Surface* textSurface = TTF_RenderText_Solid(TheTextureManager::Instance()->getFont(fontId) , text.c_str(), textColor);
-        if( textSurface == NULL ) {
-            Logger::Instance()->error(TTF_GetError());
-        }
-        //Create texture from surface pixels
-        texture = SDL_CreateTextureFromSurface( TheTextureManager::Instance()->getRenderer(), textSurface );
-        if( texture == NULL ) {
-            Logger::Instance()->error(SDL_GetError());
-        }
-        else {
-            //Get image dimensions
-            SDL_QueryTexture(texture, NULL, NULL, &ui.width, &ui.height);
-            // Or could use TTF_SizeText ? which won't require texture to find width and height
-        }
+        // We will assume texture is set here for performance, but error will be logged
+        // in rendering system in case texture is not set
+        texture = TextureManager::Instance()->getTextTexture(fontId, text, textColor);
 
-        // Get rid of old surface
-        SDL_FreeSurface( textSurface );
+        //Get image dimensions
+        SDL_QueryTexture(texture, NULL, NULL, &ui.width, &ui.height);
+        // Or could use TTF_SizeText ? which won't require texture to find width and height
 
         // Calculate text offset based on allignment, ignores offset if alligned central
         ui.refresh();
@@ -36,14 +34,7 @@ namespace Vigilant {
 
 
     void UILabelComponent::render() {
-        // TODO: all SDL_RenderCopy and SDL_RenderCopyEx calls, including the ones in SpriteComponent should go to
-        // future rendering system class
-        SDL_Rect dest;
-        dest.x = ui.x;
-        dest.y = ui.y;
-        dest.w = ui.width;
-        dest.h = ui.height;
-        SDL_RenderCopy(TheTextureManager::Instance()->getRenderer(), texture, NULL, &dest);
+        TheTextureManager::Instance()->draw(texture, ui.x, ui.y);
     }
 
 }
