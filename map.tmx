@@ -29,6 +29,9 @@
  <tileset firstgid="1688" name="collision" tilewidth="32" tileheight="32" tilecount="1" columns="1">
   <image source="assets/tilesets/collision.png" width="32" height="32"/>
  </tileset>
+ <tileset firstgid="1689" name="decor_32x32" tilewidth="32" tileheight="32" tilecount="20" columns="4">
+  <image source="assets/tilesets/decor_32x32.png" width="128" height="160"/>
+ </tileset>
  <layer id="1" name="Ground/Grass/Floor" width="50" height="50">
   <data encoding="csv">
 41,41,41,83,43,43,43,43,81,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,
@@ -308,7 +311,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="5" name="Collision" width="50" height="50">
+ <layer id="5" name="Collision" width="50" height="50" visible="0">
   <properties>
    <property name="collidable" type="bool" value="true"/>
   </properties>
