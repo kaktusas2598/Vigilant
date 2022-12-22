@@ -175,6 +175,9 @@ namespace Vigilant {
         SDL_RenderCopy(renderer, texture, NULL, &dest);
     }
 
+    void TextureManager::draw(std::string id, SDL_Rect srcRect, SDL_Rect dstRect) {
+        SDL_RenderCopy(renderer, m_textureMap[id], &srcRect, &dstRect);
+    }
 
     void TextureManager::clearTextureMap() {
         m_textureMap.clear();

@@ -22,8 +22,9 @@ namespace Vigilant {
         srcRect1.y = 0;
         destRect1.y = owner->transform->getY();
 
-        srcRect1.w = srcRect2Width = sprite->getWidth();
-        destRect1.w = destRect1Width = TheEngine::Instance()->getScreenWidth();
+        //srcRect1.w = srcRect2Width = sprite->getWidth();
+        srcRect1.w = srcRect2.w = sprite->getWidth();
+        destRect1.w = TheEngine::Instance()->getScreenWidth();
         srcRect1.h = sprite->getHeight();
         destRect1.h = TheEngine::Instance()->getScreenHeight();
 
@@ -32,7 +33,7 @@ namespace Vigilant {
         srcRect2.y = 0;
         destRect2.y = owner->transform->getY();
 
-        srcRect2.w = destRect2.w = srcRect2Width = destRect2Width = 0;
+        srcRect2.w = destRect2.w = 0;
         srcRect2.h = sprite->getHeight();
         destRect2.h = TheEngine::Instance()->getScreenHeight();
 
@@ -40,10 +41,10 @@ namespace Vigilant {
 
     void BackgroundComponent::render() {
         // draw first rect
-        SDL_RenderCopyEx(TheEngine::Instance()->getSDLRenderer(), TheTextureManager::Instance()->getTexture(sprite->getTextureID()), &srcRect1, &destRect1, 0, 0, SDL_FLIP_NONE);
+        TheTextureManager::Instance()->draw(sprite->getTextureID(), srcRect1, destRect1);
 
         // draw second rect
-        SDL_RenderCopyEx(TheEngine::Instance()->getSDLRenderer(), TheTextureManager::Instance()->getTexture(sprite->getTextureID()), &srcRect2, &destRect2, 0, 0, SDL_FLIP_NONE);
+        TheTextureManager::Instance()->draw(sprite->getTextureID(), srcRect2, destRect2);
     }
 
     void BackgroundComponent::update(float deltaTime) {
@@ -65,8 +66,9 @@ namespace Vigilant {
                 srcRect1.y = 0;
                 destRect1.y = owner->transform->getY();
 
-                srcRect1.w = srcRect2Width = sprite->getWidth();
-                destRect1.w = destRect2Width = TheEngine::Instance()->getScreenWidth();
+                //srcRect1.w = srcRect2Width = sprite->getWidth();
+                srcRect1.w = srcRect2.w = sprite->getWidth();
+                destRect1.w = TheEngine::Instance()->getScreenWidth();
                 srcRect1.h = sprite->getHeight();
                 destRect1.h = TheEngine::Instance()->getScreenHeight();
 
@@ -75,7 +77,7 @@ namespace Vigilant {
                 srcRect2.y = 0;
                 destRect2.y = owner->transform->getY();
 
-                srcRect2.w = destRect2.w = srcRect2Width = destRect2Width = 0;
+                srcRect2.w = destRect2.w = 0;
                 srcRect2.h = sprite->getHeight();
                 destRect2.h = TheEngine::Instance()->getScreenHeight();
             }
