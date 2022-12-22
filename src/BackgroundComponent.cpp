@@ -22,8 +22,7 @@ namespace Vigilant {
         srcRect1.y = 0;
         destRect1.y = owner->transform->getY();
 
-        //srcRect1.w = srcRect2Width = sprite->getWidth();
-        srcRect1.w = srcRect2.w = sprite->getWidth();
+        srcRect1.w = sprite->getWidth();
         destRect1.w = TheEngine::Instance()->getScreenWidth();
         srcRect1.h = sprite->getHeight();
         destRect1.h = TheEngine::Instance()->getScreenHeight();
@@ -66,8 +65,7 @@ namespace Vigilant {
                 srcRect1.y = 0;
                 destRect1.y = owner->transform->getY();
 
-                //srcRect1.w = srcRect2Width = sprite->getWidth();
-                srcRect1.w = srcRect2.w = sprite->getWidth();
+                srcRect1.w = sprite->getWidth();
                 destRect1.w = TheEngine::Instance()->getScreenWidth();
                 srcRect1.h = sprite->getHeight();
                 destRect1.h = TheEngine::Instance()->getScreenHeight();
