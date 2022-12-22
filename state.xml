@@ -28,6 +28,7 @@
         <TEXTURES>
             <texture filename="assets/sprites/player.png" ID="player"/>
             <texture filename="assets/sprites/slime.png" ID="slime"/>
+            <texture filename="assets/sprites/skeleton.png" ID="skeleton"/>
             <texture filename="assets/particles/bullet1.png" ID="bullet"/>
             <!--<texture filename="assets/particles/Color/fire/fire_1.png" ID="particle"/>-->
             <texture filename="assets/particles/bullet2.png" ID="particle"/>

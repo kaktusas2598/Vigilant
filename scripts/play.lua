@@ -308,10 +308,10 @@ for i = 1, 100 do
     entityTable[i]:setType("enemy")
     entityTable[i]:move(100 + i * 100, 220 + i * 200)
     entityTable[i]:scale(1 * (i % 10), 1 * (i % 10))
-    entityTable[i]:addSprite("player", "assets/sprite/player.png", 48, 48)
+    entityTable[i]:addSprite("skeleton", "", 64, 64)
     entityTable[i]:addAnimation("default", 1, 6)
     entityTable[i]:setAnimation("default")
-    entityTable[i]:addCollider(15, 20, 0, 25)
+    entityTable[i]:addCollider(20, 20, 0, 38)
     entityTable[i]:addPhysics(2.0, 0.3)
     entityTable[i]:addCharacter(50, 1, 5, 5)
     -- Attach dynamic behavioir and start it
