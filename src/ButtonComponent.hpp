@@ -3,7 +3,6 @@
 
 #include "Component.hpp"
 #include "UI.hpp"
-#include "TextureManager.hpp"
 
 namespace Vigilant {
 

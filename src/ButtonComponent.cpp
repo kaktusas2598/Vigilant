@@ -2,6 +2,7 @@
 
 #include "InputManager.hpp"
 #include "SoundManager.hpp"
+#include "TextureManager.hpp"
 #include "ScriptEngine.hpp"
 #include "Entity.hpp"
 #include "Vector2D.hpp"
@@ -39,26 +40,14 @@ namespace Vigilant {
     }
 
     void ButtonComponent::render() {
-        SDL_Rect srcRect;
-        SDL_Rect destRect;
-
-        srcRect.x = 0;
-        srcRect.y = 0;
-        srcRect.w = ui.width;
-        srcRect.h = ui.height;
-        destRect.w = ui.width * owner->transform->getScaleX();
-        destRect.h = ui.height * owner->transform->getScaleY();
-        destRect.x = ui.x;
-        destRect.y = ui.y;
-
-        SDL_RenderCopyEx(
-                TheEngine::Instance()->getSDLRenderer(),
-                TheTextureManager::Instance()->getTexture(textureID),
-                &srcRect,
-                &destRect,
-                0,
-                0,
-                SDL_FLIP_NONE
+        TextureManager::Instance()->draw(
+                textureID,
+                ui.x, ui.y,
+                ui.width, ui.height,
+                SDL_FLIP_NONE,
+                owner->transform->getScaleX(),
+                owner->transform->getScaleY(),
+                true
                 );
     }
 }
