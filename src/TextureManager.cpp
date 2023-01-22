@@ -167,10 +167,10 @@ namespace Vigilant {
         return texture;
     }
 
-    void TextureManager::draw(SDL_Texture* texture, int x, int y) {
+    void TextureManager::draw(SDL_Texture* texture, int x, int y, bool absolutePos) {
         SDL_Rect dest;
-        dest.x = x;
-        dest.y = y;
+        dest.x = x - (absolutePos ? 0 : TheEngine::Instance()->camera.x);
+        dest.y = y - (absolutePos ? 0 : TheEngine::Instance()->camera.y);
         SDL_QueryTexture(texture, NULL, NULL, &dest.w, &dest.h);
         SDL_RenderCopy(renderer, texture, NULL, &dest);
     }

@@ -267,7 +267,11 @@ namespace Vigilant {
             static int lua_setAbsolutePosition(lua_State *L) {
                 Entity* entity = (Entity*)lua_touserdata(L, 1);
                 bool absol = (bool)lua_toboolean(L, 2);
-                entity->getComponent<SpriteComponent>()->setAbsolute(absol);
+                if (entity->hasComponent<SpriteComponent>()) {
+                    entity->getComponent<SpriteComponent>()->setAbsolute(absol);
+                } else if (entity->hasComponent<UILabelComponent>()) {
+                    entity->getComponent<UILabelComponent>()->setAbsolute(absol);
+                }
                 return 0;
             }
 
@@ -389,7 +393,12 @@ namespace Vigilant {
                 int b = (int)lua_tonumber(L, 8);
                 int a = (int)lua_tonumber(L, 9);
                 SDL_Color color{(Uint8)r, (Uint8)g, (Uint8)b, (Uint8)a};
-                entity->getComponent<UILabelComponent>()->load(x, y, text, fontId, color);
+                int stackSize = lua_gettop(L);
+                double life = -1.0f;
+                if (stackSize > 9) {
+                    life = (double)lua_tonumber(L,10);
+                }
+                entity->getComponent<UILabelComponent>()->load(x, y, text, fontId, color, life);
                 return 0;
             }
 

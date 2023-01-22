@@ -92,9 +92,9 @@ namespace Vigilant {
 		m_numAttributes++;
 	}
 
-	GLint GLSLProgram::getUniformLocation(const std::string &uniformName)
+	int GLSLProgram::getUniformLocation(const std::string &uniformName)
 	{
-		GLint location = glGetUniformLocation(m_programID, uniformName.c_str());
+		int location = glGetUniformLocation(m_programID, uniformName.c_str());
 		if (location == GL_INVALID_INDEX)
 		{
 			exitWithError("Uniform " + uniformName + " not found in shader");

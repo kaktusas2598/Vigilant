@@ -31,7 +31,7 @@ namespace Vigilant {
 
 			void addAttribute(const std::string& attributeName);
 
-			GLint getUniformLocation(const std::string& uniformName);
+			int getUniformLocation(const std::string& uniformName);
 
 			void use();
 			void unuse();

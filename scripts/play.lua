@@ -113,15 +113,28 @@ function onCollide(thisId, secondId)
     if entities[thisId]:getType() == "playerProjectile" then
         playSound("boom")
         entities[thisId]:remove()
+        previousHp = entities[secondId]:hp()
+        x = entities[secondId]:getX()
+        y = entities[secondId]:getY()
+        if (entities[secondId]:hp() - 10 < 0) then
+            print("killed an enemy")
+            -- MASSIVE FPS DROPS HERE if calling this without removing second entity to stop collision dispatches
+            -- Causes seg fault
+            --addParticleEmitter(entities[secondId]:getX() - getCameraX(), entities[secondId]:getY() - getCameraY(), "burst")
+        end
         entities[secondId]:damage(10)
-        -- MASSIVE FPS DROPS HERE if calling this without removing second entity to stop collision dispatches
-        addParticleEmitter(entities[secondId]:getX() - getCameraX(), entities[secondId]:getY() - getCameraY(), "burst")
-    else -- player collided with someone
+        if entities[secondId]:hp() < previousHp then
+            damageLbl = create()
+            damageLbl:addLabel("-10", "pixel", x, y, 255, 0, 0, 255, 1000.0)
+            damageLbl:setAbsolutePosition(false)
+
+        end
+            else -- player collided with someone
         -- TODO: need to have a way to know if player is not already taking damage, so that player doesn't die instantly
         -- probably CharacterStte will have that, do we need a cooldown timer too?
         if entities[secondId]:getType() == "enemy" then
-            --player:damage(10)
-            --playerHp:setLabel("HP : "..math.floor(player:hp()), "pixel", 10, 110, 192, 204, 255)
+            player:damage(10)
+            playerHp:setLabel("HP : "..math.floor(player:hp()), "pixel", 10, 110, 192, 204, 255)
         end
     end
 end
@@ -279,6 +292,7 @@ testEntity:addAnimation("default", "0", "4")
 testEntity:setAnimation("default")
 testEntity:addCollider(24, 24)
 testEntity:addPhysics(4.0, 0.3)
+testEntity:addCharacter(50, 1, 5, 5)
 print("Slime ID: "..testEntity:id())
 
 -- Testing deleting entity, needs to be deleted from global table as well

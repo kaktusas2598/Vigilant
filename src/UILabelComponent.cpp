@@ -20,6 +20,7 @@ namespace Vigilant {
 
     void UILabelComponent::setValue(std::string text) {
         value = text;
+        // TODO: check here if texture is not already set to delete it
         // We will assume texture is set here for performance, but error will be logged
         // in rendering system in case texture is not set
         texture = TextureManager::Instance()->getTextTexture(fontId, text, textColor);
@@ -34,7 +35,15 @@ namespace Vigilant {
 
 
     void UILabelComponent::render() {
-        TheTextureManager::Instance()->draw(texture, ui.x, ui.y);
+        TheTextureManager::Instance()->draw(texture, ui.x, ui.y, isAbsolute);
+    }
+
+    void UILabelComponent::update(float deltaTime) {
+        if (lifetime != -1.0f) {
+            if (lifetimeTime.read() > lifetime) {
+                owner->destroy();
+            }
+        }
     }
 
 }

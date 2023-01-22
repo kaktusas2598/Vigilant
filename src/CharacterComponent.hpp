@@ -3,6 +3,7 @@
 
 #include "Component.hpp"
 #include "ScriptEngine.hpp"
+#include "Timer.hpp"
 #include <math.h>
 
 namespace Vigilant {
@@ -37,7 +38,12 @@ namespace Vigilant {
             }
 
             void damage(int dmg) {
-                hp -= dmg;
+                // Check if damage can be done and then restart cooldown time
+                if (!takingDamage || damageCooldownTime.read() > damageCooldown) {
+                    hp -= dmg;
+                    damageCooldownTime.start();
+                    takingDamage = true;
+                }
                 if (hp < 0) {
                     // TODO: instead of destroy maybe fire an event which does additional stuff
                     // and is responsible for destroying an entity
@@ -67,6 +73,10 @@ namespace Vigilant {
             // Some kind of combat system, which will also need improved animation support
             int attack;
             int defense;
+
+            bool takingDamage = false;
+            float damageCooldown = 1000.0f;
+            Timer damageCooldownTime;
     };
 }
 

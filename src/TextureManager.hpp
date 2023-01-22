@@ -52,7 +52,7 @@ namespace Vigilant {
         void drawRect(SDL_Rect rect, SDL_Color color, bool absolutePos = true, bool fill = false);
 
         SDL_Texture* getTextTexture(std::string font, std::string text, SDL_Color color = {255, 255, 255, 255});
-        void draw(SDL_Texture* texture, int x, int y);
+        void draw(SDL_Texture* texture, int x, int y, bool absolutePos = true);
         void draw(std::string id, SDL_Rect srcRect, SDL_Rect dstRect);
 
         // These 2 should go to FontManager class OR could refactor this class to AssetManager?
