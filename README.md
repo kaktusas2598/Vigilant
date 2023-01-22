@@ -93,4 +93,6 @@ work to do them, I will write them down here instead:
 
  * Instead of binding Entity class to lua using metatable, I could have used lightuserdata and pointers to make memory
    management easier.
+ * 2023-01-06: I have been learning and experimenting with Modern OpenGL for the last month in order to convert all rendering to use OpenGL, but after a
+   while I realised that it might be a very difficult undertaking so I am thinking about starting a new engine project and forking this one, new engine     would use purely OpenGL for all rendering.
 
