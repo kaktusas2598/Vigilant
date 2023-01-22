@@ -2,18 +2,24 @@
 
 2D (Eventually 3D) Game/Physics engine I am working on.
 
+## Project Status
+
+This Project has been abandoned because I am now learning and using OpenGL for rendering instead and that
+opened a lot of new possibilities so instead of trying to refactor this project to use OpenGL rendering backend,
+I have decided to take best parts from this project, apply what I've learned here and learning OpenGL and start working on
+new 2D and 3D! rendering engine here: [OpenGL Engine](https://github.com/kaktusas2598/Villain)
+
 ![Vigilant Engine Demo](assets/screenshot.PNG?raw=true "Vigilant Engine Demo: 2D RPG")
 
 
 #### Supported features:
 
- * SDL2 2D rendering (OpenGL support will be coming later)
+ * SDL2 2D rendering
  * Finite State Machine and state loading from XML file
  * Entities defined using Lua scripts including Lua listener functions on events
  * Entities can have dynamic behaviours coded using Lua coroutines
  * Keyboard and Mouse input handling with SDL2
- * Window and GL context handling with SDL2
- * GLSL shader program loading
+ * Window handling with SDL2
  * Texture loading (Using stb_image.h and SDL2_image)
  * TTF Font loading (Using SDL_ttf)
  * Menu buttons with callbacks, labels, backgrounds
@@ -95,4 +101,10 @@ work to do them, I will write them down here instead:
    management easier.
  * 2023-01-06: I have been learning and experimenting with Modern OpenGL for the last month in order to convert all rendering to use OpenGL, but after a
    while I realised that it might be a very difficult undertaking so I am thinking about starting a new engine project and forking this one, new engine     would use purely OpenGL for all rendering.
+
+## Posible Additions
+ * Rigid body resolution using impulse response
+ * Serialization support for saving
+ * Warp Zone/tile support
+ * Pathfinding behaviours/A*
 
